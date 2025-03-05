@@ -1,0 +1,51 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# Credentials dictionary mapping username to password and role
+credentials = {
+    "emp": {"password": "", "role": "employee"},
+    "own": {"password": "", "role": "owner"},
+    "man": {"password": "", "role": "manager"}
+}
+
+class LoginPage(tk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+        self.configure(bg="white")
+
+        # Centered frame for the login form with a subtle border
+        frame = tk.Frame(self, bg="white", bd=1, relief="solid", padx=20, pady=20)
+        frame.place(relx=0.5, rely=0.5, anchor="center")
+
+        # Header label
+        tk.Label(frame, text="Login", font=("Helvetica", 20, "bold"), bg="white", fg="black").pack(pady=(0, 10))
+
+        # Username label and entry field
+        tk.Label(frame, text="Username:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+        self.entry_username = tk.Entry(frame, font=("Helvetica", 14), width=35, bd=2, relief="solid")
+        self.entry_username.pack(pady=5)
+
+        # Password label and entry field
+        tk.Label(frame, text="Password:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+        self.entry_password = tk.Entry(frame, font=("Helvetica", 14), show="*", width=35, bd=2, relief="solid")
+        self.entry_password.pack(pady=5)
+
+        # Login button with larger dimensions for easy clicking
+        login_button = tk.Button(frame, text="Login", command=self.login, font=("Helvetica", 16), fg="black", bg="white", bd=2, relief="solid", width=25, height=2)
+        login_button.pack(pady=20)
+
+    def login(self):
+        username = self.entry_username.get()
+        password = self.entry_password.get()
+        
+        if username in credentials and credentials[username]["password"] == password:
+            role = credentials[username]["role"]
+            if role == "employee":
+                self.controller.show_frame("EmployeePage")
+            elif role == "owner":
+                self.controller.show_frame("OwnerPage")
+            elif role == "manager":
+                self.controller.show_frame("ManagerPage")
+        else:
+            messagebox.showerror("Login Failed", "Invalid Username or Password")
