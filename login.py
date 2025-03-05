@@ -2,6 +2,12 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk  # Import PIL library
 
+try:
+    import vlc  # Import VLC library
+    vlc_available = True
+except (ImportError, OSError):
+    vlc_available = False
+
 # Credentials dictionary mapping username to password and role
 credentials = {
     "emp": {"password": "", "role": "employee"},
@@ -20,6 +26,17 @@ class LoginPage(tk.Frame):
         self.bg_image = ImageTk.PhotoImage(image)
         self.bg_label = tk.Label(self, image=self.bg_image)
         self.bg_label.place(relwidth=1, relheight=1)
+
+        # Initialize VLC player if available
+        global vlc_available
+        if vlc_available:
+            try:
+                self.player = vlc.MediaPlayer("Reggae Shark.mp4")
+                self.player.audio_set_volume(100)  # Set volume to 100%
+                self.player.play()
+            except Exception as e:
+                print(f"Error initializing VLC player: {e}")
+                vlc_available = False
 
         # Centered frame for the login form with a subtle border
         frame = tk.Frame(self, bg="white", bd=1, relief="solid", padx=20, pady=20)
@@ -48,6 +65,8 @@ class LoginPage(tk.Frame):
         password = self.entry_password.get()
         
         if username in credentials and credentials[username]["password"] == password:
+            if vlc_available:
+                self.player.stop()  # Stop the audio when navigating away from the login screen
             role = credentials[username]["role"]
             if role == "employee":
                 self.controller.show_frame("EmployeePage")
