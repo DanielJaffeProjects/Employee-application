@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from PIL import Image, ImageTk  # Import PIL library
 
 # Credentials dictionary mapping username to password and role
 credentials = {
@@ -13,10 +14,17 @@ class LoginPage(tk.Frame):
         super().__init__(parent)
         self.controller = controller
         self.configure(bg="white")
+        
+        # Load the background image using PIL
+        image = Image.open("clwbeach.jpg")
+        self.bg_image = ImageTk.PhotoImage(image)
+        self.bg_label = tk.Label(self, image=self.bg_image)
+        self.bg_label.place(relwidth=1, relheight=1)
 
         # Centered frame for the login form with a subtle border
         frame = tk.Frame(self, bg="white", bd=1, relief="solid", padx=20, pady=20)
         frame.place(relx=0.5, rely=0.5, anchor="center")
+        frame.configure(highlightbackground="white", highlightcolor="white", highlightthickness=1)
 
         # Header label
         tk.Label(frame, text="Login", font=("Helvetica", 20, "bold"), bg="white", fg="black").pack(pady=(0, 10))
