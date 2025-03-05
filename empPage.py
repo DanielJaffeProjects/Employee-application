@@ -60,6 +60,33 @@ class EmployeePage(tk.Frame):
         tk.Button(reg_out, text="Submit and Clock Out", font=("Helvetica", 14), command=self.clock_out).pack(pady=10)
         self.tabs["Clock out"] = reg_out
 
+        # close out tab
+        close_out = tk.Frame(content_frame, bg="white")
+        close_out.grid(row=0, column=0, sticky="nsew")
+
+        # Labels
+        tk.Label(close_out, text="Enter credit", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+        self.credit_entry = tk.Entry(close_out, font=("Helvetica", 18))
+        self.credit_entry.pack(pady=10)
+
+        tk.Label(close_out, text="Enter cash in envelope", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+        self.cash_entry = tk.Entry(close_out, font=("Helvetica", 18))
+        self.cash_entry.pack(pady=10)
+
+        tk.Label(close_out, text="Enter expense", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+        self.expense_entry = tk.Entry(close_out, font=("Helvetica", 18))
+        self.expense_entry.pack(pady=10)
+
+        tk.Label(close_out, text="Comments", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+        self.comments_entry = tk.Entry(close_out, font=("Helvetica", 18))
+        self.comments_entry.pack(pady=10)
+
+        # You can add a submit button if needed
+        submit_button = tk.Button(close_out, text="Submit", font=("Helvetica", 18), command=self.submit_info)
+        submit_button.pack(pady=20)
+
+        self.tabs["Close"] = close_out
+
         # History tab
         history_tab = tk.Frame(content_frame, bg="white")
         tk.Label(history_tab, text="Clock In/Out History", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
@@ -139,7 +166,12 @@ class EmployeePage(tk.Frame):
         for record in self.records:
             tk.Label(self.history_list_frame, text=record, font=("Helvetica", 12), bg="white").pack(anchor="w", pady=2)
 
-
+    # Function to handle the submit button action
+    def submit_info(self):
+        credit = self.credit_entry.get()
+        cash = self.cash_entry.get()
+        expense = self.expense_entry.get()
+        comments = self.comments_entry.get()
 if __name__ == '__main__':
     root = tk.Tk()
     root.title("Employee Dashboard")
