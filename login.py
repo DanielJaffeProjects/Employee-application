@@ -44,16 +44,16 @@ class LoginPage(tk.Frame):
         frame.configure(highlightbackground="white", highlightcolor="white", highlightthickness=1)
 
         # Header label
-        tk.Label(frame, text="Login", font=("Helvetica", 20, "bold"), bg="white", fg="black").pack(pady=(0, 10))
+        tk.Label(frame, text="ALOHA", font=("Helvetica", 20, "bold"), bg="white", fg="black").pack(pady=(0, 10))
 
         # Username label and entry field
         tk.Label(frame, text="Username:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
-        self.entry_username = tk.Entry(frame, font=("Helvetica", 14), width=35, bd=2, relief="solid")
+        self.entry_username = tk.Entry(frame, font=("Helvetica", 14), width=25, bd=2, relief="solid")
         self.entry_username.pack(pady=5)
 
         # Password label and entry field
         tk.Label(frame, text="Password:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
-        self.entry_password = tk.Entry(frame, font=("Helvetica", 14), show="*", width=35, bd=2, relief="solid")
+        self.entry_password = tk.Entry(frame, font=("Helvetica", 14), show="*", width=25, bd=2, relief="solid")
         self.entry_password.pack(pady=5)
 
         # Login button with larger dimensions for easy clicking
