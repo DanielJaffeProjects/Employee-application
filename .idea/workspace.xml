@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.">
+    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="added history so that you can see the prior in balance and out balances as well and when clock in and out">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/empPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/empPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/managerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/managerPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ownerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ownerPage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,24 +38,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.empPage.executor&quot;: &quot;Run&quot;,
-    &quot;Python.ems.executor&quot;: &quot;Run&quot;,
-    &quot;Python.login.executor&quot;: &quot;Run&quot;,
-    &quot;Python.managerPage.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/drjed/OneDrive/Documents/GitHub/Employee-application&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.empPage.executor": "Run",
+    "Python.ems.executor": "Run",
+    "Python.login.executor": "Run",
+    "Python.managerPage.executor": "Run",
+    "Python.ownerPage.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/drjed/OneDrive/Documents/GitHub/Employee-application",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -73,7 +76,7 @@
       <workItem from="1741139396833" duration="39000" />
       <workItem from="1741188109676" duration="2860000" />
       <workItem from="1741193751555" duration="530000" />
-      <workItem from="1741195127453" duration="3704000" />
+      <workItem from="1741195127453" duration="5336000" />
     </task>
     <task id="LOCAL-00001" summary="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.">
       <option name="closed" value="true" />
@@ -83,7 +86,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741197688889</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="added history so that you can see the prior in balance and out balances as well and when clock in and out">
+      <option name="closed" value="true" />
+      <created>1741199595129</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1741199595129</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -91,23 +102,14 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/empPage.py</url>
-          <line>46</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="added history so that you can see the prior in balance and out balances as well and when clock in and out" />
+    <option name="LAST_COMMIT_MESSAGE" value="added history so that you can see the prior in balance and out balances as well and when clock in and out" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1741195217229" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Employee_application$managerPage.coverage" NAME="managerPage Coverage Results" MODIFIED="1741190502390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$ownerPage.coverage" NAME="ownerPage Coverage Results" MODIFIED="1741201638908" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$managerPage.coverage" NAME="managerPage Coverage Results" MODIFIED="1741201562596" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$login.coverage" NAME="login Coverage Results" MODIFIED="1741195204863" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1741199443915" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1741201811570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

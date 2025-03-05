@@ -11,8 +11,14 @@ class ManagerPage(tk.Frame):
         # Top frame for store selection dropdown
         top_frame = tk.Frame(self, bg="white", bd=1, relief="solid")
         top_frame.pack(side="top", fill="x", padx=10, pady=10)
-        
-        tk.Label(top_frame, text="Select Store:", font=("Helvetica", 14), bg="white", fg="black").pack(side="left", padx=(10,5))
+
+        # Centered label (ALOHA)
+        aloha_label = tk.Label(top_frame, text="ALOHA", font=("Helvetica", 14), bg="white", fg="black")
+        aloha_label.place(relx=0.5, rely=0.5, anchor="center")
+
+        # Right label (name of employee)
+        tk.Label(top_frame, text="Name of manager", font=("Helvetica", 14), bg="white", fg="black").pack(side="right",
+                                                                                                          padx=(5, 10))
         selected_store = tk.StringVar()
         selected_store.set("Store 1")
         store_options = ["Store 1", "Store 2", "Store 3", "Store 4"]

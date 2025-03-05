@@ -8,6 +8,25 @@ class EmployeePage(tk.Frame):
         self.controller = controller
         self.configure(bg="white")
 
+        # Top frame for store selection dropdown
+        top_frame = tk.Frame(self, bg="white", bd=1, relief="solid")
+        top_frame.pack(side="top", fill="x", padx=10, pady=10)
+
+        # Centered label (ALOHA)
+        aloha_label = tk.Label(top_frame, text="ALOHA", font=("Helvetica", 14), bg="white", fg="black")
+        aloha_label.place(relx=0.5, rely=0.5, anchor="center")
+
+        # Right label (name of employee)
+        tk.Label(top_frame, text="Name of employee", font=("Helvetica", 14), bg="white", fg="black").pack(side="right",
+                                                                                                          padx=(5, 10))
+
+        selected_store = tk.StringVar()
+        selected_store.set("Store 1")
+        store_options = ["Store 1", "Store 2", "Store 3", "Store 4"]
+        store_dropdown = tk.OptionMenu(top_frame, selected_store, *store_options)
+        store_dropdown.config(font=("Helvetica", 14), bg="white", fg="black", relief="solid", bd=2)
+        store_dropdown.pack(side="left", padx=10, pady=5)
+
         # Left frame for tab buttons
         tab_frame = tk.Frame(self, bg="white", width=220, bd=1, relief="solid")
         tab_frame.pack(side="left", fill="y", padx=10, pady=10)
