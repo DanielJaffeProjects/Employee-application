@@ -1,0 +1,336 @@
+Index: ownerPage.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import tkinter as tk\r\nfrom tkinter import messagebox\r\nimport login\r\n\r\nclass OwnerPage(tk.Frame):\r\n    def __init__(self, parent, controller):\r\n        super().__init__(parent)\r\n        self.controller = controller\r\n        self.configure(bg=\"white\")\r\n        \r\n        # Top frame for store selection dropdown\r\n        top_frame = tk.Frame(self, bg=\"white\", bd=1, relief=\"solid\")\r\n        top_frame.pack(side=\"top\", fill=\"x\", padx=10, pady=10)\r\n\r\n        # Centered label (ALOHA)\r\n        aloha_label = tk.Label(top_frame, text=\"ALOHA\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\")\r\n        aloha_label.place(relx=0.5, rely=0.5, anchor=\"center\")\r\n\r\n        # Right label (name of employee)\r\n        tk.Label(top_frame, text=\"Name of owner\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(side=\"right\",\r\n                                                                                                          padx=(5, 10))\r\n\r\n        selected_store = tk.StringVar()\r\n        selected_store.set(\"Store 1\")\r\n        store_options = [\"Store 1\", \"Store 2\", \"Store 3\", \"Store 4\"]\r\n        store_dropdown = tk.OptionMenu(top_frame, selected_store, *store_options)\r\n        store_dropdown.config(font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\", relief=\"solid\", bd=2)\r\n        store_dropdown.pack(side=\"left\", padx=10, pady=5)\r\n        \r\n        # Main frame for tabs and content\r\n        main_frame = tk.Frame(self, bg=\"white\")\r\n        main_frame.pack(fill=\"both\", expand=True, padx=10, pady=10)\r\n        \r\n        # Left frame for tabs\r\n        tab_frame = tk.Frame(main_frame, bg=\"white\", width=250, bd=1, relief=\"solid\")\r\n        tab_frame.pack(side=\"left\", fill=\"y\", padx=10, pady=10)\r\n        \r\n        # Right frame for content\r\n        content_frame = tk.Frame(main_frame, bg=\"white\", bd=1, relief=\"solid\")\r\n        content_frame.pack(side=\"right\", fill=\"both\", expand=True, padx=10, pady=10)\r\n        content_frame.grid_rowconfigure(0, weight=1)\r\n        content_frame.grid_columnconfigure(0, weight=1)\r\n        \r\n        # Dictionary to hold tabs with forms (mirroring the ManagerPage layout)\r\n        tabs = {}\r\n        \r\n        # Tab: Enter Invoice\r\n        invoice_frame = tk.Frame(content_frame, bg=\"white\")\r\n        invoice_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(invoice_frame, text=\"Enter Invoice\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(invoice_frame, text=\"Invoice ID:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        inv_id = tk.Entry(invoice_frame, font=(\"Helvetica\", 14))\r\n        inv_id.pack(pady=5)\r\n        tk.Label(invoice_frame, text=\"Date:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        inv_date = tk.Entry(invoice_frame, font=(\"Helvetica\", 14))\r\n        inv_date.pack(pady=5)\r\n        tk.Label(invoice_frame, text=\"Amount:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        inv_amount = tk.Entry(invoice_frame, font=(\"Helvetica\", 14))\r\n        inv_amount.pack(pady=5)\r\n        tk.Button(invoice_frame, text=\"Submit Invoice\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Invoice\", \"Invoice Submitted\")).pack(pady=10)\r\n        tabs[\"Enter Invoice\"] = invoice_frame\r\n        \r\n        # Tab: Enter Expense\r\n        expense_frame = tk.Frame(content_frame, bg=\"white\")\r\n        expense_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(expense_frame, text=\"Enter Expense\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(expense_frame, text=\"Expense ID:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        exp_id = tk.Entry(expense_frame, font=(\"Helvetica\", 14))\r\n        exp_id.pack(pady=5)\r\n        tk.Label(expense_frame, text=\"Date:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        exp_date = tk.Entry(expense_frame, font=(\"Helvetica\", 14))\r\n        exp_date.pack(pady=5)\r\n        tk.Label(expense_frame, text=\"Amount:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        exp_amount = tk.Entry(expense_frame, font=(\"Helvetica\", 14))\r\n        exp_amount.pack(pady=5)\r\n        tk.Label(expense_frame, text=\"Category:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        exp_category = tk.Entry(expense_frame, font=(\"Helvetica\", 14))\r\n        exp_category.pack(pady=5)\r\n        tk.Button(expense_frame, text=\"Submit Expense\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Expense\", \"Expense Submitted\")).pack(pady=10)\r\n        tabs[\"Enter Expense\"] = expense_frame\r\n        \r\n        # Tab: Enter Merchandise Sales\r\n        sales_frame = tk.Frame(content_frame, bg=\"white\")\r\n        sales_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(sales_frame, text=\"Enter Merchandise Sales\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(sales_frame, text=\"Sale ID:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        sale_id = tk.Entry(sales_frame, font=(\"Helvetica\", 14))\r\n        sale_id.pack(pady=5)\r\n        tk.Label(sales_frame, text=\"Date:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        sale_date = tk.Entry(sales_frame, font=(\"Helvetica\", 14))\r\n        sale_date.pack(pady=5)\r\n        tk.Label(sales_frame, text=\"Item:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        item_entry = tk.Entry(sales_frame, font=(\"Helvetica\", 14))\r\n        item_entry.pack(pady=5)\r\n        tk.Label(sales_frame, text=\"Quantity:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        qty_entry = tk.Entry(sales_frame, font=(\"Helvetica\", 14))\r\n        qty_entry.pack(pady=5)\r\n        tk.Label(sales_frame, text=\"Price:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        price_entry = tk.Entry(sales_frame, font=(\"Helvetica\", 14))\r\n        price_entry.pack(pady=5)\r\n        tk.Button(sales_frame, text=\"Submit Sale\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Sales\", \"Sale Submitted\")).pack(pady=10)\r\n        tabs[\"Enter Merchandise Sales\"] = sales_frame\r\n        \r\n        # Tab: Enter Gross Profit\r\n        gross_frame = tk.Frame(content_frame, bg=\"white\")\r\n        gross_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(gross_frame, text=\"Enter Gross Profit\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(gross_frame, text=\"Total Revenue:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        rev_entry = tk.Entry(gross_frame, font=(\"Helvetica\", 14))\r\n        rev_entry.pack(pady=5)\r\n        tk.Label(gross_frame, text=\"Total Expenses:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        exp_total_entry = tk.Entry(gross_frame, font=(\"Helvetica\", 14))\r\n        exp_total_entry.pack(pady=5)\r\n        tk.Button(gross_frame, text=\"Calculate Gross Profit\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Gross Profit\", \"Gross Profit Calculated\")).pack(pady=10)\r\n        tabs[\"Enter Gross Profit\"] = gross_frame\r\n        \r\n        # Tab: Withdrawal\r\n        withdrawal_frame = tk.Frame(content_frame, bg=\"white\")\r\n        withdrawal_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(withdrawal_frame, text=\"Withdrawal\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(withdrawal_frame, text=\"Withdrawal ID:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        with_id = tk.Entry(withdrawal_frame, font=(\"Helvetica\", 14))\r\n        with_id.pack(pady=5)\r\n        tk.Label(withdrawal_frame, text=\"Date:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        with_date = tk.Entry(withdrawal_frame, font=(\"Helvetica\", 14))\r\n        with_date.pack(pady=5)\r\n        tk.Label(withdrawal_frame, text=\"Amount:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        with_amount = tk.Entry(withdrawal_frame, font=(\"Helvetica\", 14))\r\n        with_amount.pack(pady=5)\r\n        tk.Button(withdrawal_frame, text=\"Submit Withdrawal\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Withdrawal\", \"Withdrawal Submitted\")).pack(pady=10)\r\n        tabs[\"Withdrawal\"] = withdrawal_frame\r\n        \r\n        # Tab: Calculate Employee Bonus\r\n        bonus_frame = tk.Frame(content_frame, bg=\"white\")\r\n        bonus_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(bonus_frame, text=\"Calculate Employee Bonus\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(bonus_frame, text=\"Employee ID:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        emp_id = tk.Entry(bonus_frame, font=(\"Helvetica\", 14))\r\n        emp_id.pack(pady=5)\r\n        tk.Label(bonus_frame, text=\"Sales Amount:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        sales_amt = tk.Entry(bonus_frame, font=(\"Helvetica\", 14))\r\n        sales_amt.pack(pady=5)\r\n        tk.Label(bonus_frame, text=\"Bonus Percentage:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        bonus_pct = tk.Entry(bonus_frame, font=(\"Helvetica\", 14))\r\n        bonus_pct.pack(pady=5)\r\n        \r\n        def calculate_bonus():\r\n            try:\r\n                sales = float(sales_amt.get())\r\n                percent = float(bonus_pct.get())\r\n                bonus = sales * percent / 100\r\n                messagebox.showinfo(\"Bonus\", f\"Calculated Bonus: {bonus:.2f}\")\r\n            except ValueError:\r\n                messagebox.showerror(\"Error\", \"Please enter valid numbers\")\r\n                \r\n        tk.Button(bonus_frame, text=\"Calculate Bonus\", font=(\"Helvetica\", 14),\r\n                  command=calculate_bonus).pack(pady=10)\r\n        tabs[\"Calculate Employee Bonus\"] = bonus_frame\r\n        \r\n        # Tab: Add Employee\r\n        add_emp_frame = tk.Frame(content_frame, bg=\"white\")\r\n        add_emp_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(add_emp_frame, text=\"Add Employee\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(add_emp_frame, text=\"Employee Name:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        emp_name = tk.Entry(add_emp_frame, font=(\"Helvetica\", 14))\r\n        emp_name.pack(pady=5)\r\n        tk.Label(add_emp_frame, text=\"Role:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        role_var = tk.StringVar(add_emp_frame)\r\n        role_var.set(\"employee\")\r\n        role_menu = tk.OptionMenu(add_emp_frame, role_var, \"employee\", \"manager\", \"owner\")\r\n        role_menu.config(font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\")\r\n        role_menu.pack(pady=5)\r\n        tk.Button(add_emp_frame, text=\"Add Employee\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Add Employee\", \"Employee Added\")).pack(pady=10)\r\n        tabs[\"Add Employee\"] = add_emp_frame\r\n        \r\n        def show_tab(tab_name):\r\n            tabs[tab_name].tkraise()\r\n        \r\n        for title in tabs:\r\n            btn = tk.Button(tab_frame, text=title, font=(\"Helvetica\", 14), fg=\"black\", bg=\"white\",\r\n                            relief=\"flat\", bd=2, command=lambda t=title: show_tab(t), width=25, height=3)\r\n            btn.pack(pady=5, padx=10, fill=\"x\")\r\n        \r\n        logout_button = tk.Button(tab_frame, text=\"Logout\", font=(\"Helvetica\", 14), fg=\"black\", bg=\"white\",\r\n                                  relief=\"flat\", bd=2, command=lambda: controller.show_frame(\"LoginPage\"),\r\n                                  width=25, height=3)\r\n        logout_button.pack(side=\"bottom\", pady=10, padx=10)\r\n        \r\n        show_tab(\"Enter Invoice\")\r\n\r\nif __name__ == '__main__':\r\n    root = tk.Tk()\r\n    root.title(\"Owner Dashboard\")\r\n    root.geometry(\"900x750\")\r\n    owner_page = OwnerPage(root, None)\r\n    owner_page.pack(fill=\"both\", expand=True)\r\n    root.mainloop()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ownerPage.py b/ownerPage.py
+--- a/ownerPage.py	(revision 8ce12b11b5d76c165d825748a6c7d8976ead579b)
++++ b/ownerPage.py	(date 1741313083337)
+@@ -1,13 +1,17 @@
+ import tkinter as tk
+ from tkinter import messagebox
+-import login
+ 
+ class OwnerPage(tk.Frame):
+     def __init__(self, parent, controller):
+         super().__init__(parent)
+         self.controller = controller
+         self.configure(bg="white")
+-        
++        self.tabs = {}
++
++        self.create_top_frame()
++        self.create_main_frame()
++
++    def create_top_frame(self):
+         # Top frame for store selection dropdown
+         top_frame = tk.Frame(self, bg="white", bd=1, relief="solid")
+         top_frame.pack(side="top", fill="x", padx=10, pady=10)
+@@ -17,8 +21,7 @@
+         aloha_label.place(relx=0.5, rely=0.5, anchor="center")
+ 
+         # Right label (name of employee)
+-        tk.Label(top_frame, text="Name of owner", font=("Helvetica", 14), bg="white", fg="black").pack(side="right",
+-                                                                                                          padx=(5, 10))
++        tk.Label(top_frame, text="Name of employee", font=("Helvetica", 14), bg="white", fg="black").pack(side="right", padx=(5, 10))
+ 
+         selected_store = tk.StringVar()
+         selected_store.set("Store 1")
+@@ -26,178 +29,132 @@
+         store_dropdown = tk.OptionMenu(top_frame, selected_store, *store_options)
+         store_dropdown.config(font=("Helvetica", 14), bg="white", fg="black", relief="solid", bd=2)
+         store_dropdown.pack(side="left", padx=10, pady=5)
+-        
+-        # Main frame for tabs and content
++
++    def create_main_frame(self):
++        """Create the main frame with tabs and content."""
+         main_frame = tk.Frame(self, bg="white")
+-        main_frame.pack(fill="both", expand=True, padx=10, pady=10)
+-        
+-        # Left frame for tabs
++        main_frame.pack(side="top", fill="both", expand=True, padx=10, pady=10)
++
+         tab_frame = tk.Frame(main_frame, bg="white", width=250, bd=1, relief="solid")
+         tab_frame.pack(side="left", fill="y", padx=10, pady=10)
+-        
+-        # Right frame for content
++
+         content_frame = tk.Frame(main_frame, bg="white", bd=1, relief="solid")
+         content_frame.pack(side="right", fill="both", expand=True, padx=10, pady=10)
+-        content_frame.grid_rowconfigure(0, weight=1)
+-        content_frame.grid_columnconfigure(0, weight=1)
+-        
+-        # Dictionary to hold tabs with forms (mirroring the ManagerPage layout)
+-        tabs = {}
+-        
+-        # Tab: Enter Invoice
+-        invoice_frame = tk.Frame(content_frame, bg="white")
+-        invoice_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(invoice_frame, text="Enter Invoice", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(invoice_frame, text="Invoice ID:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        inv_id = tk.Entry(invoice_frame, font=("Helvetica", 14))
+-        inv_id.pack(pady=5)
+-        tk.Label(invoice_frame, text="Date:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        inv_date = tk.Entry(invoice_frame, font=("Helvetica", 14))
+-        inv_date.pack(pady=5)
+-        tk.Label(invoice_frame, text="Amount:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        inv_amount = tk.Entry(invoice_frame, font=("Helvetica", 14))
+-        inv_amount.pack(pady=5)
+-        tk.Button(invoice_frame, text="Submit Invoice", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Invoice", "Invoice Submitted")).pack(pady=10)
+-        tabs["Enter Invoice"] = invoice_frame
+-        
+-        # Tab: Enter Expense
+-        expense_frame = tk.Frame(content_frame, bg="white")
+-        expense_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(expense_frame, text="Enter Expense", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(expense_frame, text="Expense ID:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        exp_id = tk.Entry(expense_frame, font=("Helvetica", 14))
+-        exp_id.pack(pady=5)
+-        tk.Label(expense_frame, text="Date:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        exp_date = tk.Entry(expense_frame, font=("Helvetica", 14))
+-        exp_date.pack(pady=5)
+-        tk.Label(expense_frame, text="Amount:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        exp_amount = tk.Entry(expense_frame, font=("Helvetica", 14))
+-        exp_amount.pack(pady=5)
+-        tk.Label(expense_frame, text="Category:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        exp_category = tk.Entry(expense_frame, font=("Helvetica", 14))
+-        exp_category.pack(pady=5)
+-        tk.Button(expense_frame, text="Submit Expense", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Expense", "Expense Submitted")).pack(pady=10)
+-        tabs["Enter Expense"] = expense_frame
+-        
+-        # Tab: Enter Merchandise Sales
+-        sales_frame = tk.Frame(content_frame, bg="white")
+-        sales_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(sales_frame, text="Enter Merchandise Sales", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(sales_frame, text="Sale ID:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        sale_id = tk.Entry(sales_frame, font=("Helvetica", 14))
+-        sale_id.pack(pady=5)
+-        tk.Label(sales_frame, text="Date:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        sale_date = tk.Entry(sales_frame, font=("Helvetica", 14))
+-        sale_date.pack(pady=5)
+-        tk.Label(sales_frame, text="Item:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        item_entry = tk.Entry(sales_frame, font=("Helvetica", 14))
+-        item_entry.pack(pady=5)
+-        tk.Label(sales_frame, text="Quantity:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        qty_entry = tk.Entry(sales_frame, font=("Helvetica", 14))
+-        qty_entry.pack(pady=5)
+-        tk.Label(sales_frame, text="Price:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        price_entry = tk.Entry(sales_frame, font=("Helvetica", 14))
+-        price_entry.pack(pady=5)
+-        tk.Button(sales_frame, text="Submit Sale", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Sales", "Sale Submitted")).pack(pady=10)
+-        tabs["Enter Merchandise Sales"] = sales_frame
+-        
+-        # Tab: Enter Gross Profit
+-        gross_frame = tk.Frame(content_frame, bg="white")
+-        gross_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(gross_frame, text="Enter Gross Profit", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(gross_frame, text="Total Revenue:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        rev_entry = tk.Entry(gross_frame, font=("Helvetica", 14))
+-        rev_entry.pack(pady=5)
+-        tk.Label(gross_frame, text="Total Expenses:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        exp_total_entry = tk.Entry(gross_frame, font=("Helvetica", 14))
+-        exp_total_entry.pack(pady=5)
+-        tk.Button(gross_frame, text="Calculate Gross Profit", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Gross Profit", "Gross Profit Calculated")).pack(pady=10)
+-        tabs["Enter Gross Profit"] = gross_frame
+-        
+-        # Tab: Withdrawal
+-        withdrawal_frame = tk.Frame(content_frame, bg="white")
+-        withdrawal_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(withdrawal_frame, text="Withdrawal", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(withdrawal_frame, text="Withdrawal ID:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        with_id = tk.Entry(withdrawal_frame, font=("Helvetica", 14))
+-        with_id.pack(pady=5)
+-        tk.Label(withdrawal_frame, text="Date:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        with_date = tk.Entry(withdrawal_frame, font=("Helvetica", 14))
+-        with_date.pack(pady=5)
+-        tk.Label(withdrawal_frame, text="Amount:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        with_amount = tk.Entry(withdrawal_frame, font=("Helvetica", 14))
+-        with_amount.pack(pady=5)
+-        tk.Button(withdrawal_frame, text="Submit Withdrawal", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Withdrawal", "Withdrawal Submitted")).pack(pady=10)
+-        tabs["Withdrawal"] = withdrawal_frame
+-        
+-        # Tab: Calculate Employee Bonus
+-        bonus_frame = tk.Frame(content_frame, bg="white")
+-        bonus_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(bonus_frame, text="Calculate Employee Bonus", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(bonus_frame, text="Employee ID:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        emp_id = tk.Entry(bonus_frame, font=("Helvetica", 14))
+-        emp_id.pack(pady=5)
+-        tk.Label(bonus_frame, text="Sales Amount:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        sales_amt = tk.Entry(bonus_frame, font=("Helvetica", 14))
+-        sales_amt.pack(pady=5)
+-        tk.Label(bonus_frame, text="Bonus Percentage:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        bonus_pct = tk.Entry(bonus_frame, font=("Helvetica", 14))
+-        bonus_pct.pack(pady=5)
+-        
++
++        # Create tabs
++        self.create_tab(content_frame, "Enter Invoice", self.create_invoice_tab)
++        self.create_tab(content_frame, "Enter Expense", self.create_expense_tab)
++        self.create_tab(content_frame, "Enter Merchandise Sales", self.create_sales_tab)
++        self.create_tab(content_frame, "Enter Gross Profit", self.create_gross_profit_tab)
++        self.create_tab(content_frame, "Withdrawal", self.create_withdrawal_tab)
++        self.create_tab(content_frame, "Calculate Employee Bonus", self.create_bonus_tab)
++        self.create_tab(content_frame, "Add Employee", self.create_add_employee_tab)
++
++        self.create_tab_buttons(tab_frame)
++
++    def create_tab(self, content_frame, title, create_function):
++        """Create a tab and add it to the content frame."""
++        frame = tk.Frame(content_frame, bg="white")
++        frame.pack(fill="both", expand=True)
++        create_function(frame)
++        self.tabs[title] = frame
++
++    def create_entry_field(self, parent, label_text):
++        """Create an entry field with label."""
++        tk.Label(parent, text=label_text, font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
++        entry = tk.Entry(parent, font=("Helvetica", 14))
++        entry.pack(pady=5)
++
++    def create_button(self, parent, button_text, command):
++        """Create a button for submission."""
++        tk.Button(parent, text=button_text, font=("Helvetica", 14), command=lambda: messagebox.showinfo(button_text, command)).pack(pady=10)
++
++    def create_dropdown_field(self, parent, label_text, options):
++        """Create a dropdown menu."""
++        tk.Label(parent, text=label_text, font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
++        var = tk.StringVar(parent)
++        var.set(options[0])
++        dropdown = tk.OptionMenu(parent, var, *options)
++        dropdown.config(font=("Helvetica", 14), bg="white", fg="black")
++        dropdown.pack(pady=5)
++
++    def create_tab_buttons(self, tab_frame):
++        """Create buttons for each tab."""
++        for title in self.tabs:
++            btn = tk.Button(tab_frame, text=title, font=("Helvetica", 14), fg="black", bg="white", relief="flat", bd=2, command=lambda t=title: self.show_tab(t), width=25, height=3)
++            btn.pack(pady=5, padx=10, fill="x")
++
++        logout_button = tk.Button(tab_frame, text="Logout", font=("Helvetica", 14), fg="black", bg="white", relief="flat", bd=2, command=lambda: self.controller.show_frame("LoginPage"), width=25, height=3)
++        logout_button.pack(side="bottom", pady=10, padx=10)
++
++    def show_tab(self, tab_name):
++        """Show the selected tab."""
++        self.tabs[tab_name].tkraise()
++
++    # Tab creation functions (e.g., for invoices, expenses, etc.)
++    def create_invoice_tab(self, parent):
++        """Create the Invoice Tab UI."""
++        tk.Label(parent, text="Enter Invoice", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
++        self.create_entry_field(parent, "Invoice ID:")
++        self.create_entry_field(parent, "Date:")
++        self.create_entry_field(parent, "Amount:")
++        self.create_button(parent, "Submit Invoice", "Invoice Submitted")
++
++    def create_expense_tab(self, parent):
++        """Create the Expense Tab UI."""
++        tk.Label(parent, text="Enter Expense", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
++        self.create_entry_field(parent, "Expense ID:")
++        self.create_entry_field(parent, "Date:")
++        self.create_entry_field(parent, "Amount:")
++        self.create_entry_field(parent, "Category:")
++        self.create_button(parent, "Submit Expense", "Expense Submitted")
++
++    def create_sales_tab(self, parent):
++        """Create the Merchandise Sales Tab UI."""
++        tk.Label(parent, text="Enter Merchandise Sales", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
++        self.create_entry_field(parent, "Sale ID:")
++        self.create_entry_field(parent, "Date:")
++        self.create_entry_field(parent, "Item:")
++        self.create_entry_field(parent, "Quantity:")
++        self.create_entry_field(parent, "Price:")
++        self.create_button(parent, "Submit Sale", "Sale Submitted")
++
++    def create_gross_profit_tab(self, parent):
++        """Create the Gross Profit Tab UI."""
++        tk.Label(parent, text="Enter Gross Profit", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
++        self.create_entry_field(parent, "Total Revenue:")
++        self.create_entry_field(parent, "Total Expenses:")
++        self.create_button(parent, "Calculate Gross Profit", "Gross Profit Calculated")
++
++    def create_withdrawal_tab(self, parent):
++        """Create the Withdrawal Tab UI."""
++        tk.Label(parent, text="Withdrawal", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
++        self.create_entry_field(parent, "Withdrawal ID:")
++        self.create_entry_field(parent, "Date:")
++        self.create_entry_field(parent, "Amount:")
++        self.create_button(parent, "Submit Withdrawal", "Withdrawal Submitted")
++
++    def create_bonus_tab(self, parent):
++        """Create the Bonus Calculation Tab UI."""
++        tk.Label(parent, text="Calculate Employee Bonus", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
++        self.create_entry_field(parent, "Employee ID:")
++        self.create_entry_field(parent, "Sales Amount:")
++        self.create_entry_field(parent, "Bonus Percentage:")
++
+         def calculate_bonus():
+             try:
+-                sales = float(sales_amt.get())
+-                percent = float(bonus_pct.get())
++                sales = float(self.get_entry_value(parent, "Sales Amount:"))
++                percent = float(self.get_entry_value(parent, "Bonus Percentage:"))
+                 bonus = sales * percent / 100
+                 messagebox.showinfo("Bonus", f"Calculated Bonus: {bonus:.2f}")
+             except ValueError:
+                 messagebox.showerror("Error", "Please enter valid numbers")
+-                
+-        tk.Button(bonus_frame, text="Calculate Bonus", font=("Helvetica", 14),
+-                  command=calculate_bonus).pack(pady=10)
+-        tabs["Calculate Employee Bonus"] = bonus_frame
+-        
+-        # Tab: Add Employee
+-        add_emp_frame = tk.Frame(content_frame, bg="white")
+-        add_emp_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(add_emp_frame, text="Add Employee", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(add_emp_frame, text="Employee Name:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        emp_name = tk.Entry(add_emp_frame, font=("Helvetica", 14))
+-        emp_name.pack(pady=5)
+-        tk.Label(add_emp_frame, text="Role:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        role_var = tk.StringVar(add_emp_frame)
+-        role_var.set("employee")
+-        role_menu = tk.OptionMenu(add_emp_frame, role_var, "employee", "manager", "owner")
+-        role_menu.config(font=("Helvetica", 14), bg="white", fg="black")
+-        role_menu.pack(pady=5)
+-        tk.Button(add_emp_frame, text="Add Employee", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Add Employee", "Employee Added")).pack(pady=10)
+-        tabs["Add Employee"] = add_emp_frame
+-        
+-        def show_tab(tab_name):
+-            tabs[tab_name].tkraise()
+-        
+-        for title in tabs:
+-            btn = tk.Button(tab_frame, text=title, font=("Helvetica", 14), fg="black", bg="white",
+-                            relief="flat", bd=2, command=lambda t=title: show_tab(t), width=25, height=3)
+-            btn.pack(pady=5, padx=10, fill="x")
+-        
+-        logout_button = tk.Button(tab_frame, text="Logout", font=("Helvetica", 14), fg="black", bg="white",
+-                                  relief="flat", bd=2, command=lambda: controller.show_frame("LoginPage"),
+-                                  width=25, height=3)
+-        logout_button.pack(side="bottom", pady=10, padx=10)
+-        
+-        show_tab("Enter Invoice")
++
++        self.create_button(parent, "Calculate Bonus", calculate_bonus)
+ 
+-if __name__ == '__main__':
+-    root = tk.Tk()
+-    root.title("Owner Dashboard")
+-    root.geometry("900x750")
+-    owner_page = OwnerPage(root, None)
+-    owner_page.pack(fill="both", expand=True)
+-    root.mainloop()
++    def create_add_employee_tab(self, parent):
++        """Create the Add Employee Tab UI."""
++        tk.Label(parent, text="Add Employee", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
++        self.create_entry_field(parent, "Employee Name:")
++        self.create_dropdown_field(parent, "Role:", ["employee", "manager", "owner"])
++        self.create_button(parent, "Add Employee", "Employee Added")

@@ -8,6 +8,7 @@ class EmployeePage(tk.Frame):
         self.controller = controller
         self.configure(bg="white")
 
+
         # Top frame for store selection dropdown
         top_frame = tk.Frame(self, bg="white", bd=1, relief="solid")
         top_frame.pack(side="top", fill="x", padx=10, pady=10)

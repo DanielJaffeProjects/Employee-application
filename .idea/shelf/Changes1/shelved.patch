@@ -1,0 +1,352 @@
+Index: empPage.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import tkinter as tk\r\nfrom tkinter import messagebox\r\nfrom datetime import datetime\r\n\r\nclass EmployeePage(tk.Frame):\r\n    def __init__(self, parent, controller):\r\n        super().__init__(parent)\r\n        self.controller = controller\r\n        self.configure(bg=\"white\")\r\n\r\n        # Top frame for store selection dropdown\r\n        top_frame = tk.Frame(self, bg=\"white\", bd=1, relief=\"solid\")\r\n        top_frame.pack(side=\"top\", fill=\"x\", padx=10, pady=10)\r\n\r\n        # Centered label (ALOHA)\r\n        aloha_label = tk.Label(top_frame, text=\"ALOHA\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\")\r\n        aloha_label.place(relx=0.5, rely=0.5, anchor=\"center\")\r\n\r\n        # Right label (name of employee)\r\n        tk.Label(top_frame, text=\"Name of employee\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(side=\"right\",\r\n                                                                                                          padx=(5, 10))\r\n\r\n        selected_store = tk.StringVar()\r\n        selected_store.set(\"Store 1\")\r\n        store_options = [\"Store 1\", \"Store 2\", \"Store 3\", \"Store 4\"]\r\n        store_dropdown = tk.OptionMenu(top_frame, selected_store, *store_options)\r\n        store_dropdown.config(font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\", relief=\"solid\", bd=2)\r\n        store_dropdown.pack(side=\"left\", padx=10, pady=5)\r\n\r\n        # Left frame for tab buttons\r\n        tab_frame = tk.Frame(self, bg=\"white\", width=220, bd=1, relief=\"solid\")\r\n        tab_frame.pack(side=\"left\", fill=\"y\", padx=10, pady=10)\r\n\r\n        # Right frame for content\r\n        content_frame = tk.Frame(self, bg=\"white\", bd=1, relief=\"solid\")\r\n        content_frame.pack(side=\"right\", fill=\"both\", expand=True, padx=10, pady=10)\r\n        content_frame.grid_rowconfigure(0, weight=1)\r\n        content_frame.grid_columnconfigure(0, weight=1)\r\n\r\n        # Dictionary to hold the tabs and their corresponding frames\r\n        self.tabs = {}\r\n        # Store clock-in/out history\r\n        self.records = []\r\n\r\n        # Clock-in tab\r\n        reg_in = tk.Frame(content_frame, bg=\"white\")\r\n        reg_in.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(reg_in, text=\"Enter Reg-In Balance\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        self.reg_in_balance = tk.Entry(reg_in, font=(\"Helvetica\", 14))\r\n        self.reg_in_balance.pack(pady=5)\r\n        tk.Button(reg_in, text=\"Submit and Clock In\", font=(\"Helvetica\", 14), command=self.clock_in).pack(pady=10)\r\n        self.tabs[\"Clock in\"] = reg_in\r\n\r\n        # Clock-out tab\r\n        reg_out = tk.Frame(content_frame, bg=\"white\")\r\n        reg_out.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(reg_out, text=\"Enter Reg-Out Balance\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        self.reg_out_balance = tk.Entry(reg_out, font=(\"Helvetica\", 14))\r\n        self.reg_out_balance.pack(pady=5)\r\n        tk.Button(reg_out, text=\"Submit and Clock Out\", font=(\"Helvetica\", 14), command=self.clock_out).pack(pady=10)\r\n        self.tabs[\"Clock out\"] = reg_out\r\n\r\n        # close out tab\r\n        close_out = tk.Frame(content_frame, bg=\"white\")\r\n        close_out.grid(row=0, column=0, sticky=\"nsew\")\r\n\r\n        # Labels\r\n        tk.Label(close_out, text=\"Enter credit\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        self.credit_entry = tk.Entry(close_out, font=(\"Helvetica\", 18))\r\n        self.credit_entry.pack(pady=10)\r\n\r\n        tk.Label(close_out, text=\"Enter cash in envelope\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        self.cash_entry = tk.Entry(close_out, font=(\"Helvetica\", 18))\r\n        self.cash_entry.pack(pady=10)\r\n\r\n        tk.Label(close_out, text=\"Enter expense\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        self.expense_entry = tk.Entry(close_out, font=(\"Helvetica\", 18))\r\n        self.expense_entry.pack(pady=10)\r\n\r\n        tk.Label(close_out, text=\"Comments\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        self.comments_entry = tk.Entry(close_out, font=(\"Helvetica\", 18))\r\n        self.comments_entry.pack(pady=10)\r\n\r\n        # You can add a submit button if needed\r\n        submit_button = tk.Button(close_out, text=\"Submit\", font=(\"Helvetica\", 18), command=self.submit_info)\r\n        submit_button.pack(pady=20)\r\n\r\n        self.tabs[\"Close\"] = close_out\r\n\r\n        # History tab\r\n        history_tab = tk.Frame(content_frame, bg=\"white\")\r\n        tk.Label(history_tab, text=\"Clock In/Out History\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n\r\n        history_frame = tk.Frame(history_tab)\r\n        history_frame.pack(fill=\"both\", expand=True, padx=10, pady=10)\r\n\r\n        history_canvas = tk.Canvas(history_frame)\r\n        history_scrollbar = tk.Scrollbar(history_frame, orient=\"vertical\", command=history_canvas.yview)\r\n        self.history_list_frame = tk.Frame(history_canvas)\r\n\r\n        self.history_list_frame.bind(\"<Configure>\", lambda e: history_canvas.configure(scrollregion=history_canvas.bbox(\"all\")))\r\n        history_canvas.create_window((0, 0), window=self.history_list_frame, anchor=\"nw\")\r\n        history_canvas.configure(yscrollcommand=history_scrollbar.set)\r\n\r\n        history_canvas.pack(side=\"left\", fill=\"both\", expand=True)\r\n        history_scrollbar.pack(side=\"right\", fill=\"y\")\r\n\r\n        self.tabs[\"History\"] = history_tab\r\n\r\n        # Function to switch tabs\r\n        def show_tab(tab_name):\r\n            for frame in self.tabs.values():\r\n                frame.grid_forget()  # Hide all tabs\r\n            self.tabs[tab_name].grid(row=0, column=0, sticky=\"nsew\")  # Show the selected tab\r\n\r\n            if tab_name == \"History\":\r\n                self.update_history()  # Update the history tab content when it's shown\r\n\r\n        # Create tab buttons\r\n        for title in self.tabs.keys():\r\n            btn = tk.Button(tab_frame, text=title, font=(\"Helvetica\", 14), fg=\"black\", bg=\"white\",\r\n                            relief=\"flat\", bd=2, command=lambda t=title: show_tab(t), width=25, height=3)\r\n            btn.pack(pady=5, padx=10, fill=\"x\")\r\n\r\n        # Logout button (handle controller reference)\r\n        logout_button = tk.Button(tab_frame, text=\"Logout\", font=(\"Helvetica\", 14), fg=\"black\", bg=\"white\",\r\n                                  relief=\"flat\", bd=2,\r\n                                  command=lambda: controller.show_frame(\"LoginPage\") if controller else self.quit(),\r\n                                  width=25, height=3)\r\n        logout_button.pack(side=\"bottom\", pady=10, padx=10)\r\n\r\n        # Show default tab\r\n        show_tab(\"Clock in\")\r\n\r\n    def clock_in(self):\r\n        \"\"\"Handles clock-in event.\"\"\"\r\n        balance = self.reg_in_balance.get()\r\n        if not balance:\r\n            messagebox.showerror(\"Error\", \"Please enter a register balance.\")\r\n            return\r\n        timestamp = datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\")\r\n        self.records.append(f\"Clock In: {timestamp} - Balance: {balance}\")\r\n        self.reg_in_balance.delete(0, tk.END)\r\n        messagebox.showinfo(\"Clock In\", \"Clock-in recorded successfully.\")\r\n        self.update_history()\r\n\r\n    def clock_out(self):\r\n        \"\"\"Handles clock-out event.\"\"\"\r\n        balance = self.reg_out_balance.get()\r\n        if not balance:\r\n            messagebox.showerror(\"Error\", \"Please enter a register balance.\")\r\n            return\r\n        timestamp = datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\")\r\n        self.records.append(f\"Clock Out: {timestamp} - Balance: {balance}\")\r\n        self.reg_out_balance.delete(0, tk.END)\r\n        messagebox.showinfo(\"Clock Out\", \"Clock-out recorded successfully.\")\r\n        self.update_history()\r\n\r\n    def update_history(self):\r\n        \"\"\"Updates the history tab with new clock-in/out records.\"\"\"\r\n        # Clear previous records in history\r\n        for widget in self.history_list_frame.winfo_children():\r\n            widget.destroy()\r\n\r\n        # Display current records\r\n        for record in self.records:\r\n            tk.Label(self.history_list_frame, text=record, font=(\"Helvetica\", 12), bg=\"white\").pack(anchor=\"w\", pady=2)\r\n\r\n    # Function to handle the submit button action\r\n    def submit_info(self):\r\n        credit = self.credit_entry.get()\r\n        cash = self.cash_entry.get()\r\n        expense = self.expense_entry.get()\r\n        comments = self.comments_entry.get()\r\nif __name__ == '__main__':\r\n    root = tk.Tk()\r\n    root.title(\"Employee Dashboard\")\r\n    root.geometry(\"900x750\")\r\n    employee_page = EmployeePage(root, None)\r\n    employee_page.pack(fill=\"both\", expand=True)\r\n    root.mainloop()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/empPage.py b/empPage.py
+--- a/empPage.py	(revision 8ce12b11b5d76c165d825748a6c7d8976ead579b)
++++ b/empPage.py	(date 1741312001817)
+@@ -19,7 +19,6 @@
+         # Right label (name of employee)
+         tk.Label(top_frame, text="Name of employee", font=("Helvetica", 14), bg="white", fg="black").pack(side="right",
+                                                                                                           padx=(5, 10))
+-
+         selected_store = tk.StringVar()
+         selected_store.set("Store 1")
+         store_options = ["Store 1", "Store 2", "Store 3", "Store 4"]
+@@ -172,6 +171,7 @@
+         cash = self.cash_entry.get()
+         expense = self.expense_entry.get()
+         comments = self.comments_entry.get()
++
+ if __name__ == '__main__':
+     root = tk.Tk()
+     root.title("Employee Dashboard")
+Index: ems.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import tkinter as tk\r\nfrom tkinter import messagebox\r\nfrom login import LoginPage\r\nfrom empPage import EmployeePage\r\nfrom ownerPage import OwnerPage\r\nfrom managerPage import ManagerPage\r\n\r\nclass EMSApp(tk.Tk):\r\n    def __init__(self):\r\n        super().__init__()\r\n        self.title(\"EMS Application\")\r\n        self.geometry(\"900x750\")\r\n        self.configure(bg=\"white\")\r\n\r\n        self.container = tk.Frame(self)\r\n        self.container.pack(side=\"top\", fill=\"both\", expand=True)\r\n        self.container.grid_rowconfigure(0, weight=1)\r\n        self.container.grid_columnconfigure(0, weight=1)\r\n\r\n        self.frames = {}\r\n        for F in (LoginPage, EmployeePage, OwnerPage, ManagerPage):\r\n            page_name = F.__name__\r\n            frame = F(parent=self.container, controller=self)\r\n            self.frames[page_name] = frame\r\n            frame.grid(row=0, column=0, sticky=\"nsew\")\r\n\r\n        self.show_frame(\"LoginPage\")\r\n\r\n    def show_frame(self, page_name):\r\n        frame = self.frames[page_name]\r\n        frame.tkraise()\r\n\r\nif __name__ == \"__main__\":\r\n    app = EMSApp()\r\n    app.mainloop()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ems.py b/ems.py
+--- a/ems.py	(revision 8ce12b11b5d76c165d825748a6c7d8976ead579b)
++++ b/ems.py	(date 1741313123038)
+@@ -1,5 +1,4 @@
+ import tkinter as tk
+-from tkinter import messagebox
+ from login import LoginPage
+ from empPage import EmployeePage
+ from ownerPage import OwnerPage
+Index: managerPage.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import tkinter as tk\r\nfrom tkinter import messagebox\r\nimport login\r\n\r\nclass ManagerPage(tk.Frame):\r\n    def __init__(self, parent, controller):\r\n        super().__init__(parent)\r\n        self.controller = controller\r\n        self.configure(bg=\"white\")\r\n        \r\n        # Top frame for store selection dropdown\r\n        top_frame = tk.Frame(self, bg=\"white\", bd=1, relief=\"solid\")\r\n        top_frame.pack(side=\"top\", fill=\"x\", padx=10, pady=10)\r\n\r\n        # Centered label (ALOHA)\r\n        aloha_label = tk.Label(top_frame, text=\"ALOHA\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\")\r\n        aloha_label.place(relx=0.5, rely=0.5, anchor=\"center\")\r\n\r\n        # Right label (name of employee)\r\n        tk.Label(top_frame, text=\"Name of manager\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(side=\"right\",\r\n                                                                                                          padx=(5, 10))\r\n        selected_store = tk.StringVar()\r\n        selected_store.set(\"Store 1\")\r\n        store_options = [\"Store 1\", \"Store 2\", \"Store 3\", \"Store 4\"]\r\n        store_dropdown = tk.OptionMenu(top_frame, selected_store, *store_options)\r\n        store_dropdown.config(font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\", relief=\"solid\", bd=2)\r\n        store_dropdown.pack(side=\"left\", padx=10, pady=5)\r\n        \r\n        # Main frame for tabs and content\r\n        main_frame = tk.Frame(self, bg=\"white\")\r\n        main_frame.pack(fill=\"both\", expand=True, padx=10, pady=10)\r\n        \r\n        # Left frame for tabs\r\n        tab_frame = tk.Frame(main_frame, bg=\"white\", width=250, bd=1, relief=\"solid\")\r\n        tab_frame.pack(side=\"left\", fill=\"y\", padx=10, pady=10)\r\n        \r\n        # Right frame for content\r\n        content_frame = tk.Frame(main_frame, bg=\"white\", bd=1, relief=\"solid\")\r\n        content_frame.pack(side=\"right\", fill=\"both\", expand=True, padx=10, pady=10)\r\n        content_frame.grid_rowconfigure(0, weight=1)\r\n        content_frame.grid_columnconfigure(0, weight=1)\r\n        \r\n        # Dictionary to hold the tabs with enhanced UI forms\r\n        \r\n        tabs = {}\r\n        \r\n        # Tab: Enter Invoice\r\n        invoice_frame = tk.Frame(content_frame, bg=\"white\")\r\n        invoice_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(invoice_frame, text=\"Enter Invoice\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(invoice_frame, text=\"Invoice ID:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        inv_id = tk.Entry(invoice_frame, font=(\"Helvetica\", 14))\r\n        inv_id.pack(pady=5)\r\n        tk.Label(invoice_frame, text=\"Date:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        inv_date = tk.Entry(invoice_frame, font=(\"Helvetica\", 14))\r\n        inv_date.pack(pady=5)\r\n        tk.Label(invoice_frame, text=\"Amount:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        inv_amount = tk.Entry(invoice_frame, font=(\"Helvetica\", 14))\r\n        inv_amount.pack(pady=5)\r\n        tk.Button(invoice_frame, text=\"Submit Invoice\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Invoice\", \"Invoice Submitted\")).pack(pady=10)\r\n        tabs[\"Enter Invoice\"] = invoice_frame\r\n        \r\n        # Tab: Enter Expense\r\n        expense_frame = tk.Frame(content_frame, bg=\"white\")\r\n        expense_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(expense_frame, text=\"Enter Expense\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(expense_frame, text=\"Expense ID:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        exp_id = tk.Entry(expense_frame, font=(\"Helvetica\", 14))\r\n        exp_id.pack(pady=5)\r\n        tk.Label(expense_frame, text=\"Date:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        exp_date = tk.Entry(expense_frame, font=(\"Helvetica\", 14))\r\n        exp_date.pack(pady=5)\r\n        tk.Label(expense_frame, text=\"Amount:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        exp_amount = tk.Entry(expense_frame, font=(\"Helvetica\", 14))\r\n        exp_amount.pack(pady=5)\r\n        tk.Label(expense_frame, text=\"Category:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        exp_category = tk.Entry(expense_frame, font=(\"Helvetica\", 14))\r\n        exp_category.pack(pady=5)\r\n        tk.Button(expense_frame, text=\"Submit Expense\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Expense\", \"Expense Submitted\")).pack(pady=10)\r\n        tabs[\"Enter Expense\"] = expense_frame\r\n        \r\n        # Tab: Enter Merchandise Sales\r\n        sales_frame = tk.Frame(content_frame, bg=\"white\")\r\n        sales_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(sales_frame, text=\"Enter Merchandise Sales\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(sales_frame, text=\"Sale ID:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        sale_id = tk.Entry(sales_frame, font=(\"Helvetica\", 14))\r\n        sale_id.pack(pady=5)\r\n        tk.Label(sales_frame, text=\"Date:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        sale_date = tk.Entry(sales_frame, font=(\"Helvetica\", 14))\r\n        sale_date.pack(pady=5)\r\n        tk.Label(sales_frame, text=\"Item:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        item_entry = tk.Entry(sales_frame, font=(\"Helvetica\", 14))\r\n        item_entry.pack(pady=5)\r\n        tk.Label(sales_frame, text=\"Quantity:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        qty_entry = tk.Entry(sales_frame, font=(\"Helvetica\", 14))\r\n        qty_entry.pack(pady=5)\r\n        tk.Label(sales_frame, text=\"Price:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        price_entry = tk.Entry(sales_frame, font=(\"Helvetica\", 14))\r\n        price_entry.pack(pady=5)\r\n        tk.Button(sales_frame, text=\"Submit Sale\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Sales\", \"Sale Submitted\")).pack(pady=10)\r\n        tabs[\"Enter Merchandise Sales\"] = sales_frame\r\n        \r\n        # Tab: Enter Gross Profit\r\n        gross_frame = tk.Frame(content_frame, bg=\"white\")\r\n        gross_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(gross_frame, text=\"Enter Gross Profit\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(gross_frame, text=\"Total Revenue:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        rev_entry = tk.Entry(gross_frame, font=(\"Helvetica\", 14))\r\n        rev_entry.pack(pady=5)\r\n        tk.Label(gross_frame, text=\"Total Expenses:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        exp_total_entry = tk.Entry(gross_frame, font=(\"Helvetica\", 14))\r\n        exp_total_entry.pack(pady=5)\r\n        tk.Button(gross_frame, text=\"Calculate Gross Profit\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Gross Profit\", \"Gross Profit Calculated\")).pack(pady=10)\r\n        tabs[\"Enter Gross Profit\"] = gross_frame\r\n        \r\n        # Tab: Withdrawal\r\n        withdrawal_frame = tk.Frame(content_frame, bg=\"white\")\r\n        withdrawal_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(withdrawal_frame, text=\"Withdrawal\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(withdrawal_frame, text=\"Withdrawal ID:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        with_id = tk.Entry(withdrawal_frame, font=(\"Helvetica\", 14))\r\n        with_id.pack(pady=5)\r\n        tk.Label(withdrawal_frame, text=\"Date:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        with_date = tk.Entry(withdrawal_frame, font=(\"Helvetica\", 14))\r\n        with_date.pack(pady=5)\r\n        tk.Label(withdrawal_frame, text=\"Amount:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        with_amount = tk.Entry(withdrawal_frame, font=(\"Helvetica\", 14))\r\n        with_amount.pack(pady=5)\r\n        tk.Button(withdrawal_frame, text=\"Submit Withdrawal\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Withdrawal\", \"Withdrawal Submitted\")).pack(pady=10)\r\n        tabs[\"Withdrawal\"] = withdrawal_frame\r\n        \r\n        # Tab: Calculate Employee Bonus\r\n        bonus_frame = tk.Frame(content_frame, bg=\"white\")\r\n        bonus_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(bonus_frame, text=\"Calculate Employee Bonus\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(bonus_frame, text=\"Employee ID:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        emp_id = tk.Entry(bonus_frame, font=(\"Helvetica\", 14))\r\n        emp_id.pack(pady=5)\r\n        tk.Label(bonus_frame, text=\"Sales Amount:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        sales_amt = tk.Entry(bonus_frame, font=(\"Helvetica\", 14))\r\n        sales_amt.pack(pady=5)\r\n        tk.Label(bonus_frame, text=\"Bonus Percentage:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        bonus_pct = tk.Entry(bonus_frame, font=(\"Helvetica\", 14))\r\n        bonus_pct.pack(pady=5)\r\n        \r\n        def calculate_bonus():\r\n            try:\r\n                sales = float(sales_amt.get())\r\n                percent = float(bonus_pct.get())\r\n                bonus = sales * percent / 100\r\n                messagebox.showinfo(\"Bonus\", f\"Calculated Bonus: {bonus:.2f}\")\r\n            except ValueError:\r\n                messagebox.showerror(\"Error\", \"Please enter valid numbers for Sales Amount and Bonus Percentage\")\r\n                \r\n        tk.Button(bonus_frame, text=\"Calculate Bonus\", font=(\"Helvetica\", 14),\r\n                  command=calculate_bonus).pack(pady=10)\r\n        tabs[\"Calculate Employee Bonus\"] = bonus_frame\r\n        \r\n        # Tab: Add Employee\r\n        add_emp_frame = tk.Frame(content_frame, bg=\"white\")\r\n        add_emp_frame.grid(row=0, column=0, sticky=\"nsew\")\r\n        tk.Label(add_emp_frame, text=\"Add Employee\", font=(\"Helvetica\", 18), bg=\"white\", fg=\"black\").pack(pady=10)\r\n        tk.Label(add_emp_frame, text=\"Employee Name:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        emp_name = tk.Entry(add_emp_frame, font=(\"Helvetica\", 14))\r\n        emp_name.pack(pady=5)\r\n        tk.Label(add_emp_frame, text=\"Role:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack(pady=5)\r\n        role_var = tk.StringVar(add_emp_frame)\r\n        role_var.set(\"employee\")\r\n        role_menu = tk.OptionMenu(add_emp_frame, role_var, \"employee\", \"manager\", \"owner\")\r\n        role_menu.config(font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\")\r\n        role_menu.pack(pady=5)\r\n        tk.Button(add_emp_frame, text=\"Add Employee\", font=(\"Helvetica\", 14),\r\n                  command=lambda: messagebox.showinfo(\"Add Employee\", \"Employee Added\")).pack(pady=10)\r\n        tabs[\"Add Employee\"] = add_emp_frame\r\n        \r\n        # Function to raise the selected tab\r\n        def show_tab(tab_name):\r\n            tabs[tab_name].tkraise()\r\n        \r\n        # Create tab buttons on the left\r\n        for title in tabs:\r\n            btn = tk.Button(tab_frame, text=title, font=(\"Helvetica\", 14), fg=\"black\", bg=\"white\",\r\n                            relief=\"flat\", bd=2, command=lambda t=title: show_tab(t), width=25, height=3)\r\n            btn.pack(pady=5, padx=10, fill=\"x\")\r\n        \r\n        # Logout button\r\n        logout_button = tk.Button(tab_frame, text=\"Logout\", font=(\"Helvetica\", 14), fg=\"black\", bg=\"white\",\r\n                                  relief=\"flat\", bd=2, command=lambda: controller.show_frame(\"LoginPage\"),\r\n                                  width=25, height=3)\r\n        logout_button.pack(side=\"bottom\", pady=10, padx=10)\r\n        \r\n        # Show the default tab\r\n        show_tab(\"Enter Invoice\")\r\n\r\nif __name__ == '__main__':\r\n    root = tk.Tk()\r\n    root.title(\"Manager Dashboard\")\r\n    root.geometry(\"900x750\")\r\n    manager_page = ManagerPage(root, None)\r\n    manager_page.pack(fill=\"both\", expand=True)\r\n    root.mainloop()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/managerPage.py b/managerPage.py
+--- a/managerPage.py	(revision 8ce12b11b5d76c165d825748a6c7d8976ead579b)
++++ b/managerPage.py	(date 1741313366245)
+@@ -1,207 +1,12 @@
+ import tkinter as tk
+-from tkinter import messagebox
+-import login
++
++from ownerPage import OwnerPage
+ 
+-class ManagerPage(tk.Frame):
++
++# used chatgpt to remove repetition
++class ManagerPage(OwnerPage):  # Inherit from OwnerPage
+     def __init__(self, parent, controller):
+-        super().__init__(parent)
++        super().__init__(parent, controller)  # Call the constructor of OwnerPage
+         self.controller = controller
+         self.configure(bg="white")
+-        
+-        # Top frame for store selection dropdown
+-        top_frame = tk.Frame(self, bg="white", bd=1, relief="solid")
+-        top_frame.pack(side="top", fill="x", padx=10, pady=10)
+-
+-        # Centered label (ALOHA)
+-        aloha_label = tk.Label(top_frame, text="ALOHA", font=("Helvetica", 14), bg="white", fg="black")
+-        aloha_label.place(relx=0.5, rely=0.5, anchor="center")
+-
+-        # Right label (name of employee)
+-        tk.Label(top_frame, text="Name of manager", font=("Helvetica", 14), bg="white", fg="black").pack(side="right",
+-                                                                                                          padx=(5, 10))
+-        selected_store = tk.StringVar()
+-        selected_store.set("Store 1")
+-        store_options = ["Store 1", "Store 2", "Store 3", "Store 4"]
+-        store_dropdown = tk.OptionMenu(top_frame, selected_store, *store_options)
+-        store_dropdown.config(font=("Helvetica", 14), bg="white", fg="black", relief="solid", bd=2)
+-        store_dropdown.pack(side="left", padx=10, pady=5)
+-        
+-        # Main frame for tabs and content
+-        main_frame = tk.Frame(self, bg="white")
+-        main_frame.pack(fill="both", expand=True, padx=10, pady=10)
+-        
+-        # Left frame for tabs
+-        tab_frame = tk.Frame(main_frame, bg="white", width=250, bd=1, relief="solid")
+-        tab_frame.pack(side="left", fill="y", padx=10, pady=10)
+-        
+-        # Right frame for content
+-        content_frame = tk.Frame(main_frame, bg="white", bd=1, relief="solid")
+-        content_frame.pack(side="right", fill="both", expand=True, padx=10, pady=10)
+-        content_frame.grid_rowconfigure(0, weight=1)
+-        content_frame.grid_columnconfigure(0, weight=1)
+-        
+-        # Dictionary to hold the tabs with enhanced UI forms
+-        
+-        tabs = {}
+-        
+-        # Tab: Enter Invoice
+-        invoice_frame = tk.Frame(content_frame, bg="white")
+-        invoice_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(invoice_frame, text="Enter Invoice", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(invoice_frame, text="Invoice ID:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        inv_id = tk.Entry(invoice_frame, font=("Helvetica", 14))
+-        inv_id.pack(pady=5)
+-        tk.Label(invoice_frame, text="Date:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        inv_date = tk.Entry(invoice_frame, font=("Helvetica", 14))
+-        inv_date.pack(pady=5)
+-        tk.Label(invoice_frame, text="Amount:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        inv_amount = tk.Entry(invoice_frame, font=("Helvetica", 14))
+-        inv_amount.pack(pady=5)
+-        tk.Button(invoice_frame, text="Submit Invoice", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Invoice", "Invoice Submitted")).pack(pady=10)
+-        tabs["Enter Invoice"] = invoice_frame
+-        
+-        # Tab: Enter Expense
+-        expense_frame = tk.Frame(content_frame, bg="white")
+-        expense_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(expense_frame, text="Enter Expense", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(expense_frame, text="Expense ID:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        exp_id = tk.Entry(expense_frame, font=("Helvetica", 14))
+-        exp_id.pack(pady=5)
+-        tk.Label(expense_frame, text="Date:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        exp_date = tk.Entry(expense_frame, font=("Helvetica", 14))
+-        exp_date.pack(pady=5)
+-        tk.Label(expense_frame, text="Amount:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        exp_amount = tk.Entry(expense_frame, font=("Helvetica", 14))
+-        exp_amount.pack(pady=5)
+-        tk.Label(expense_frame, text="Category:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        exp_category = tk.Entry(expense_frame, font=("Helvetica", 14))
+-        exp_category.pack(pady=5)
+-        tk.Button(expense_frame, text="Submit Expense", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Expense", "Expense Submitted")).pack(pady=10)
+-        tabs["Enter Expense"] = expense_frame
+-        
+-        # Tab: Enter Merchandise Sales
+-        sales_frame = tk.Frame(content_frame, bg="white")
+-        sales_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(sales_frame, text="Enter Merchandise Sales", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(sales_frame, text="Sale ID:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        sale_id = tk.Entry(sales_frame, font=("Helvetica", 14))
+-        sale_id.pack(pady=5)
+-        tk.Label(sales_frame, text="Date:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        sale_date = tk.Entry(sales_frame, font=("Helvetica", 14))
+-        sale_date.pack(pady=5)
+-        tk.Label(sales_frame, text="Item:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        item_entry = tk.Entry(sales_frame, font=("Helvetica", 14))
+-        item_entry.pack(pady=5)
+-        tk.Label(sales_frame, text="Quantity:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        qty_entry = tk.Entry(sales_frame, font=("Helvetica", 14))
+-        qty_entry.pack(pady=5)
+-        tk.Label(sales_frame, text="Price:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        price_entry = tk.Entry(sales_frame, font=("Helvetica", 14))
+-        price_entry.pack(pady=5)
+-        tk.Button(sales_frame, text="Submit Sale", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Sales", "Sale Submitted")).pack(pady=10)
+-        tabs["Enter Merchandise Sales"] = sales_frame
+-        
+-        # Tab: Enter Gross Profit
+-        gross_frame = tk.Frame(content_frame, bg="white")
+-        gross_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(gross_frame, text="Enter Gross Profit", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(gross_frame, text="Total Revenue:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        rev_entry = tk.Entry(gross_frame, font=("Helvetica", 14))
+-        rev_entry.pack(pady=5)
+-        tk.Label(gross_frame, text="Total Expenses:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        exp_total_entry = tk.Entry(gross_frame, font=("Helvetica", 14))
+-        exp_total_entry.pack(pady=5)
+-        tk.Button(gross_frame, text="Calculate Gross Profit", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Gross Profit", "Gross Profit Calculated")).pack(pady=10)
+-        tabs["Enter Gross Profit"] = gross_frame
+-        
+-        # Tab: Withdrawal
+-        withdrawal_frame = tk.Frame(content_frame, bg="white")
+-        withdrawal_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(withdrawal_frame, text="Withdrawal", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(withdrawal_frame, text="Withdrawal ID:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        with_id = tk.Entry(withdrawal_frame, font=("Helvetica", 14))
+-        with_id.pack(pady=5)
+-        tk.Label(withdrawal_frame, text="Date:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        with_date = tk.Entry(withdrawal_frame, font=("Helvetica", 14))
+-        with_date.pack(pady=5)
+-        tk.Label(withdrawal_frame, text="Amount:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        with_amount = tk.Entry(withdrawal_frame, font=("Helvetica", 14))
+-        with_amount.pack(pady=5)
+-        tk.Button(withdrawal_frame, text="Submit Withdrawal", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Withdrawal", "Withdrawal Submitted")).pack(pady=10)
+-        tabs["Withdrawal"] = withdrawal_frame
+-        
+-        # Tab: Calculate Employee Bonus
+-        bonus_frame = tk.Frame(content_frame, bg="white")
+-        bonus_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(bonus_frame, text="Calculate Employee Bonus", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(bonus_frame, text="Employee ID:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        emp_id = tk.Entry(bonus_frame, font=("Helvetica", 14))
+-        emp_id.pack(pady=5)
+-        tk.Label(bonus_frame, text="Sales Amount:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        sales_amt = tk.Entry(bonus_frame, font=("Helvetica", 14))
+-        sales_amt.pack(pady=5)
+-        tk.Label(bonus_frame, text="Bonus Percentage:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        bonus_pct = tk.Entry(bonus_frame, font=("Helvetica", 14))
+-        bonus_pct.pack(pady=5)
+-        
+-        def calculate_bonus():
+-            try:
+-                sales = float(sales_amt.get())
+-                percent = float(bonus_pct.get())
+-                bonus = sales * percent / 100
+-                messagebox.showinfo("Bonus", f"Calculated Bonus: {bonus:.2f}")
+-            except ValueError:
+-                messagebox.showerror("Error", "Please enter valid numbers for Sales Amount and Bonus Percentage")
+-                
+-        tk.Button(bonus_frame, text="Calculate Bonus", font=("Helvetica", 14),
+-                  command=calculate_bonus).pack(pady=10)
+-        tabs["Calculate Employee Bonus"] = bonus_frame
+-        
+-        # Tab: Add Employee
+-        add_emp_frame = tk.Frame(content_frame, bg="white")
+-        add_emp_frame.grid(row=0, column=0, sticky="nsew")
+-        tk.Label(add_emp_frame, text="Add Employee", font=("Helvetica", 18), bg="white", fg="black").pack(pady=10)
+-        tk.Label(add_emp_frame, text="Employee Name:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        emp_name = tk.Entry(add_emp_frame, font=("Helvetica", 14))
+-        emp_name.pack(pady=5)
+-        tk.Label(add_emp_frame, text="Role:", font=("Helvetica", 14), bg="white", fg="black").pack(pady=5)
+-        role_var = tk.StringVar(add_emp_frame)
+-        role_var.set("employee")
+-        role_menu = tk.OptionMenu(add_emp_frame, role_var, "employee", "manager", "owner")
+-        role_menu.config(font=("Helvetica", 14), bg="white", fg="black")
+-        role_menu.pack(pady=5)
+-        tk.Button(add_emp_frame, text="Add Employee", font=("Helvetica", 14),
+-                  command=lambda: messagebox.showinfo("Add Employee", "Employee Added")).pack(pady=10)
+-        tabs["Add Employee"] = add_emp_frame
+-        
+-        # Function to raise the selected tab
+-        def show_tab(tab_name):
+-            tabs[tab_name].tkraise()
+-        
+-        # Create tab buttons on the left
+-        for title in tabs:
+-            btn = tk.Button(tab_frame, text=title, font=("Helvetica", 14), fg="black", bg="white",
+-                            relief="flat", bd=2, command=lambda t=title: show_tab(t), width=25, height=3)
+-            btn.pack(pady=5, padx=10, fill="x")
+-        
+-        # Logout button
+-        logout_button = tk.Button(tab_frame, text="Logout", font=("Helvetica", 14), fg="black", bg="white",
+-                                  relief="flat", bd=2, command=lambda: controller.show_frame("LoginPage"),
+-                                  width=25, height=3)
+-        logout_button.pack(side="bottom", pady=10, padx=10)
+-        
+-        # Show the default tab
+-        show_tab("Enter Invoice")
+-
+-if __name__ == '__main__':
+-    root = tk.Tk()
+-    root.title("Manager Dashboard")
+-    root.geometry("900x750")
+-    manager_page = ManagerPage(root, None)
+-    manager_page.pack(fill="both", expand=True)
+-    root.mainloop()
++
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"1273df12-f704-48bc-b0d1-73903eeefc88\" name=\"Changes\" comment=\"added a header to employee and reformated the ones for manager and owner\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/empPage.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/empPage.py\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;DanielJaffeProjects&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/DanielJaffeProjects/Employee-application.git&quot;,\r\n    &quot;accountId&quot;: &quot;91c662e2-bbe2-4e9c-8c90-a67d3f4145ee&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2tsSfy8edG6w5uyQjivXBQHiNuX\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Python.empPage.executor&quot;: &quot;Run&quot;,\r\n    &quot;Python.ems.executor&quot;: &quot;Run&quot;,\r\n    &quot;Python.login.executor&quot;: &quot;Run&quot;,\r\n    &quot;Python.managerPage.executor&quot;: &quot;Run&quot;,\r\n    &quot;Python.ownerPage.executor&quot;: &quot;Run&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/drjed/OneDrive/Documents/GitHub/Employee-application&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-PY-243.23654.177\" />\r\n        <option value=\"bundled-python-sdk-91d3a02ef49d-43b77aa2d136-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.23654.177\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"1273df12-f704-48bc-b0d1-73903eeefc88\" name=\"Changes\" comment=\"\" />\r\n      <created>1741139395654</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1741139395654</updated>\r\n      <workItem from=\"1741139396833\" duration=\"39000\" />\r\n      <workItem from=\"1741188109676\" duration=\"2860000\" />\r\n      <workItem from=\"1741193751555\" duration=\"530000\" />\r\n      <workItem from=\"1741195127453\" duration=\"5681000\" />\r\n      <workItem from=\"1741208821762\" duration=\"2208000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1741197688889</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1741197688889</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"added history so that you can see the prior in balance and out balances as well and when clock in and out\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1741199595129</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1741199595129</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"added a header to employee and reformated the ones for manager and owner\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1741202026556</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1741202026556</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"4\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.\" />\r\n    <MESSAGE value=\"added history so that you can see the prior in balance and out balances as well and when clock in and out\" />\r\n    <MESSAGE value=\"added a header to employee and reformated the ones for manager and owner\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"added a header to employee and reformated the ones for manager and owner\" />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$ems.coverage\" NAME=\"ems Coverage Results\" MODIFIED=\"1741209026010\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$ownerPage.coverage\" NAME=\"ownerPage Coverage Results\" MODIFIED=\"1741201638908\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$managerPage.coverage\" NAME=\"managerPage Coverage Results\" MODIFIED=\"1741201955956\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$login.coverage\" NAME=\"login Coverage Results\" MODIFIED=\"1741209022060\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$empPage.coverage\" NAME=\"empPage Coverage Results\" MODIFIED=\"1741212434465\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 8ce12b11b5d76c165d825748a6c7d8976ead579b)
++++ b/.idea/workspace.xml	(date 1741313366609)
+@@ -4,14 +4,24 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="added a header to employee and reformated the ones for manager and owner">
++    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="changed manager to only add people that are employees.">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/empPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/empPage.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/ems.py" beforeDir="false" afterPath="$PROJECT_DIR$/ems.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/managerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/managerPage.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/ownerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ownerPage.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Python Script" />
++      </list>
++    </option>
+   </component>
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+@@ -75,7 +85,9 @@
+       <workItem from="1741188109676" duration="2860000" />
+       <workItem from="1741193751555" duration="530000" />
+       <workItem from="1741195127453" duration="5681000" />
+-      <workItem from="1741208821762" duration="2208000" />
++      <workItem from="1741208821762" duration="3683000" />
++      <workItem from="1741301101399" duration="1828000" />
++      <workItem from="1741309549110" duration="3791000" />
+     </task>
+     <task id="LOCAL-00001" summary="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.">
+       <option name="closed" value="true" />
+@@ -101,7 +113,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1741202026556</updated>
+     </task>
+-    <option name="localTasksCounter" value="4" />
++    <task id="LOCAL-00004" summary="added a close for the employee tab including credit card, cash in envelope,expense and comments">
++      <option name="closed" value="true" />
++      <created>1741212848674</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1741212848674</updated>
++    </task>
++    <option name="localTasksCounter" value="5" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -111,13 +131,14 @@
+     <MESSAGE value="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things." />
+     <MESSAGE value="added history so that you can see the prior in balance and out balances as well and when clock in and out" />
+     <MESSAGE value="added a header to employee and reformated the ones for manager and owner" />
+-    <option name="LAST_COMMIT_MESSAGE" value="added a header to employee and reformated the ones for manager and owner" />
++    <MESSAGE value="added a close for the employee tab including credit card, cash in envelope,expense and comments" />
++    <option name="LAST_COMMIT_MESSAGE" value="added a close for the employee tab including credit card, cash in envelope,expense and comments" />
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+-    <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1741209026010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/Employee_application$ownerPage.coverage" NAME="ownerPage Coverage Results" MODIFIED="1741201638908" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/Employee_application$managerPage.coverage" NAME="managerPage Coverage Results" MODIFIED="1741201955956" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1741313237640" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Employee_application$ownerPage.coverage" NAME="ownerPage Coverage Results" MODIFIED="1741313216841" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Employee_application$managerPage.coverage" NAME="managerPage Coverage Results" MODIFIED="1741312258009" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/Employee_application$login.coverage" NAME="login Coverage Results" MODIFIED="1741209022060" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1741212434465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1741312211529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+   </component>
+ </project>
+\ No newline at end of file
