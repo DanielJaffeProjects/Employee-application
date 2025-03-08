@@ -7,4 +7,3 @@ class OwnerPage(ManagerPage):
         self.controller = controller
         self.configure(bg="white")
 
-        tk.Label(self, text="Owner Dashboard", font=("Helvetica", 20), bg="white").pack(pady=10)

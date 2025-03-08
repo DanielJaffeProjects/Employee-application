@@ -8,7 +8,5 @@ class ManagerPage(tk.Frame):
         self.controller = controller
         self.configure(bg="white")
 
-        tk.Label(self, text="Manager Dashboard", font=("Helvetica", 20), bg="white").pack(pady=10)
-
         self.manage_employees = ManageEmployees(self, controller)
         self.manage_employees.pack(expand=True, fill="both")
