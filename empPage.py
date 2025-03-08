@@ -7,8 +7,12 @@ class EmployeePage(tk.Frame):
         super().__init__(parent)
         self.controller = controller
         self.configure(bg="white")
+        self.create_top_frame()
+        self.create_bottom_frame()
+        self.createRLframe()
 
-
+    # creates the top part
+    def create_top_frame(self):
         # Top frame for store selection dropdown
         top_frame = tk.Frame(self, bg="white", bd=1, relief="solid")
         top_frame.pack(side="top", fill="x", padx=10, pady=10)
@@ -27,7 +31,7 @@ class EmployeePage(tk.Frame):
         store_dropdown = tk.OptionMenu(top_frame, selected_store, *store_options)
         store_dropdown.config(font=("Helvetica", 14), bg="white", fg="black", relief="solid", bd=2)
         store_dropdown.pack(side="left", padx=10, pady=5)
-
+    def createRLframe(self):
         # Left frame for tab buttons
         tab_frame = tk.Frame(self, bg="white", width=220, bd=1, relief="solid")
         tab_frame.pack(side="left", fill="y", padx=10, pady=10)
@@ -82,7 +86,7 @@ class EmployeePage(tk.Frame):
         self.comments_entry = tk.Entry(close_out, font=("Helvetica", 18))
         self.comments_entry.pack(pady=10)
 
-        # You can add a submit button if needed
+        # submit button
         submit_button = tk.Button(close_out, text="Submit", font=("Helvetica", 18), command=self.submit_info)
         submit_button.pack(pady=20)
 
@@ -108,6 +112,7 @@ class EmployeePage(tk.Frame):
 
         self.tabs["History"] = history_tab
 
+
         # Function to switch tabs
         def show_tab(tab_name):
             for frame in self.tabs.values():
@@ -120,21 +125,27 @@ class EmployeePage(tk.Frame):
         # Create tab buttons
         for title in self.tabs.keys():
             btn = tk.Button(tab_frame, text=title, font=("Helvetica", 14), fg="black", bg="white",
-                            relief="flat", bd=2, command=lambda t=title: show_tab(t), width=25, height=3)
+                            relief="solid", bd=2, command=lambda t=title: show_tab(t), width=25, height=2)
             btn.pack(pady=5, padx=10, fill="x")
-
-        # Logout button (handle controller reference)
-        logout_button = tk.Button(tab_frame, text="Logout", font=("Helvetica", 14), fg="black", bg="white",
-                                  relief="flat", bd=2,
-                                  command=lambda: controller.show_frame("LoginPage") if controller else self.quit(),
-                                  width=25, height=3)
-        logout_button.pack(side="bottom", pady=10, padx=10)
-
-        # Show default tab
+        # shows clock in as the opening tab
         show_tab("Clock in")
+    # bottom frame containing logout
+    def create_bottom_frame(self):
 
+        bottom_frame = tk.Frame(self, bg="white", bd=1, relief="solid")
+        bottom_frame.pack(side="bottom", fill="x", padx=10, pady=10)
+
+        logout_button = tk.Button(bottom_frame, text="Logout", font=("Helvetica", 14), bg="red", fg="white",
+                                  command=self.logout)
+        logout_button.pack(side="left", padx=10, pady=5)
+    # confirms logout
+    def logout(self):
+        confirm = messagebox.askyesno("Logout", "Are you sure you want to logout?")
+        if confirm:
+            self.controller.show_frame("LoginPage")
+
+    #clock in
     def clock_in(self):
-        """Handles clock-in event."""
         balance = self.reg_in_balance.get()
         if not balance:
             messagebox.showerror("Error", "Please enter a register balance.")
@@ -144,9 +155,8 @@ class EmployeePage(tk.Frame):
         self.reg_in_balance.delete(0, tk.END)
         messagebox.showinfo("Clock In", "Clock-in recorded successfully.")
         self.update_history()
-
+    # clock out
     def clock_out(self):
-        """Handles clock-out event."""
         balance = self.reg_out_balance.get()
         if not balance:
             messagebox.showerror("Error", "Please enter a register balance.")
@@ -157,8 +167,8 @@ class EmployeePage(tk.Frame):
         messagebox.showinfo("Clock Out", "Clock-out recorded successfully.")
         self.update_history()
 
+    # updates the history for clock in and clock out
     def update_history(self):
-        """Updates the history tab with new clock-in/out records."""
         # Clear previous records in history
         for widget in self.history_list_frame.winfo_children():
             widget.destroy()

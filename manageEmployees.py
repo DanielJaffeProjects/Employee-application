@@ -16,6 +16,25 @@ class ManageEmployees(tk.Frame):
         self.current_payroll_sunday = self.get_most_recent_sunday(datetime.now().date())
         # For Employee History, initialize current date (daily)
         self.current_date = datetime.now().date()
+        self.create_bottom_frame()
+        # Top frame for store selection dropdown
+        top_frame = tk.Frame(self, bg="white", bd=1, relief="solid")
+        top_frame.pack(side="top", fill="x", padx=10, pady=10)
+
+        # Centered label (ALOHA)
+        aloha_label = tk.Label(top_frame, text="ALOHA", font=("Helvetica", 14), bg="white", fg="black")
+        aloha_label.place(relx=0.5, rely=0.5, anchor="center")
+
+        # Right label (name of employee)
+        tk.Label(top_frame, text="Name of employee", font=("Helvetica", 14), bg="white", fg="black").pack(side="right",
+                                                                                                          padx=(5, 10))
+
+        selected_store = tk.StringVar()
+        selected_store.set("Store 1")
+        store_options = ["Store 1", "Store 2", "Store 3", "Store 4"]
+        store_dropdown = tk.OptionMenu(top_frame, selected_store, *store_options)
+        store_dropdown.config(font=("Helvetica", 14), bg="white", fg="black", relief="solid", bd=2)
+        store_dropdown.pack(side="left", padx=10, pady=5)
 
         # Create Main Layout
         main_frame = tk.Frame(self, bg="white")
@@ -328,6 +347,7 @@ class ManageEmployees(tk.Frame):
         
         tabs["Manage Employees"] = manage_frame
 
+
         # -------------------------------
         # Function to Show Selected Tab
         # -------------------------------
@@ -336,7 +356,7 @@ class ManageEmployees(tk.Frame):
         
         for title in tabs:
             btn = tk.Button(tab_frame, text=title, font=("Helvetica", 14), fg="black", bg="white",
-                            relief="flat", bd=2, command=lambda t=title: show_tab(t), width=25, height=3)
+                            relief="solid", bd=2, command=lambda t=title: show_tab(t), width=25, height=2)
             btn.pack(pady=5, padx=10, fill="x")
         
         # Show the default tab
@@ -345,6 +365,21 @@ class ManageEmployees(tk.Frame):
     # -------------------------------
     # Placeholder Methods
     # -------------------------------
+
+    def create_bottom_frame(self):
+        """Creates a bottom frame for the logout button."""
+        bottom_frame = tk.Frame(self, bg="white", bd=1, relief="solid")
+        bottom_frame.pack(side="bottom", fill="x", padx=10, pady=10)
+
+        logout_button = tk.Button(bottom_frame, text="Logout", font=("Helvetica", 14), bg="red", fg="white",
+                                  command=self.logout)
+        logout_button.pack(side="left", padx=10, pady=5)
+
+    def logout(self):
+        """Handles logout and returns to the login page."""
+        confirm = messagebox.askyesno("Logout", "Are you sure you want to logout?")
+        if confirm:
+            self.controller.show_frame("LoginPage")
     def submit_invoice(self, invoice_id, invoice_date, invoice_company, invoice_paid, invoice_amount, amount_paid):
         messagebox.showinfo("Submit Invoice", f"Invoice {invoice_id} submitted!")
     
