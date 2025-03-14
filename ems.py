@@ -9,7 +9,8 @@ class EMSApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("EMS Application")
-        self.geometry("900x750")
+        # made it full screen
+        self.attributes("-fullscreen", True)
         self.configure(bg="white")
 
         self.container = tk.Frame(self)
