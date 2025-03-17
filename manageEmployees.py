@@ -304,21 +304,19 @@ class ManageEmployees(tk.Frame):
         add_employee_frame = tk.Frame(notebook, bg="white")
         tk.Label(add_employee_frame, text="Add Employee", font=("Helvetica", 18), bg="white").pack(pady=10)
 
-        tk.Label(add_employee_frame, text="Name:", font=("Helvetica", 14), bg="white").pack()
-        emp_name = tk.Entry(add_employee_frame, font=("Helvetica", 14))
-        emp_name.pack()
+        tk.Label(add_employee_frame, text="First Name", font=("Helvetica", 14), bg="white").pack()
+        emp_firstname = tk.Entry(add_employee_frame, font=("Helvetica", 14))
+        emp_firstname.pack()
 
+        tk.Label(add_employee_frame, text="Last Name:", font=("Helvetica", 14), bg="white").pack()
+        emp_lastname = tk.Entry(add_employee_frame, font=("Helvetica", 14))
+        emp_lastname.pack()
         tk.Label(add_employee_frame, text="Username:", font=("Helvetica", 14), bg="white").pack()
         emp_username = tk.Entry(add_employee_frame, font=("Helvetica", 14))
         emp_username.pack()
-
         tk.Label(add_employee_frame, text="Password:", font=("Helvetica", 14), bg="white").pack()
         emp_password = tk.Entry(add_employee_frame, font=("Helvetica", 14), show="*")
         emp_password.pack()
-
-        tk.Label(add_employee_frame, text="Bonus Percentage:", font=("Helvetica", 14), bg="white").pack()
-        emp_bonus = tk.Entry(add_employee_frame, font=("Helvetica", 14))
-        emp_bonus.pack()
 
         # Role Dropdown Menu
         tk.Label(add_employee_frame, text="Role:", font=("Helvetica", 14), bg="white").pack()
@@ -330,7 +328,7 @@ class ManageEmployees(tk.Frame):
         role_menu.pack()
 
         tk.Button(add_employee_frame, text="Add Employee", font=("Helvetica", 14),
-                  command=lambda: self.add_employee(emp_name.get(), emp_username.get(), emp_password.get(),
+                  command=lambda: self.add_employee(emp_firstname.get(), emp_lastname.get(), emp_username.get(), emp_password.get(),
                                                  selected_role.get())).pack(pady=10)
 
         # Delete Employee Tab
@@ -405,15 +403,15 @@ class ManageEmployees(tk.Frame):
     def submit_merchandise(self, merch_type, merch_value, merch_date):
         messagebox.showinfo("Submit Merchandise", f"Merchandise '{merch_type}' submitted!")
     
-    def add_employee(self, name, username, password, selectedRole):
-        if not name or not username or not password or not selectedRole:
+    def add_employee(self, firstName, lastName, username, password, selectedRole):
+        if not firstName or not lastName or not password or not selectedRole:
             messagebox.showerror("Error", "All fields must be filled out.")
             return
-        messagebox.showinfo("Success", f"Employee {name} added successfully!")
+        messagebox.showinfo("Success", f"Employee {firstName} {lastName} added successfully!")
         # sends info to database
-        query = """INSERT INTO employee_information (employee_name,username, password, role)
-           VALUES (%s, %s, %s, %s)"""
-        data = (name, username, password,selectedRole)
+        query = """INSERT INTO employee_information (firstName,lastName, username, password,role)
+           VALUES (%s, %s, %s, %s,%s)"""
+        data = (firstName, lastName, username,password,selectedRole)
 
         # send data to sql connector
         sqlConnector.connect(query, data)
