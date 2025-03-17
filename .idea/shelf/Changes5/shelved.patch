@@ -1,0 +1,201 @@
+Index: ems.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import tkinter as tk\r\nfrom tkinter import messagebox\r\nfrom login import LoginPage\r\nfrom empPage import EmployeePage\r\nfrom ownerPage import OwnerPage\r\nfrom managerPage import ManagerPage\r\n\r\n\r\nclass EMSApp(tk.Tk):\r\n    def __init__(self):\r\n        super().__init__()\r\n        self.title(\"EMS Application\")\r\n        # made it full screen\r\n        self.attributes(\"-fullscreen\", True)\r\n        self.configure(bg=\"white\")\r\n\r\n        self.container = tk.Frame(self)\r\n        self.container.pack(side=\"top\", fill=\"both\", expand=True)\r\n        self.container.grid_rowconfigure(0, weight=1)\r\n        self.container.grid_columnconfigure(0, weight=1)\r\n\r\n        self.frames = {}\r\n        for F in (LoginPage, EmployeePage, OwnerPage, ManagerPage):\r\n            page_name = F.__name__\r\n            frame = F(parent=self.container, controller=self)\r\n            self.frames[page_name] = frame\r\n            frame.grid(row=0, column=0, sticky=\"nsew\")\r\n\r\n        self.show_frame(\"LoginPage\")\r\n\r\n    def show_frame(self, page_name):\r\n        frame = self.frames[page_name]\r\n        frame.tkraise()\r\n\r\nif __name__ == \"__main__\":\r\n    app = EMSApp()\r\n    app.mainloop()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ems.py b/ems.py
+--- a/ems.py	(revision cb42b9917b562fbd5feb543b18227eb37bf5ea7c)
++++ b/ems.py	(date 1742230585176)
+@@ -4,14 +4,16 @@
+ from empPage import EmployeePage
+ from ownerPage import OwnerPage
+ from managerPage import ManagerPage
+-
++from Signup import SignupPage
+ 
+ class EMSApp(tk.Tk):
+     def __init__(self):
+         super().__init__()
+         self.title("EMS Application")
++        self.geometry("900x760")
+         # made it full screen
+-        self.attributes("-fullscreen", True)
++        #Todo
++        # self.attributes("Fullscreen", True)
+         self.configure(bg="white")
+ 
+         self.container = tk.Frame(self)
+@@ -20,7 +22,7 @@
+         self.container.grid_columnconfigure(0, weight=1)
+ 
+         self.frames = {}
+-        for F in (LoginPage, EmployeePage, OwnerPage, ManagerPage):
++        for F in (LoginPage, SignupPage,EmployeePage, OwnerPage, ManagerPage):
+             page_name = F.__name__
+             frame = F(parent=self.container, controller=self)
+             self.frames[page_name] = frame
+Index: .idea/dataSources.local.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"dataSourceStorageLocal\" created-in=\"PY-243.23654.177\">\r\n    <data-source name=\"@localhost\" uuid=\"74882030-66c3-4690-b336-cbfd28b6d9ab\">\r\n      <database-info product=\"MySQL\" version=\"8.0.41\" jdbc-version=\"4.2\" driver-name=\"MySQL Connector/J\" driver-version=\"mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)\" dbms=\"MYSQL\" exact-version=\"8.0.41\" exact-driver-version=\"8.2\">\r\n        <extra-name-characters>#@</extra-name-characters>\r\n        <identifier-quote-string>`</identifier-quote-string>\r\n        <jdbc-catalog-is-schema>true</jdbc-catalog-is-schema>\r\n      </database-info>\r\n      <case-sensitivity plain-identifiers=\"lower\" quoted-identifiers=\"lower\" />\r\n      <secret-storage>master_key</secret-storage>\r\n      <user-name>root</user-name>\r\n      <schema-mapping>\r\n        <introspection-scope>\r\n          <node kind=\"schema\" qname=\"employee_db\" />\r\n        </introspection-scope>\r\n      </schema-mapping>\r\n    </data-source>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/dataSources.local.xml b/.idea/dataSources.local.xml
+--- a/.idea/dataSources.local.xml	(revision cb42b9917b562fbd5feb543b18227eb37bf5ea7c)
++++ b/.idea/dataSources.local.xml	(date 1742229428028)
+@@ -5,7 +5,6 @@
+       <database-info product="MySQL" version="8.0.41" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MYSQL" exact-version="8.0.41" exact-driver-version="8.2">
+         <extra-name-characters>#@</extra-name-characters>
+         <identifier-quote-string>`</identifier-quote-string>
+-        <jdbc-catalog-is-schema>true</jdbc-catalog-is-schema>
+       </database-info>
+       <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+       <secret-storage>master_key</secret-storage>
+Index: login.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import tkinter as tk\r\nfrom tkinter import messagebox\r\nfrom PIL import Image, ImageTk  # Import PIL for images\r\n\r\n# User credentials (You can modify this to fetch from a database)\r\ncredentials = {\r\n    \"emp\": {\"password\": \"1234\", \"role\": \"employee\"},\r\n    \"own\": {\"password\": \"1234\", \"role\": \"owner\"},\r\n    \"man\": {\"password\": \"1234\", \"role\": \"manager\"}\r\n}\r\n\r\nclass LoginPage(tk.Frame):\r\n    def __init__(self, parent, controller):\r\n        super().__init__(parent)\r\n        self.controller = controller\r\n        self.configure(bg=\"white\")\r\n\r\n        # Load Background Image\r\n        try:\r\n            image = Image.open(\"clwbeach.jpg\")\r\n            self.bg_image = ImageTk.PhotoImage(image)\r\n            self.bg_label = tk.Label(self, image=self.bg_image)\r\n            self.bg_label.place(relwidth=1, relheight=1)\r\n        except FileNotFoundError:\r\n            self.bg_label = tk.Label(self, text=\"Background Image Not Found\", font=(\"Helvetica\", 20), bg=\"white\", fg=\"black\")\r\n            self.bg_label.place(relwidth=1, relheight=1)\r\n\r\n        # Login Form\r\n        frame = tk.Frame(self, bg=\"white\", bd=1, relief=\"solid\", padx=20, pady=20)\r\n        frame.place(relx=0.5, rely=0.5, anchor=\"center\")\r\n\r\n        tk.Label(frame, text=\"ALOHA\", font=(\"Helvetica\", 20, \"bold\"), bg=\"white\", fg=\"black\").pack(pady=(0, 10))\r\n        tk.Label(frame, text=\"Username:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack()\r\n        self.entry_username = tk.Entry(frame, font=(\"Helvetica\", 14))\r\n        self.entry_username.pack()\r\n\r\n        tk.Label(frame, text=\"Password:\", font=(\"Helvetica\", 14), bg=\"white\", fg=\"black\").pack()\r\n        self.entry_password = tk.Entry(frame, font=(\"Helvetica\", 14), show=\"*\")\r\n        self.entry_password.pack()\r\n\r\n        tk.Button(frame, text=\"Login\", command=self.login, font=(\"Helvetica\", 16), fg=\"black\", bg=\"white\", width=25, height=2).pack(pady=10)\r\n\r\n    def login(self):\r\n        username = self.entry_username.get()\r\n        password = self.entry_password.get()\r\n        if username in credentials and credentials[username][\"password\"] == password:\r\n            role = credentials[username][\"role\"]\r\n            self.controller.show_frame(f\"{role.capitalize()}Page\")\r\n        else:\r\n            messagebox.showerror(\"Login Failed\", \"Invalid Username or Password\")\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/login.py b/login.py
+--- a/login.py	(revision cb42b9917b562fbd5feb543b18227eb37bf5ea7c)
++++ b/login.py	(date 1742230414159)
+@@ -40,6 +40,10 @@
+ 
+         tk.Button(frame, text="Login", command=self.login, font=("Helvetica", 16), fg="black", bg="white", width=25, height=2).pack(pady=10)
+ 
++        # Sign Up
++        tk.Button(frame, text="Signup", command=self.go_to_signup, font=("Helvetica", 16), fg="black", bg="white", width=25, height=2).pack(pady=10)
++
++
+     def login(self):
+         username = self.entry_username.get()
+         password = self.entry_password.get()
+@@ -48,3 +52,7 @@
+             self.controller.show_frame(f"{role.capitalize()}Page")
+         else:
+             messagebox.showerror("Login Failed", "Invalid Username or Password")
++
++    def go_to_signup(self):
++        self.controller.show_frame("SignupPage")
++
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"1273df12-f704-48bc-b0d1-73903eeefc88\" name=\"Changes\" comment=\"change it to start in full screen mode\">\r\n      <change afterPath=\"$PROJECT_DIR$/database for employee.sql\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/sqlConnector.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/empPage.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/empPage.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/ems.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/ems.py\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Python Script\" />\r\n        <option value=\"SQL File\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;DanielJaffeProjects&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/DanielJaffeProjects/Employee-application.git&quot;,\r\n    &quot;accountId&quot;: &quot;91c662e2-bbe2-4e9c-8c90-a67d3f4145ee&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2tsSfy8edG6w5uyQjivXBQHiNuX\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Database Script.sql database.sql.executor\": \"Run\",\r\n    \"Python.empPage.executor\": \"Run\",\r\n    \"Python.ems.executor\": \"Run\",\r\n    \"Python.login.executor\": \"Run\",\r\n    \"Python.manageEmployees.executor\": \"Run\",\r\n    \"Python.managerPage.executor\": \"Run\",\r\n    \"Python.ownerPage.executor\": \"Run\",\r\n    \"Python.sql connector.executor\": \"Run\",\r\n    \"Python.sqlConnector.executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"last_opened_file_path\": \"C:/Users/drjed/OneDrive/Documents/GitHub/Employee-application\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"settings.editor.selected.configurable\": \"com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  },\r\n  \"keyToStringList\": {\r\n    \"DatabaseDriversLRU\": [\r\n      \"mysql\"\r\n    ],\r\n    \"RunConfigurationTargetLRU\": [\r\n      \"aa110dd0-22cf-41cb-b463-22a0748a2ec6\",\r\n      \"8e9e8047-58f1-4ba5-9b36-912ac72beeaf\"\r\n    ]\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"console.sql\" type=\"DatabaseScript\" editBeforeRun=\"true\" nameIsGenerated=\"true\">\r\n      <script-file value=\"$APPLICATION_CONFIG_DIR$/consoles/db/74882030-66c3-4690-b336-cbfd28b6d9ab/console.sql\" />\r\n      <script-mode>FILE</script-mode>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"database for employee.sql\" type=\"DatabaseScript\" editBeforeRun=\"true\" nameIsGenerated=\"true\">\r\n      <script-file value=\"$PROJECT_DIR$/database for employee.sql\" />\r\n      <script-mode>FILE</script-mode>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-PY-243.23654.177\" />\r\n        <option value=\"bundled-python-sdk-91d3a02ef49d-43b77aa2d136-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.23654.177\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"1273df12-f704-48bc-b0d1-73903eeefc88\" name=\"Changes\" comment=\"\" />\r\n      <created>1741139395654</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1741139395654</updated>\r\n      <workItem from=\"1741139396833\" duration=\"39000\" />\r\n      <workItem from=\"1741188109676\" duration=\"2860000\" />\r\n      <workItem from=\"1741193751555\" duration=\"530000\" />\r\n      <workItem from=\"1741195127453\" duration=\"5681000\" />\r\n      <workItem from=\"1741208821762\" duration=\"2208000\" />\r\n      <workItem from=\"1741353788940\" duration=\"991000\" />\r\n      <workItem from=\"1741449184501\" duration=\"269000\" />\r\n      <workItem from=\"1741458480908\" duration=\"3765000\" />\r\n      <workItem from=\"1741972901937\" duration=\"2838000\" />\r\n      <workItem from=\"1741981767234\" duration=\"606000\" />\r\n      <workItem from=\"1741982650551\" duration=\"6510000\" />\r\n      <workItem from=\"1741992592117\" duration=\"1371000\" />\r\n      <workItem from=\"1742221655448\" duration=\"4218000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1741197688889</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1741197688889</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"added history so that you can see the prior in balance and out balances as well and when clock in and out\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1741199595129</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1741199595129</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"added a header to employee and reformated the ones for manager and owner\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1741202026556</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1741202026556</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Change history to add store number, date, clock in and out, reg in and out, duration.\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1741991738845</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1741991738845</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"Change history to add store number, date, clock in and out, reg in and out, duration.\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1741991749405</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1741991749405</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"change it to start in full screen mode\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1741991942257</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1741991942257</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"7\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.\" />\r\n    <MESSAGE value=\"added history so that you can see the prior in balance and out balances as well and when clock in and out\" />\r\n    <MESSAGE value=\"added a header to employee and reformated the ones for manager and owner\" />\r\n    <MESSAGE value=\"Change history to add store number, date, clock in and out, reg in and out, duration.\" />\r\n    <MESSAGE value=\"change it to start in full screen mode\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"change it to start in full screen mode\" />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$ems.coverage\" NAME=\"ems Coverage Results\" MODIFIED=\"1742223661466\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$ownerPage.coverage\" NAME=\"ownerPage Coverage Results\" MODIFIED=\"1741460856220\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$sqlConnector.coverage\" NAME=\"sqlConnector Coverage Results\" MODIFIED=\"1742226771944\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$managerPage.coverage\" NAME=\"managerPage Coverage Results\" MODIFIED=\"1741464753332\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$login.coverage\" NAME=\"login Coverage Results\" MODIFIED=\"1741972991573\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$sql_connector.coverage\" NAME=\"sql connector Coverage Results\" MODIFIED=\"1742223421969\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$empPage.coverage\" NAME=\"empPage Coverage Results\" MODIFIED=\"1742227089377\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/Employee_application$manageEmployees.coverage\" NAME=\"manageEmployees Coverage Results\" MODIFIED=\"1741983977441\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision cb42b9917b562fbd5feb543b18227eb37bf5ea7c)
++++ b/.idea/workspace.xml	(date 1742230587138)
+@@ -4,12 +4,12 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="change it to start in full screen mode">
+-      <change afterPath="$PROJECT_DIR$/database for employee.sql" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/sqlConnector.py" afterDir="false" />
++    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="got sql connect on my local machine and try out with employee values">
++      <change afterPath="$PROJECT_DIR$/Signup.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/empPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/empPage.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/ems.py" beforeDir="false" afterPath="$PROJECT_DIR$/ems.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/login.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -19,8 +19,8 @@
+   <component name="FileTemplateManagerImpl">
+     <option name="RECENT_TEMPLATES">
+       <list>
+-        <option value="Python Script" />
+         <option value="SQL File" />
++        <option value="Python Script" />
+       </list>
+     </option>
+   </component>
+@@ -50,6 +50,7 @@
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
+     "Database Script.sql database.sql.executor": "Run",
++    "Python.Signup.executor": "Run",
+     "Python.empPage.executor": "Run",
+     "Python.ems.executor": "Run",
+     "Python.login.executor": "Run",
+@@ -80,18 +81,6 @@
+     ]
+   }
+ }]]></component>
+-  <component name="RunManager">
+-    <configuration name="console.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+-      <script-file value="$APPLICATION_CONFIG_DIR$/consoles/db/74882030-66c3-4690-b336-cbfd28b6d9ab/console.sql" />
+-      <script-mode>FILE</script-mode>
+-      <method v="2" />
+-    </configuration>
+-    <configuration name="database for employee.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+-      <script-file value="$PROJECT_DIR$/database for employee.sql" />
+-      <script-mode>FILE</script-mode>
+-      <method v="2" />
+-    </configuration>
+-  </component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+@@ -120,7 +109,8 @@
+       <workItem from="1741981767234" duration="606000" />
+       <workItem from="1741982650551" duration="6510000" />
+       <workItem from="1741992592117" duration="1371000" />
+-      <workItem from="1742221655448" duration="4218000" />
++      <workItem from="1742221655448" duration="4601000" />
++      <workItem from="1742229113750" duration="1464000" />
+     </task>
+     <task id="LOCAL-00001" summary="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.">
+       <option name="closed" value="true" />
+@@ -170,7 +160,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1741991942257</updated>
+     </task>
+-    <option name="localTasksCounter" value="7" />
++    <task id="LOCAL-00007" summary="got sql connect on my local machine and try out with employee values">
++      <option name="closed" value="true" />
++      <created>1742227454389</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1742227454389</updated>
++    </task>
++    <option name="localTasksCounter" value="8" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -182,16 +180,18 @@
+     <MESSAGE value="added a header to employee and reformated the ones for manager and owner" />
+     <MESSAGE value="Change history to add store number, date, clock in and out, reg in and out, duration." />
+     <MESSAGE value="change it to start in full screen mode" />
+-    <option name="LAST_COMMIT_MESSAGE" value="change it to start in full screen mode" />
++    <MESSAGE value="got sql connect on my local machine and try out with employee values" />
++    <option name="LAST_COMMIT_MESSAGE" value="got sql connect on my local machine and try out with employee values" />
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+-    <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1742223661466" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1742230585247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/Employee_application$ownerPage.coverage" NAME="ownerPage Coverage Results" MODIFIED="1741460856220" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/Employee_application$sqlConnector.coverage" NAME="sqlConnector Coverage Results" MODIFIED="1742226771944" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Employee_application$Signup.coverage" NAME="Signup Coverage Results" MODIFIED="1742229539230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Employee_application$sqlConnector.coverage" NAME="sqlConnector Coverage Results" MODIFIED="1742227154212" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/Employee_application$managerPage.coverage" NAME="managerPage Coverage Results" MODIFIED="1741464753332" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/Employee_application$login.coverage" NAME="login Coverage Results" MODIFIED="1741972991573" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/Employee_application$sql_connector.coverage" NAME="sql connector Coverage Results" MODIFIED="1742223421969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1742227089377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Employee_application$login.coverage" NAME="login Coverage Results" MODIFIED="1742230414251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1742227273697" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/Employee_application$manageEmployees.coverage" NAME="manageEmployees Coverage Results" MODIFIED="1741983977441" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+   </component>
+ </project>
+\ No newline at end of file

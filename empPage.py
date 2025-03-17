@@ -216,9 +216,9 @@ class EmployeePage(tk.Frame):
             comments = self.comments_entry.get()
             storeName = self.selected_store.get()
 
-            query = """INSERT INTO employee_financials (employee_name, store_name, credit, cash_in_envelope, expense, comments)
-           VALUES (%s, %s, %s, %s, %s, %s)"""
-            data = ("change to employee name",storeName, credit, cash, expense, comments)
+            query = """INSERT INTO employee_close (employee_name, store_name, credit, cash_in_envelope, expense, comments)
+                VALUES (%s, %s, %s, %s, %s, %s)"""
+            data = (None,storeName, credit, cash, expense, comments)
 
             #send data to sql connector
             sqlConnector.connect(query, data)

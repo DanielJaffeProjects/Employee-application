@@ -20,7 +20,7 @@
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="6" parent="1" name="employee_db">
-      <LastIntrospectionLocalTimestamp>2025-03-17.15:50:30</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-03-17.17:46:27</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="7" parent="1" name="information_schema">
@@ -41,51 +41,71 @@
     <schema id="12" parent="1" name="university">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <table id="13" parent="6" name="employee_financials">
+    <table id="13" parent="6" name="employee_close">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <column id="14" parent="13" name="id">
+    <table id="14" parent="6" name="employee_information">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <column id="15" parent="13" name="employee_name">
+      <Position>1</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="16" parent="13" name="store_name">
+      <Position>2</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="17" parent="13" name="credit">
+      <Position>3</Position>
+      <StoredType>decimal(10,2 digit)|0s</StoredType>
+    </column>
+    <column id="18" parent="13" name="cash_in_envelope">
+      <Position>4</Position>
+      <StoredType>decimal(10,2 digit)|0s</StoredType>
+    </column>
+    <column id="19" parent="13" name="expense">
+      <Position>5</Position>
+      <StoredType>decimal(10,2 digit)|0s</StoredType>
+    </column>
+    <column id="20" parent="13" name="comments">
+      <Position>6</Position>
+      <StoredType>text|0s</StoredType>
+    </column>
+    <column id="21" parent="13" name="timestamp">
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <Position>7</Position>
+      <StoredType>timestamp|0s</StoredType>
+    </column>
+    <column id="22" parent="14" name="id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="15" parent="13" name="employee_name">
+    <column id="23" parent="14" name="employee_name">
       <Position>2</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="16" parent="13" name="store_name">
+    <column id="24" parent="14" name="username">
       <Position>3</Position>
-      <StoredType>varchar(100)|0s</StoredType>
+      <StoredType>varchar(25)|0s</StoredType>
     </column>
-    <column id="17" parent="13" name="credit">
+    <column id="25" parent="14" name="password">
       <Position>4</Position>
-      <StoredType>decimal(10,2 digit)|0s</StoredType>
+      <StoredType>varchar(25)|0s</StoredType>
     </column>
-    <column id="18" parent="13" name="cash_in_envelope">
+    <column id="26" parent="14" name="role">
       <Position>5</Position>
-      <StoredType>decimal(10,2 digit)|0s</StoredType>
+      <StoredType>varchar(50)|0s</StoredType>
     </column>
-    <column id="19" parent="13" name="expense">
-      <Position>6</Position>
-      <StoredType>decimal(10,2 digit)|0s</StoredType>
-    </column>
-    <column id="20" parent="13" name="comments">
-      <Position>7</Position>
-      <StoredType>text|0s</StoredType>
-    </column>
-    <column id="21" parent="13" name="timestamp">
-      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
-      <Position>8</Position>
-      <StoredType>timestamp|0s</StoredType>
-    </column>
-    <index id="22" parent="13" name="PRIMARY">
+    <index id="27" parent="14" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="23" parent="13" name="PRIMARY">
+    <key id="28" parent="14" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>

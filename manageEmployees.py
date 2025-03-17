@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 from datetime import datetime, timedelta
+import sqlConnector
+
 
 class ManageEmployees(tk.Frame):
     def __init__(self, parent, controller):
@@ -298,25 +300,39 @@ class ManageEmployees(tk.Frame):
         manage_frame.grid(row=0, column=0, sticky="nsew")
         notebook = ttk.Notebook(manage_frame)
         notebook.pack(expand=True, fill="both")
-
         # Add Employee Tab
         add_employee_frame = tk.Frame(notebook, bg="white")
         tk.Label(add_employee_frame, text="Add Employee", font=("Helvetica", 18), bg="white").pack(pady=10)
+
         tk.Label(add_employee_frame, text="Name:", font=("Helvetica", 14), bg="white").pack()
         emp_name = tk.Entry(add_employee_frame, font=("Helvetica", 14))
         emp_name.pack()
+
         tk.Label(add_employee_frame, text="Username:", font=("Helvetica", 14), bg="white").pack()
         emp_username = tk.Entry(add_employee_frame, font=("Helvetica", 14))
         emp_username.pack()
+
         tk.Label(add_employee_frame, text="Password:", font=("Helvetica", 14), bg="white").pack()
         emp_password = tk.Entry(add_employee_frame, font=("Helvetica", 14), show="*")
         emp_password.pack()
+
         tk.Label(add_employee_frame, text="Bonus Percentage:", font=("Helvetica", 14), bg="white").pack()
         emp_bonus = tk.Entry(add_employee_frame, font=("Helvetica", 14))
         emp_bonus.pack()
-        tk.Button(add_employee_frame, text="Add Employee", font=("Helvetica", 14), 
-                  command=lambda: self.add_employee(emp_name.get(), emp_username.get(), emp_password.get(), emp_bonus.get())).pack(pady=10)
-        
+
+        # Role Dropdown Menu
+        tk.Label(add_employee_frame, text="Role:", font=("Helvetica", 14), bg="white").pack()
+        roles = ["Employee", "Manager","Owner"]  # List of roles
+        selected_role = tk.StringVar()
+        selected_role.set(roles[0])  # Set default role
+        role_menu = tk.OptionMenu(add_employee_frame, selected_role, *roles)
+        role_menu.config(font=("Helvetica", 14))
+        role_menu.pack()
+
+        tk.Button(add_employee_frame, text="Add Employee", font=("Helvetica", 14),
+                  command=lambda: self.add_employee(emp_name.get(), emp_username.get(), emp_password.get(),
+                                                 selected_role.get())).pack(pady=10)
+
         # Delete Employee Tab
         delete_employee_frame = tk.Frame(notebook, bg="white")
         tk.Label(delete_employee_frame, text="Delete Employee", font=("Helvetica", 18), bg="white").pack(pady=10)
@@ -325,7 +341,7 @@ class ManageEmployees(tk.Frame):
         del_username.pack()
         tk.Button(delete_employee_frame, text="Delete", font=("Helvetica", 14), 
                   command=lambda: self.delete_employee(del_username.get())).pack(pady=10)
-        
+
         # Edit Employee Tab
         edit_employee_frame = tk.Frame(notebook, bg="white")
         tk.Label(edit_employee_frame, text="Edit Employee", font=("Helvetica", 18), bg="white").pack(pady=10)
@@ -338,9 +354,9 @@ class ManageEmployees(tk.Frame):
         tk.Label(edit_employee_frame, text="Edit Bonus Percentage:", font=("Helvetica", 14), bg="white").pack()
         new_bonus = tk.Entry(edit_employee_frame, font=("Helvetica", 14))
         new_bonus.pack()
-        tk.Button(edit_employee_frame, text="Update", font=("Helvetica", 14), 
+        tk.Button(edit_employee_frame, text="Update", font=("Helvetica", 14),
                   command=lambda: self.edit_employee(edit_username.get(), new_password.get(), new_bonus.get())).pack(pady=10)
-        
+
         notebook.add(add_employee_frame, text="Add Employee")
         notebook.add(delete_employee_frame, text="Delete Employee")
         notebook.add(edit_employee_frame, text="Edit Employee")
@@ -389,12 +405,19 @@ class ManageEmployees(tk.Frame):
     def submit_merchandise(self, merch_type, merch_value, merch_date):
         messagebox.showinfo("Submit Merchandise", f"Merchandise '{merch_type}' submitted!")
     
-    def add_employee(self, name, username, password, bonus):
-        if not name or not username or not password:
+    def add_employee(self, name, username, password, selectedRole):
+        if not name or not username or not password or not selectedRole:
             messagebox.showerror("Error", "All fields must be filled out.")
             return
         messagebox.showinfo("Success", f"Employee {name} added successfully!")
-    
+        # sends info to database
+        query = """INSERT INTO employee_information (employee_name,username, password, role)
+           VALUES (%s, %s, %s, %s)"""
+        data = (name, username, password,selectedRole)
+
+        # send data to sql connector
+        sqlConnector.connect(query, data)
+
     def delete_employee(self, username):
         if not username:
             messagebox.showerror("Error", "Username is required.")
@@ -547,6 +570,9 @@ class ManageEmployees(tk.Frame):
             self.update_payroll_display()
         except ValueError:
             messagebox.showerror("Invalid Date", "Please enter a valid date in YYYY-MM-DD format.")
+
+
+
 
 # For testing purposes, run this file directly.
 if __name__ == '__main__':
