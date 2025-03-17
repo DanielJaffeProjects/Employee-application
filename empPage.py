@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from datetime import datetime
 from tkinter import ttk
+import sqlConnector
 
 # Color definitions
 BG_COLOR = "white"
@@ -209,10 +210,18 @@ class EmployeePage(tk.Frame):
 
     # Function to handle the submit button action
     def submit_info(self):
-        credit = self.credit_entry.get()
-        cash = self.cash_entry.get()
-        expense = self.expense_entry.get()
-        comments = self.comments_entry.get()
+            credit = self.credit_entry.get()
+            cash = self.cash_entry.get()
+            expense = self.expense_entry.get()
+            comments = self.comments_entry.get()
+            storeName = self.selected_store.get()
+
+            query = """INSERT INTO employee_financials (employee_name, store_name, credit, cash_in_envelope, expense, comments)
+           VALUES (%s, %s, %s, %s, %s, %s)"""
+            data = ("change to employee name",storeName, credit, cash, expense, comments)
+
+            #send data to sql connector
+            sqlConnector.connect(query, data)
 
 if __name__ == '__main__':
     root = tk.Tk()

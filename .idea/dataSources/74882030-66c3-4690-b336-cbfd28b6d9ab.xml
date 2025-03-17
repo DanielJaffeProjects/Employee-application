@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="@localhost">
+  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.53">
+    <root id="1">
+      <DefaultCasing>lower/lower</DefaultCasing>
+      <DefaultEngine>InnoDB</DefaultEngine>
+      <DefaultTmpEngine>InnoDB</DefaultTmpEngine>
+      <ServerVersion>8.0.41</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="booksdb">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="3" parent="1" name="census">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="4" parent="1" name="company">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="5" parent="1" name="company2">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="6" parent="1" name="employee_db">
+      <LastIntrospectionLocalTimestamp>2025-03-17.15:50:30</LastIntrospectionLocalTimestamp>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="7" parent="1" name="information_schema">
+      <CollationName>utf8mb3_general_ci</CollationName>
+    </schema>
+    <schema id="8" parent="1" name="mysql">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="9" parent="1" name="performance_schema">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="10" parent="1" name="sys">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="11" parent="1" name="test_db">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="12" parent="1" name="university">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <table id="13" parent="6" name="employee_financials">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <column id="14" parent="13" name="id">
+      <AutoIncrement>1</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="15" parent="13" name="employee_name">
+      <Position>2</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="16" parent="13" name="store_name">
+      <Position>3</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="17" parent="13" name="credit">
+      <Position>4</Position>
+      <StoredType>decimal(10,2 digit)|0s</StoredType>
+    </column>
+    <column id="18" parent="13" name="cash_in_envelope">
+      <Position>5</Position>
+      <StoredType>decimal(10,2 digit)|0s</StoredType>
+    </column>
+    <column id="19" parent="13" name="expense">
+      <Position>6</Position>
+      <StoredType>decimal(10,2 digit)|0s</StoredType>
+    </column>
+    <column id="20" parent="13" name="comments">
+      <Position>7</Position>
+      <StoredType>text|0s</StoredType>
+    </column>
+    <column id="21" parent="13" name="timestamp">
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <Position>8</Position>
+      <StoredType>timestamp|0s</StoredType>
+    </column>
+    <index id="22" parent="13" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="23" parent="13" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+  </database-model>
+</dataSource>

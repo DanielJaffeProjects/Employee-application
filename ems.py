@@ -5,6 +5,7 @@ from empPage import EmployeePage
 from ownerPage import OwnerPage
 from managerPage import ManagerPage
 
+
 class EMSApp(tk.Tk):
     def __init__(self):
         super().__init__()
