@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="add the ability to add employees with name, username, password, and role">
+    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="change the database for both employee closing and the employee information">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/74882030-66c3-4690-b336-cbfd28b6d9ab.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/74882030-66c3-4690-b336-cbfd28b6d9ab.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database for employee.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database for employee.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manageEmployees.py" beforeDir="false" afterPath="$PROJECT_DIR$/manageEmployees.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ems.py" beforeDir="false" afterPath="$PROJECT_DIR$/ems.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sqlConnector.py" beforeDir="false" afterPath="$PROJECT_DIR$/sqlConnector.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,6 +111,7 @@
       <workItem from="1741982650551" duration="6510000" />
       <workItem from="1741992592117" duration="1371000" />
       <workItem from="1742221655448" duration="4218000" />
+      <workItem from="1742248464725" duration="6153000" />
     </task>
     <task id="LOCAL-00001" summary="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.">
       <option name="closed" value="true" />
@@ -165,7 +169,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742233655446</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="change the database for both employee closing and the employee information">
+      <option name="closed" value="true" />
+      <created>1742235534622</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1742235534622</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,17 +190,18 @@
     <MESSAGE value="Change history to add store number, date, clock in and out, reg in and out, duration." />
     <MESSAGE value="change it to start in full screen mode" />
     <MESSAGE value="add the ability to add employees with name, username, password, and role" />
-    <option name="LAST_COMMIT_MESSAGE" value="add the ability to add employees with name, username, password, and role" />
+    <MESSAGE value="change the database for both employee closing and the employee information" />
+    <option name="LAST_COMMIT_MESSAGE" value="change the database for both employee closing and the employee information" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1742232644269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1742260427862" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$ownerPage.coverage" NAME="ownerPage Coverage Results" MODIFIED="1741460856220" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$Signup.coverage" NAME="Signup Coverage Results" MODIFIED="1742229539230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Employee_application$sqlConnector.coverage" NAME="sqlConnector Coverage Results" MODIFIED="1742227154212" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$sqlConnector.coverage" NAME="sqlConnector Coverage Results" MODIFIED="1742260312660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$managerPage.coverage" NAME="managerPage Coverage Results" MODIFIED="1741464753332" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$sql_connector.coverage" NAME="sql connector Coverage Results" MODIFIED="1742223421969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Employee_application$login.coverage" NAME="login Coverage Results" MODIFIED="1742230414251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1742233593270" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Employee_application$manageEmployees.coverage" NAME="manageEmployees Coverage Results" MODIFIED="1742235219128" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$login.coverage" NAME="login Coverage Results" MODIFIED="1742259112774" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1742249394001" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$manageEmployees.coverage" NAME="manageEmployees Coverage Results" MODIFIED="1742235252062" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -20,7 +20,7 @@
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="6" parent="1" name="employee_db">
-      <LastIntrospectionLocalTimestamp>2025-03-17.18:13:32</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-03-17.22:54:43</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="7" parent="1" name="information_schema">

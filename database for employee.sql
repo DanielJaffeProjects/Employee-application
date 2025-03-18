@@ -4,10 +4,10 @@ USE employee_db;
 
 CREATE TABLE IF NOT EXISTS employee_information (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    firstName VARCHAR(15),
-    lastName varchar(15),
+    firstName VARCHAR(15) Null,
+    lastName varchar(15) Null,
     userName varchar(15),
-    password varchar(25),
+    password varchar(25) null,
     role enum('employee','manager','owner')
     );
 

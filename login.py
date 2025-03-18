@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk  # Import PIL for images
 
+from sqlConnector import connect
+
 # User credentials (You can modify this to fetch from a database)
 credentials = {
     "emp": {"password": "1234", "role": "employee"},
@@ -43,8 +45,20 @@ class LoginPage(tk.Frame):
     def login(self):
         username = self.entry_username.get()
         password = self.entry_password.get()
-        if username in credentials and credentials[username]["password"] == password:
-            role = credentials[username]["role"]
-            self.controller.show_frame(f"{role.capitalize()}Page")
+        query = "SELECT * FROM employee_information WHERE username = %s AND password = %s"
+
+        user_data=connect(query, (username, password))
+        print(user_data)
+
+        if user_data and len(user_data)>0:
+            user = user_data[0]
+            role_index = 4
+            role = user[role_index] if len(user) > role_index else None
+
+            if role:
+                role = role.title()
+                self.controller.show_frame(f"{role}Page")
+            else:
+                messagebox.showerror("Login Failed", "User role not found.")
         else:
             messagebox.showerror("Login Failed", "Invalid Username or Password")

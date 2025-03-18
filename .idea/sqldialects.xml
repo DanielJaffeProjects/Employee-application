@@ -3,5 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/database for employee.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/empPage.py" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/login.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/sqlConnector.py" dialect="GenericSQL" />
   </component>
 </project>
