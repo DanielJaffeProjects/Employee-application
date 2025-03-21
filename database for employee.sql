@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS employee_information (
     password varchar(25) null,
     role enum('employee','manager','owner')
     );
-
+insert into employee_information(firstName, lastName, userName, password, role)
+values('Daniel','afd','admin','admin','owner');
 Create Table if not exists employee_close(
     firstName Varchar (15),
     lastName varchar (15),

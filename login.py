@@ -52,9 +52,10 @@ class LoginPage(tk.Frame):
 
         if user_data and len(user_data)>0:
             user = user_data[0]
-            role_index = 4
+            print(user)
+            role_index = 5
             role = user[role_index] if len(user) > role_index else None
-
+            print(role)
             if role:
                 role = role.title()
                 self.controller.show_frame(f"{role}Page")
