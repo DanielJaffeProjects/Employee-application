@@ -193,8 +193,8 @@ class EmployeePage(tk.Frame):
 
         # sends info to database
         query = """INSERT INTO clockTable(reg_in)
-           VALUES (%s, %s)"""
-        data = (reg_in)
+           VALUES (%s)"""
+        data = (reg_in,)
 
         # send data to sql connector
         sqlConnector.connect(query, data)

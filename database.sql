@@ -11,14 +11,14 @@ CREATE TABLE IF NOT EXISTS employee(
     password varchar(25) null,
     role enum('employee','manager','owner')
     );
-insert into employee_information(firstName, lastName, userName, password, role)
+insert into employee(firstName, lastName, userName, password, role)
 values('Daniel','is the best','admin','admin','owner');
 # todo get rid of when done for testing purposes only
-insert into employee_information(firstName, lastName, userName, password, role)
+insert into employee(firstName, lastName, userName, password, role)
 values('Daniel','Jaffe','e','e','owner');
-insert into employee_information(firstName, lastName, userName, password, role)
+insert into employee(firstName, lastName, userName, password, role)
 values('Daniel','is thn','m','m','owner');
-insert into employee_information(firstName, lastName, userName, password, role)
+insert into employee(firstName, lastName, userName, password, role)
 values('Daniel','Yes I am the ','o','o','owner');
 
 # employee close
