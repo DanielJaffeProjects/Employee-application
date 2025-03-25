@@ -361,7 +361,60 @@ class ManageEmployees(tk.Frame):
         notebook.add(edit_employee_frame, text="Edit Employee")
         
         tabs["Manage Employees"] = manage_frame
+        # -------------------------------
+        # Add Store Tab
+        # -------------------------------
+        add_store_frame = tk.Frame(content_frame, bg="white")
+        add_store_frame.grid(row=0, column=0, sticky="nsew")
+        tabs["Add Store"] = add_store_frame
 
+        tk.Label(add_store_frame, text="Add Store", font=("Helvetica", 18), bg="white").pack(pady=10)
+
+        tk.Label(add_store_frame, text="Store Name:", font=("Helvetica", 14), bg="white").pack()
+        store_name = tk.Entry(add_store_frame, font=("Helvetica", 14))
+        store_name.pack()
+
+        tk.Label(add_store_frame, text="Store Location:", font=("Helvetica", 14), bg="white").pack()
+        store_location = tk.Entry(add_store_frame, font=("Helvetica", 14))
+        store_location.pack()
+
+        tk.Button(add_store_frame, text="Add Store", font=("Helvetica", 14),
+                  command=lambda: self.add_store(store_name.get(), store_location.get())).pack(pady=10)
+
+        # -------------------------------
+        # Manage Stores Tab
+        # -------------------------------
+        manage_stores_frame = tk.Frame(content_frame, bg="white")
+        manage_stores_frame.grid(row=0, column=0, sticky="nsew")
+        tabs["Manage Stores"] = manage_stores_frame
+
+        tk.Label(manage_stores_frame, text="Manage Stores", font=("Helvetica", 18), bg="white").pack(pady=10)
+
+        # Dropdown to select store to edit/delete
+        tk.Label(manage_stores_frame, text="Select Store:", font=("Helvetica", 14), bg="white").pack()
+        selected_edit_store = tk.StringVar()
+        store_edit_dropdown = tk.OptionMenu(manage_stores_frame, selected_edit_store, "")
+        store_edit_dropdown.config(font=("Helvetica", 14), bg="white")
+        store_edit_dropdown.pack(pady=5)
+
+        # Edit Store Fields
+        tk.Label(manage_stores_frame, text="New Store Name:", font=("Helvetica", 14), bg="white").pack()
+        new_store_name = tk.Entry(manage_stores_frame, font=("Helvetica", 14))
+        new_store_name.pack()
+
+        tk.Label(manage_stores_frame, text="New Store Location:", font=("Helvetica", 14), bg="white").pack()
+        new_store_location = tk.Entry(manage_stores_frame, font=("Helvetica", 14))
+        new_store_location.pack()
+
+        tk.Button(manage_stores_frame, text="Update Store", font=("Helvetica", 14),
+                  command=lambda: self.update_store(
+                      selected_edit_store.get(),
+                      new_store_name.get(),
+                      new_store_location.get()
+                  )).pack(pady=10)
+
+        tk.Button(manage_stores_frame, text="Delete Store", font=("Helvetica", 14),
+                  command=lambda: self.delete_store(selected_edit_store.get())).pack(pady=5)
 
         # -------------------------------
         # Function to Show Selected Tab
