@@ -174,15 +174,30 @@ class EmployeePage(tk.Frame):
         if not balance:
             messagebox.showerror("Error", "Please enter a register balance.")
             return
+        date= datetime.now().strftime("%Y-%m-%d")
+        store = self.selected_store.get()
+        clock_in = datetime.now().strftime("%H:%M")
+        reg_in = balance
+        clock_out = None
+        reg_out = None
+
         self.records.append({
-            "date": datetime.now().strftime("%Y-%m-%d"),
-            "store": self.selected_store.get(),
-            "clock_in": datetime.now().strftime("%H:%M"),
-            "reg_in": balance,
-            "clock_out": None,
-            "reg_out": None,
+            "date": date,
+            "store": store,
+            "clock_in": clock_in,
+            "reg_in": reg_in,
+            "clock_out": clock_out,
+            "reg_out": reg_out,
             "duration": "-"
         })
+
+        # sends info to database
+        query = """INSERT INTO clockTable(reg_in)
+           VALUES (%s)"""
+        data = (reg_in,)
+
+        # send data to sql connector
+        sqlConnector.connect(query, data)
         messagebox.showinfo("Clock In", "Clock-in recorded successfully.")
         self.update_history()
 
@@ -216,7 +231,7 @@ class EmployeePage(tk.Frame):
             comments = self.comments_entry.get()
             storeName = self.selected_store.get()
 
-            query = """INSERT INTO employee_close (firstName, lastName, store_name, credit, cash_in_envelope, expense, comments)
+            query = """INSERT INTO employee_close(firstName, lastName, store_name, credit, cash_in_envelope, expense, comments)
                 VALUES (%s, %s, %s, %s, %s, %s,%s)"""
             data = (None, None,storeName, credit, cash, expense, comments)
 

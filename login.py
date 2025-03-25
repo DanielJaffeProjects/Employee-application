@@ -45,7 +45,7 @@ class LoginPage(tk.Frame):
     def login(self):
         username = self.entry_username.get()
         password = self.entry_password.get()
-        query = "SELECT * FROM employee_information WHERE username = %s AND password = %s"
+        query = "SELECT * FROM employee WHERE username = %s AND password = %s"
 
         user_data=connect(query, (username, password))
         print(user_data)
