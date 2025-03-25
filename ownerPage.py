@@ -1,7 +1,7 @@
 import tkinter as tk 
-from managerPage import ManagerPage
+from managerPage import ManageEmployees
 
-class OwnerPage(ManagerPage):
+class OwnerPage(ManageEmployees):
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
         self.controller = controller
