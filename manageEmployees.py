@@ -463,7 +463,7 @@ class ManageEmployees(tk.Frame):
             return
         messagebox.showinfo("Success", f"Employee {firstName} {lastName} added successfully!")
         # sends info to database
-        query = """INSERT INTO employee_information (firstName,lastName, username, password,role)
+        query = """INSERT INTO employee(firstName,lastName, username, password,role)
            VALUES (%s, %s, %s, %s,%s)"""
         data = (firstName, lastName, username,password,selectedRole)
 

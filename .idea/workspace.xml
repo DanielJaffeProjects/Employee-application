@@ -4,10 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="change the database for both employee closing and the employee information">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+=======
+    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="Fixed the login">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ems.py" beforeDir="false" afterPath="$PROJECT_DIR$/ems.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/managerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/managerPage.py" afterDir="false" />
+>>>>>>> 7ad1b2bf1c36c60b5b2f6d6dde9505b273e4a7b8
       <change beforePath="$PROJECT_DIR$/ownerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ownerPage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,39 +53,69 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Database Script.sql database.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Python.empPage.executor&quot;: &quot;Run&quot;,
-    &quot;Python.ems.executor&quot;: &quot;Run&quot;,
-    &quot;Python.login.executor&quot;: &quot;Run&quot;,
-    &quot;Python.manageEmployees.executor&quot;: &quot;Run&quot;,
-    &quot;Python.managerPage.executor&quot;: &quot;Run&quot;,
-    &quot;Python.ownerPage.executor&quot;: &quot;Run&quot;,
-    &quot;Python.sql connector.executor&quot;: &quot;Run&quot;,
-    &quot;Python.sqlConnector.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/drjed/OneDrive/Documents/GitHub/Employee-application&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Database Script.sql database.sql.executor": "Run",
+    "Python.empPage.executor": "Run",
+    "Python.ems.executor": "Run",
+    "Python.login.executor": "Run",
+    "Python.manageEmployees.executor": "Run",
+    "Python.managerPage.executor": "Run",
+    "Python.ownerPage.executor": "Run",
+    "Python.sql connector.executor": "Run",
+    "Python.sqlConnector.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/drjed/OneDrive/Documents/GitHub/Employee-application",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ],
-    &quot;RunConfigurationTargetLRU&quot;: [
-      &quot;aa110dd0-22cf-41cb-b463-22a0748a2ec6&quot;,
-      &quot;8e9e8047-58f1-4ba5-9b36-912ac72beeaf&quot;
+    "RunConfigurationTargetLRU": [
+      "aa110dd0-22cf-41cb-b463-22a0748a2ec6",
+      "8e9e8047-58f1-4ba5-9b36-912ac72beeaf"
     ]
   }
-}</component>
+}]]></component>
+  <component name="RunManager">
+    <configuration name="empPage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Employee-application" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/empPage.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.empPage" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -109,10 +146,16 @@
       <workItem from="1741992592117" duration="1371000" />
       <workItem from="1742221655448" duration="4218000" />
       <workItem from="1742248464725" duration="6153000" />
+<<<<<<< HEAD
       <workItem from="1742565807545" duration="3276000" />
       <workItem from="1742569834638" duration="270000" />
       <workItem from="1742839636823" duration="2374000" />
       <workItem from="1742863647486" duration="658000" />
+=======
+      <workItem from="1742565807545" duration="5387000" />
+      <workItem from="1742689303343" duration="4782000" />
+      <workItem from="1742733181633" duration="1339000" />
+>>>>>>> 7ad1b2bf1c36c60b5b2f6d6dde9505b273e4a7b8
     </task>
     <task id="LOCAL-00001" summary="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.">
       <option name="closed" value="true" />
@@ -178,11 +221,30 @@
       <option name="project" value="LOCAL" />
       <updated>1742235534622</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Fixed the login">
+      <option name="closed" value="true" />
+      <created>1742569410321</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1742569410321</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things." />
@@ -192,9 +254,11 @@
     <MESSAGE value="change it to start in full screen mode" />
     <MESSAGE value="add the ability to add employees with name, username, password, and role" />
     <MESSAGE value="change the database for both employee closing and the employee information" />
-    <option name="LAST_COMMIT_MESSAGE" value="change the database for both employee closing and the employee information" />
+    <MESSAGE value="Fixed the login" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed the login" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+<<<<<<< HEAD
     <SUITE FILE_PATH="coverage/Employee_application$Signup.coverage" NAME="Signup Coverage Results" MODIFIED="1742229539230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$sqlConnector.coverage" NAME="sqlConnector Coverage Results" MODIFIED="1742260312660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1742249394001" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -204,5 +268,16 @@
     <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1742841181966" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$login.coverage" NAME="login Coverage Results" MODIFIED="1742839948763" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$ownerPage.coverage" NAME="ownerPage Coverage Results" MODIFIED="1742841161425" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+=======
+    <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1742869372469" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$ownerPage.coverage" NAME="ownerPage Coverage Results" MODIFIED="1742847677570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$Signup.coverage" NAME="Signup Coverage Results" MODIFIED="1742229539230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$sqlConnector.coverage" NAME="sqlConnector Coverage Results" MODIFIED="1742260312660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$managerPage.coverage" NAME="managerPage Coverage Results" MODIFIED="1742868099477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$sql_connector.coverage" NAME="sql connector Coverage Results" MODIFIED="1742223421969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$login.coverage" NAME="login Coverage Results" MODIFIED="1742569079667" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1742868811037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$manageEmployees.coverage" NAME="manageEmployees Coverage Results" MODIFIED="1742869417035" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+>>>>>>> 7ad1b2bf1c36c60b5b2f6d6dde9505b273e4a7b8
   </component>
 </project>
