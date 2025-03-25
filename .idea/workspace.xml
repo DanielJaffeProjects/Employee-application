@@ -4,18 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="Fixed the login">
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Changes6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Changes6/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Changes7.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Changes7/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Fixed_the_login.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Fixed_the_login/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/74882030-66c3-4690-b336-cbfd28b6d9ab.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/74882030-66c3-4690-b336-cbfd28b6d9ab.xml" afterDir="false" />
+<<<<<<< HEAD
+    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="change the database for both employee closing and the employee information">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/empPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/empPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/login.py" afterDir="false" />
+=======
+    <list default="true" id="1273df12-f704-48bc-b0d1-73903eeefc88" name="Changes" comment="Fixed the login">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ems.py" beforeDir="false" afterPath="$PROJECT_DIR$/ems.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/managerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/managerPage.py" afterDir="false" />
+>>>>>>> 7ad1b2bf1c36c60b5b2f6d6dde9505b273e4a7b8
+      <change beforePath="$PROJECT_DIR$/ownerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ownerPage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +66,7 @@
     "Python.sqlConnector.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Rebasing main",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/drjed/OneDrive/Documents/GitHub/Employee-application",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -119,8 +119,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-PY-243.23654.177" />
-        <option value="bundled-python-sdk-91d3a02ef49d-43b77aa2d136-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.23654.177" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.26053.29" />
+        <option value="bundled-python-sdk-b1dbf8ef85a6-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.26053.29" />
       </set>
     </attachedChunks>
   </component>
@@ -146,9 +146,16 @@
       <workItem from="1741992592117" duration="1371000" />
       <workItem from="1742221655448" duration="4218000" />
       <workItem from="1742248464725" duration="6153000" />
+<<<<<<< HEAD
+      <workItem from="1742565807545" duration="3276000" />
+      <workItem from="1742569834638" duration="270000" />
+      <workItem from="1742839636823" duration="2374000" />
+      <workItem from="1742863647486" duration="658000" />
+=======
       <workItem from="1742565807545" duration="5387000" />
       <workItem from="1742689303343" duration="4782000" />
       <workItem from="1742733181633" duration="1339000" />
+>>>>>>> 7ad1b2bf1c36c60b5b2f6d6dde9505b273e4a7b8
     </task>
     <task id="LOCAL-00001" summary="Added title to login page as well as ad justified the width of the username and password box. Change employee so it has regular in balance and out balance and removed unnecessary things.">
       <option name="closed" value="true" />
@@ -251,14 +258,26 @@
     <option name="LAST_COMMIT_MESSAGE" value="Fixed the login" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1742733994160" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Employee_application$ownerPage.coverage" NAME="ownerPage Coverage Results" MODIFIED="1741460856220" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+<<<<<<< HEAD
     <SUITE FILE_PATH="coverage/Employee_application$Signup.coverage" NAME="Signup Coverage Results" MODIFIED="1742229539230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$sqlConnector.coverage" NAME="sqlConnector Coverage Results" MODIFIED="1742260312660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1742249394001" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$managerPage.coverage" NAME="managerPage Coverage Results" MODIFIED="1741464753332" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$manageEmployees.coverage" NAME="manageEmployees Coverage Results" MODIFIED="1742568925665" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$sql_connector.coverage" NAME="sql connector Coverage Results" MODIFIED="1742223421969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1742841181966" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$login.coverage" NAME="login Coverage Results" MODIFIED="1742839948763" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$ownerPage.coverage" NAME="ownerPage Coverage Results" MODIFIED="1742841161425" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+=======
+    <SUITE FILE_PATH="coverage/Employee_application$ems.coverage" NAME="ems Coverage Results" MODIFIED="1742869372469" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$ownerPage.coverage" NAME="ownerPage Coverage Results" MODIFIED="1742847677570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$Signup.coverage" NAME="Signup Coverage Results" MODIFIED="1742229539230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$sqlConnector.coverage" NAME="sqlConnector Coverage Results" MODIFIED="1742260312660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$managerPage.coverage" NAME="managerPage Coverage Results" MODIFIED="1742868099477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$sql_connector.coverage" NAME="sql connector Coverage Results" MODIFIED="1742223421969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Employee_application$login.coverage" NAME="login Coverage Results" MODIFIED="1742569079667" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1742734522961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Employee_application$manageEmployees.coverage" NAME="manageEmployees Coverage Results" MODIFIED="1742733698846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$empPage.coverage" NAME="empPage Coverage Results" MODIFIED="1742868811037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Employee_application$manageEmployees.coverage" NAME="manageEmployees Coverage Results" MODIFIED="1742869417035" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+>>>>>>> 7ad1b2bf1c36c60b5b2f6d6dde9505b273e4a7b8
   </component>
 </project>
