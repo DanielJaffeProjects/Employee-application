@@ -7,4 +7,4 @@ class OwnerPage(ManagerPage):
         super().__init__(parent, controller)
         self.controller = controller
         self.configure(bg="white")
-#####
+
