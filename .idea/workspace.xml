@@ -46,39 +46,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Database Script.sql database.sql.executor": "Run",
-    "Python.empPage.executor": "Run",
-    "Python.ems.executor": "Run",
-    "Python.login.executor": "Run",
-    "Python.manageEmployees.executor": "Run",
-    "Python.managerPage.executor": "Run",
-    "Python.ownerPage.executor": "Run",
-    "Python.sql connector.executor": "Run",
-    "Python.sqlConnector.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/drjed/OneDrive/Documents/GitHub/Employee-application",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Database Script.sql database.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Python.empPage.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ems.executor&quot;: &quot;Run&quot;,
+    &quot;Python.login.executor&quot;: &quot;Run&quot;,
+    &quot;Python.manageEmployees.executor&quot;: &quot;Run&quot;,
+    &quot;Python.managerPage.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ownerPage.executor&quot;: &quot;Run&quot;,
+    &quot;Python.sql connector.executor&quot;: &quot;Run&quot;,
+    &quot;Python.sqlConnector.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/drjed/OneDrive/Documents/GitHub/Employee-application&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ],
-    "RunConfigurationTargetLRU": [
-      "aa110dd0-22cf-41cb-b463-22a0748a2ec6",
-      "8e9e8047-58f1-4ba5-9b36-912ac72beeaf"
+    &quot;RunConfigurationTargetLRU&quot;: [
+      &quot;aa110dd0-22cf-41cb-b463-22a0748a2ec6&quot;,
+      &quot;8e9e8047-58f1-4ba5-9b36-912ac72beeaf&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="empPage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Employee-application" />
