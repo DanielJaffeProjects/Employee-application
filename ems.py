@@ -2,8 +2,9 @@ import tkinter as tk
 from tkinter import messagebox
 from login import LoginPage
 from empPage import EmployeePage
+from manageEmployees import ManageEmployees
 from ownerPage import OwnerPage
-from managerPage import ManagerPage
+
 
 
 class EMSApp(tk.Tk):
@@ -22,7 +23,7 @@ class EMSApp(tk.Tk):
         self.container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoginPage, EmployeePage, OwnerPage, manageEmployees):
+        for F in (LoginPage, EmployeePage, OwnerPage, ManageEmployees):
             page_name = F.__name__
             frame = F(parent=self.container, controller=self)
             self.frames[page_name] = frame
