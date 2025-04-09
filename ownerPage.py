@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, simpledialog
-from managerPage import ManagerPage
+from manageEmployees import ManageEmployees
 import sqlConnector
 
 class OwnerPage(tk.Frame):

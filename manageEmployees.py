@@ -5,10 +5,11 @@ import sqlConnector
 
 
 class ManageEmployees(tk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, role=None, store_id=None):
         super().__init__(parent)
         self.controller = controller
-        self.configure(bg="white")
+        self.user_role = role
+        self.assigned_store_id = store_id
 
         # Initialize weekly start dates for Expenses, Merchandise, Gross Profit History (set to Monday)
         self.current_week_start = datetime.now().date() - timedelta(days=datetime.now().date().weekday())
@@ -361,60 +362,7 @@ class ManageEmployees(tk.Frame):
         notebook.add(edit_employee_frame, text="Edit Employee")
         
         tabs["Manage Employees"] = manage_frame
-        # -------------------------------
-        # Add Store Tab
-        # -------------------------------
-        add_store_frame = tk.Frame(content_frame, bg="white")
-        add_store_frame.grid(row=0, column=0, sticky="nsew")
-        tabs["Add Store"] = add_store_frame
 
-        tk.Label(add_store_frame, text="Add Store", font=("Helvetica", 18), bg="white").pack(pady=10)
-
-        tk.Label(add_store_frame, text="Store Name:", font=("Helvetica", 14), bg="white").pack()
-        store_name = tk.Entry(add_store_frame, font=("Helvetica", 14))
-        store_name.pack()
-
-        tk.Label(add_store_frame, text="Store Location:", font=("Helvetica", 14), bg="white").pack()
-        store_location = tk.Entry(add_store_frame, font=("Helvetica", 14))
-        store_location.pack()
-
-        tk.Button(add_store_frame, text="Add Store", font=("Helvetica", 14),
-                  command=lambda: self.add_store(store_name.get(), store_location.get())).pack(pady=10)
-
-        # -------------------------------
-        # Manage Stores Tab
-        # -------------------------------
-        manage_stores_frame = tk.Frame(content_frame, bg="white")
-        manage_stores_frame.grid(row=0, column=0, sticky="nsew")
-        tabs["Manage Stores"] = manage_stores_frame
-
-        tk.Label(manage_stores_frame, text="Manage Stores", font=("Helvetica", 18), bg="white").pack(pady=10)
-
-        # Dropdown to select store to edit/delete
-        tk.Label(manage_stores_frame, text="Select Store:", font=("Helvetica", 14), bg="white").pack()
-        selected_edit_store = tk.StringVar()
-        store_edit_dropdown = tk.OptionMenu(manage_stores_frame, selected_edit_store, "")
-        store_edit_dropdown.config(font=("Helvetica", 14), bg="white")
-        store_edit_dropdown.pack(pady=5)
-
-        # Edit Store Fields
-        tk.Label(manage_stores_frame, text="New Store Name:", font=("Helvetica", 14), bg="white").pack()
-        new_store_name = tk.Entry(manage_stores_frame, font=("Helvetica", 14))
-        new_store_name.pack()
-
-        tk.Label(manage_stores_frame, text="New Store Location:", font=("Helvetica", 14), bg="white").pack()
-        new_store_location = tk.Entry(manage_stores_frame, font=("Helvetica", 14))
-        new_store_location.pack()
-
-        tk.Button(manage_stores_frame, text="Update Store", font=("Helvetica", 14),
-                  command=lambda: self.update_store(
-                      selected_edit_store.get(),
-                      new_store_name.get(),
-                      new_store_location.get()
-                  )).pack(pady=10)
-
-        tk.Button(manage_stores_frame, text="Delete Store", font=("Helvetica", 14),
-                  command=lambda: self.delete_store(selected_edit_store.get())).pack(pady=5)
 
         # -------------------------------
         # Function to Show Selected Tab
@@ -594,16 +542,39 @@ class ManageEmployees(tk.Frame):
         # Python's weekday(): Monday is 0 ... Sunday is 6
         days_since_sunday = (d.weekday() + 1) % 7
         return d - timedelta(days=days_since_sunday)
-    
+
     def update_payroll_display(self):
-        # Clear the treeview
-        for row in self.payroll_tree.get_children():
-            self.payroll_tree.delete(row)
-        # Insert rows for the previous 4 Sundays (including current)
-        for i in range(4):
-            sunday_date = self.current_payroll_sunday - timedelta(weeks=i)
-            self.payroll_tree.insert("", "end", values=(sunday_date.strftime("%Y-%m-%d"), "0"))
-    
+        self.payroll_tree.delete(*self.payroll_tree.get_children())
+
+        if self.user_role == "Owner":
+            query = """
+                SELECT e.firstName, e.store_name, p.pay_date, p.amount
+                FROM Payroll p
+                JOIN employee e ON p.employee_id = e.employee_id
+                ORDER BY p.pay_date DESC
+                LIMIT 20
+            """
+            params = ()
+        elif self.user_role == "Manager":
+            query = """
+                SELECT e.firstName, e.store_name, p.pay_date, p.amount
+                FROM Payroll p
+                JOIN employee e ON p.employee_id = e.employee_id
+                WHERE e.store_name = %s
+                ORDER BY p.pay_date DESC
+                LIMIT 20
+            """
+            params = (self.store_name,)  # this assumes self.store_name is set for the manager
+        else:
+            return
+
+        try:
+            results = sqlConnector.fetch_all(query, params)
+            for row in results:
+                self.payroll_tree.insert("", "end", values=(row[2], row[3]))  # pay_date, amount
+        except Exception as e:
+            messagebox.showerror("Database Error", str(e))
+
     def previous_payroll_week(self):
         self.current_payroll_sunday -= timedelta(weeks=1)
         self.payroll_date_label.config(text=self.current_payroll_sunday.strftime("%Y-%m-%d"))

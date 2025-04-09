@@ -22,7 +22,7 @@ class EMSApp(tk.Tk):
         self.container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoginPage, EmployeePage, OwnerPage, ManagerPage):
+        for F in (LoginPage, EmployeePage, OwnerPage, manageEmployees):
             page_name = F.__name__
             frame = F(parent=self.container, controller=self)
             self.frames[page_name] = frame
