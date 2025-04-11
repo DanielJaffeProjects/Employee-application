@@ -5,10 +5,11 @@ import sqlConnector
 
 
 class ManageEmployees(tk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, role=None, store_id=None):
         super().__init__(parent)
         self.controller = controller
-        self.configure(bg="white")
+        self.user_role = role
+        self.assigned_store_id = store_id
 
         # Initialize weekly start dates for Expenses, Merchandise, Gross Profit History (set to Monday)
         self.current_week_start = datetime.now().date() - timedelta(days=datetime.now().date().weekday())
@@ -541,16 +542,39 @@ class ManageEmployees(tk.Frame):
         # Python's weekday(): Monday is 0 ... Sunday is 6
         days_since_sunday = (d.weekday() + 1) % 7
         return d - timedelta(days=days_since_sunday)
-    
+
     def update_payroll_display(self):
-        # Clear the treeview
-        for row in self.payroll_tree.get_children():
-            self.payroll_tree.delete(row)
-        # Insert rows for the previous 4 Sundays (including current)
-        for i in range(4):
-            sunday_date = self.current_payroll_sunday - timedelta(weeks=i)
-            self.payroll_tree.insert("", "end", values=(sunday_date.strftime("%Y-%m-%d"), "0"))
-    
+        self.payroll_tree.delete(*self.payroll_tree.get_children())
+
+        if self.user_role == "Owner":
+            query = """
+                SELECT e.firstName, e.store_name, p.pay_date, p.amount
+                FROM Payroll p
+                JOIN employee e ON p.employee_id = e.employee_id
+                ORDER BY p.pay_date DESC
+                LIMIT 20
+            """
+            params = ()
+        elif self.user_role == "Manager":
+            query = """
+                SELECT e.firstName, e.store_name, p.pay_date, p.amount
+                FROM Payroll p
+                JOIN employee e ON p.employee_id = e.employee_id
+                WHERE e.store_name = %s
+                ORDER BY p.pay_date DESC
+                LIMIT 20
+            """
+            params = (self.store_name,)  # this assumes self.store_name is set for the manager
+        else:
+            return
+
+        try:
+            results = sqlConnector.fetch_all(query, params)
+            for row in results:
+                self.payroll_tree.insert("", "end", values=(row[2], row[3]))  # pay_date, amount
+        except Exception as e:
+            messagebox.showerror("Database Error", str(e))
+
     def previous_payroll_week(self):
         self.current_payroll_sunday -= timedelta(weeks=1)
         self.payroll_date_label.config(text=self.current_payroll_sunday.strftime("%Y-%m-%d"))

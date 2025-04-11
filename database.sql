@@ -79,3 +79,13 @@ CREATE TABLE if not exists Bonuses (
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
     FOREIGN KEY (store_id) REFERENCES Store(store_id)
 );
+
+CREATE TABLE IF NOT EXISTS Payroll (
+    payroll_id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT,
+    store_id INT,
+    pay_date DATE,
+    amount DECIMAL(10,2),
+    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
+    FOREIGN KEY (store_id) REFERENCES Store(store_id)
+);
