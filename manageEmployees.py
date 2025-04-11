@@ -305,7 +305,6 @@ class ManageEmployees(tk.Frame):
         add_employee_frame = tk.Frame(notebook, bg="white")
         tk.Label(add_employee_frame, text="Add Employee", font=("Helvetica", 18), bg="white").pack(pady=10)
 
-
         tk.Label(add_employee_frame, text="First Name", font=("Helvetica", 14), bg="white").pack()
         emp_firstname = tk.Entry(add_employee_frame, font=("Helvetica", 14))
         emp_firstname.pack()
@@ -564,12 +563,12 @@ class ManageEmployees(tk.Frame):
                 ORDER BY p.pay_date DESC
                 LIMIT 20
             """
-            params = (self.store_name,)  # this assumes self.store_name is set for the manager
+            params = (self.store_name,)
         else:
             return
 
         try:
-            results = sqlConnector.fetch_all(query, params)
+            results = sqlConnector.connect(query, params)
             for row in results:
                 self.payroll_tree.insert("", "end", values=(row[2], row[3]))  # pay_date, amount
         except Exception as e:
