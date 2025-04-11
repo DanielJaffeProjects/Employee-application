@@ -3,9 +3,9 @@ from tkinter import messagebox, simpledialog
 from manageEmployees import ManageEmployees
 import sqlConnector
 
-class OwnerPage(tk.Frame):
+class OwnerPage(ManageEmployees):
     def __init__(self, parent, controller):
-        super().__init__(parent)
+        super().__init__(parent,controller)
         self.controller = controller
         self.configure(bg="white")
 
@@ -187,23 +187,25 @@ class OwnerPage(tk.Frame):
     def populate_store_dropdowns(self):
         """Populate store dropdowns with stores from the database"""
         try:
-            # Fetch stores
             query = "SELECT name FROM stores"
-            results = sqlConnector.fetch_all(query)
+            results = sqlConnector.connect(query, ())
 
-            # Extract store names
-            store_names = [store[0] for store in results] if results else []
+            if not results or not isinstance(results, list):
+                return
 
-            # Update store dropdowns
-            for dropdown in self.winfo_children():
-                if isinstance(dropdown, tk.OptionMenu):
-                    menu = dropdown['menu']
-                    menu.delete(0, 'end')
-                    for store in store_names:
-                        menu.add_command(label=store, command=lambda value=store: dropdown.set(value))
+            store_names = [row[0] for row in results]
+
+            # Find and update all OptionMenus
+            for widget in self.winfo_children():
+                for subwidget in widget.winfo_children():
+                    if isinstance(subwidget, tk.OptionMenu):
+                        menu = subwidget["menu"]
+                        menu.delete(0, "end")
+                        var = subwidget.cget("textvariable")
+                        for store in store_names:
+                            menu.add_command(label=store, command=tk._setit(var, store))
         except Exception as e:
             messagebox.showerror("Database Error", str(e))
-
 
 # For testing purposes, run this file directly.
 if __name__ == '__main__':
