@@ -217,13 +217,7 @@ class ManageEmployees(tk.Frame):
         merch_history_frame = tk.Frame(content_frame, bg="white")
         merch_history_frame.grid(row=0, column=0, sticky="nsew")
         tabs["Merchandise History"] = merch_history_frame
-        # Create Treeview for merchandise history
-        self.merch_history_tree = ttk.Treeview(merch_history_frame, columns=("Type", "Value", "Date", "Store"),show="headings")
-        self.merch_history_tree.heading("Type", text="Type")
-        self.merch_history_tree.heading("Value", text="Value")
-        self.merch_history_tree.heading("Date", text="Date")
-        self.merch_history_tree.heading("Store", text="Store ID")
-        self.merch_history_tree.pack(fill="both", expand=True, padx=10, pady=10)
+
         tk.Label(merch_history_frame, text="Merchandise History", font=("Helvetica", 18), bg="white").pack(pady=10)
 
         merch_nav_frame = tk.Frame(merch_history_frame, bg="white")
@@ -242,6 +236,14 @@ class ManageEmployees(tk.Frame):
 
         self.merch_history_placeholder = tk.Label(merch_history_frame, text="", font=("Helvetica", 12), bg="white")
         self.merch_history_placeholder.pack(pady=20)
+        # Create Treeview for merchandise history
+        self.merch_history_tree = ttk.Treeview(merch_history_frame, columns=("Type", "Value", "Date", "Store"),
+                                               show="headings")
+        self.merch_history_tree.heading("Type", text="Type")
+        self.merch_history_tree.heading("Value", text="Value")
+        self.merch_history_tree.heading("Date", text="Date")
+        self.merch_history_tree.heading("Store", text="Store ID")
+        self.merch_history_tree.pack(fill="both", expand=True, padx=10, pady=10)
         self.update_merch_history_display()
 
         # -------------------------------
