@@ -9,12 +9,18 @@ from manageEmployees import ManageEmployees
 class EMSApp(tk.Tk):
     def __init__(self):
         super().__init__()
+
         self.title("EMS Application")
         # made it full screen
         self.geometry("800x600")
         #todo put this back to normal
         # self.attributes("-fullscreen", True)
         self.configure(bg="white")
+
+        # store session info
+        self.employee_id = None
+        self.role = None
+        self.username = None
 
         self.container = tk.Frame(self)
         self.container.pack(side="top", fill="both", expand=True)

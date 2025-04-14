@@ -15,9 +15,9 @@ insert into employee(firstName, lastName, userName, password, role)
 values('Daniel','is the best','admin','admin','owner');
 # todo get rid of when done for testing purposes only
 insert into employee(firstName, lastName, userName, password, role)
-values('Daniel','Jaffe','e','e','owner');
+values('Daniel','Jaffe','e','e','employee');
 insert into employee(firstName, lastName, userName, password, role)
-values('Daniel','is thn','m','m','owner');
+values('Daniel','is thn','m','m','manager');
 insert into employee(firstName, lastName, userName, password, role)
 values('Daniel','Yes I am the ','o','o','owner');
 
@@ -47,9 +47,9 @@ CREATE TABLE if not exists Store (
 Create table if not exists clockTable(
     clock_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
-    store_id INT,
-    clock_in DATETIME,
-    clock_out DATETIME,
+    store_id int,
+    clock_in varchar(23),
+    clock_out varchar(23),
     reg_in DECIMAL(10,2),
     reg_out DECIMAL(10,2),
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),

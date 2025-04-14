@@ -25,6 +25,10 @@ class EmployeePage(tk.Frame):
         self.create_bottom_frame()
         self.createMiddleFrame()
 
+        # Access session info
+        employee_id = self.controller.employee_id
+        username = self.controller.username
+        print(f"Welcome, {username} (ID: {employee_id})")
     # creates the top part
     def create_top_frame(self):
         # Top frame for store selection dropdown
@@ -170,19 +174,33 @@ class EmployeePage(tk.Frame):
 
     # clock in
     def clock_in(self):
+        print("got in clock in")
         balance = self.reg_in_balance.get()
         if not balance:
             messagebox.showerror("Error", "Please enter a register balance.")
             return
+        else:
+            print("got a balance")
+
         date= datetime.now().strftime("%Y-%m-%d")
         store = self.selected_store.get()
-        clock_in = datetime.now().strftime("%H:%M")
-        reg_in = balance
+        clock_in = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        reg_in = float(balance)
         clock_out = None
         reg_out = None
+        employee_id = self.controller.employee_id
+
+        # Check if the user has already clocked in today
+        for record in self.records:
+            if record["date"] == date and record["employee_id"] == employee_id and record["clock_in"] is not None:
+                messagebox.showerror("Error", "You have already clocked in today.")
+                return
+            else:
+                print("not clocked in yet")
+
 
         self.records.append({
-            "date": date,
             "store": store,
             "clock_in": clock_in,
             "reg_in": reg_in,
@@ -191,32 +209,47 @@ class EmployeePage(tk.Frame):
             "duration": "-"
         })
 
+        print(self.records)
         # sends info to database
-        query = """INSERT INTO clockTable(reg_in)
-           VALUES (%s)"""
-        data = (reg_in,)
+        query = """INSERT INTO clockTable (employee_id, clock_in, reg_in)
+               VALUES (%s, %s,%s)"""
+        data = (employee_id,clock_in, reg_in)
 
-        # send data to sql connector
-        sqlConnector.connect(query, data)
-        messagebox.showinfo("Clock In", "Clock-in recorded successfully.")
+        try:
+            # Send the data to the SQL connector
+            sqlConnector.connect(query, data)
+            messagebox.showinfo("Clock In", "Clock-in recorded successfully.")
+
+        except Exception as e:
+            messagebox.showerror("Database Error", f"An error occurred: {str(e)}")
+
+        # Update the history display
         self.update_history()
 
+#TODO
     # clock out
     def clock_out(self):
         balance = self.reg_out_balance.get()
-        if not balance:
-            messagebox.showerror("Error", "Please enter a register balance.")
-            return
-        last_record = self.records[-1]
-        last_record["clock_out"] = datetime.now().strftime("%H:%M")
-        last_record["reg_out"] = balance
-
-        in_time = datetime.strptime(last_record["clock_in"], "%H:%M")
-        out_time = datetime.strptime(last_record["clock_out"], "%H:%M")
-        last_record["duration"] = str(out_time - in_time)
-
-        messagebox.showinfo("Clock Out", "Clock-out recorded successfully.")
-        self.update_history()
+    #     if not balance:
+    #         messagebox.showerror("Error", "Please enter a register balance.")
+    #         return
+    #     reg_out = float(balance)
+    #     employee_id = self.controller.employee_id
+    #     store_name= self.selected_store.get()
+    #     date= datetime.now().strftime("%Y-%m-%d")
+    #     clock_out = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    #
+    #
+    #     last_record = self.records[-1]
+    #     last_record["clock_out"] = datetime.now().strftime("%H:%M")
+    #     last_record["reg_out"] = balance
+    #
+    #     in_time = datetime.strptime(last_record["clock_in"], "%H:%M")
+    #     out_time = datetime.strptime(last_record["clock_out"], "%H:%M")
+    #     last_record["duration"] = str(out_time - in_time)
+    #
+    #     messagebox.showinfo("Clock Out", "Clock-out recorded successfully.")
+    #     self.update_history()
 
     def update_history(self):
         self.history_treeview.delete(*self.history_treeview.get_children())
