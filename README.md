@@ -1,17 +1,27 @@
-# Employee-application
+# 🧑‍💼✨ Employee Management System (EMS)
 
-Making a employee management system
-Questions:
+Welcome to the **Employee Management System** — a desktop app powered by **Python + Tkinter + MySQL** that helps you manage employees, stores, payroll, clock-ins, and more — all in one sleek interface.
 
-1. Can a manager create manager?
+🎯 Built for **Owners**, **Managers**, and **Employees** with **role-based features**!
 
-To Do:
-Add history to invoice
-Recreate buttons
-Get rid of gross profit
-In the add employee section have there be a bonus, and also have it be 3 buttons (add employee, edit employee, delete employee)
+---
 
-To view blueprint:
-Run the code
-Login (emp for employee, own for owner, man for manager view) with password 1234
-Enjoy the asthetics of this professional and beautiful GUI!
+## 🚀 Features at a Glance
+
+| 👤 Role     | 🔧 Capabilities |
+|------------|----------------|
+| 🧑‍💼 **Employee** | ⏱ Clock In/Out, 🧾 Submit Daily Close, 🕓 View History |
+| 🧑‍💼 **Manager** | 🧾 Submit Invoices, 💸 Track Expenses, 📦 Manage Merchandise, 📊 Weekly Reports, 💵 Payroll |
+| 🧑‍💼 **Owner**   | 🏪 Add/Edit/Delete Stores, 👨‍👩‍👧‍👦 Manage Employees, 🔍 View All Store Data, 💵 Payroll Access |
+
+---
+
+## 🛠 Tech Stack
+
+- 🐍 Python 3
+- 🪟 Tkinter (GUI)
+- 🛢 MySQL (via `mysql-connector-python`)
+- 🧩 Modular file system
+- 📦 Custom `sqlConnector.py` for all DB ops
+
+---
