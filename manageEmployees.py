@@ -166,6 +166,15 @@ class ManageEmployees(tk.Frame):
 
         self.history_placeholder = tk.Label(employee_history_frame, text="", font=("Helvetica", 12), bg="white")
         self.history_placeholder.pack(pady=20)
+        # Treeview table for Employee Clock-In/Out History
+        self.history_tree = ttk.Treeview(employee_history_frame, columns=("Name", "Clock In", "Clock Out", "Store"),
+                                         show="headings")
+        self.history_tree.heading("Name", text="Name")
+        self.history_tree.heading("Clock In", text="Clock In")
+        self.history_tree.heading("Clock Out", text="Clock Out")
+        self.history_tree.heading("Store", text="Store ID")
+        self.history_tree.pack(fill="both", expand=True, padx=10, pady=10)
+
         self.update_history_display()
 
         # -------------------------------
@@ -193,6 +202,13 @@ class ManageEmployees(tk.Frame):
 
         self.expenses_history_placeholder = tk.Label(expenses_history_frame, text="", font=("Helvetica", 12), bg="white")
         self.expenses_history_placeholder.pack(pady=20)
+        # Treeview for weekly expense history
+        self.expenses_history_tree = ttk.Treeview(expenses_history_frame, columns=("Type", "Value", "Date", "Store"),show="headings")
+        self.expenses_history_tree.heading("Type", text="Type")
+        self.expenses_history_tree.heading("Value", text="Value")
+        self.expenses_history_tree.heading("Date", text="Date")
+        self.expenses_history_tree.heading("Store", text="Store ID")
+        self.expenses_history_tree.pack(fill="both", expand=True, padx=10, pady=10)
         self.update_expenses_history_display()
 
         # -------------------------------
@@ -201,7 +217,13 @@ class ManageEmployees(tk.Frame):
         merch_history_frame = tk.Frame(content_frame, bg="white")
         merch_history_frame.grid(row=0, column=0, sticky="nsew")
         tabs["Merchandise History"] = merch_history_frame
-
+        # Create Treeview for merchandise history
+        self.merch_history_tree = ttk.Treeview(merch_history_frame, columns=("Type", "Value", "Date", "Store"),show="headings")
+        self.merch_history_tree.heading("Type", text="Type")
+        self.merch_history_tree.heading("Value", text="Value")
+        self.merch_history_tree.heading("Date", text="Date")
+        self.merch_history_tree.heading("Store", text="Store ID")
+        self.merch_history_tree.pack(fill="both", expand=True, padx=10, pady=10)
         tk.Label(merch_history_frame, text="Merchandise History", font=("Helvetica", 18), bg="white").pack(pady=10)
 
         merch_nav_frame = tk.Frame(merch_history_frame, bg="white")
@@ -433,8 +455,40 @@ class ManageEmployees(tk.Frame):
     # Employee History (Daily) Methods
     # -------------------------------
     def update_history_display(self):
-        self.history_placeholder.config(text=f"No clock-in records for {self.current_date.strftime('%Y-%m-%d')}.")
-    
+        """Display employee clock-in/out history for the selected day, filtered by role."""
+        selected_date = self.current_date
+        self.date_label.config(text=selected_date.strftime("%Y-%m-%d"))
+        self.history_placeholder.config(text="")  # Clear label if Treeview is shown
+
+        for row in self.history_tree.get_children():
+            self.history_tree.delete(row)
+
+        if self.user_role == "Owner":
+            query = """
+                SELECT e.firstName, c.clock_in, c.clock_out, c.store_id
+                FROM clockinout c
+                JOIN employee e ON c.employee_id = e.employee_id
+                WHERE DATE(c.clock_in) = %s
+            """
+            params = (selected_date,)
+        elif self.user_role == "Manager":
+            query = """
+                SELECT e.firstName, c.clock_in, c.clock_out, c.store_id
+                FROM clockinout c
+                JOIN employee e ON c.employee_id = e.employee_id
+                WHERE DATE(c.clock_in) = %s AND c.store_id = %s
+            """
+            params = (selected_date, self.assigned_store_id)
+        else:
+            return
+
+        try:
+            results = sqlConnector.connect(query, params)
+            for row in results:
+                self.history_tree.insert("", "end", values=row)
+        except Exception as e:
+            messagebox.showerror("Database Error", str(e))
+
     def previous_day(self):
         self.current_date -= timedelta(days=1)
         self.date_label.config(text=self.current_date.strftime("%Y-%m-%d"))
@@ -458,11 +512,41 @@ class ManageEmployees(tk.Frame):
     # Expenses History (Weekly) Methods
     # -------------------------------
     def update_expenses_history_display(self):
-        week_end = self.current_week_start + timedelta(days=6)
-        self.week_label.config(text=f"{self.current_week_start.strftime('%Y-%m-%d')} to {week_end.strftime('%Y-%m-%d')}")
-        self.expenses_history_placeholder.config(
-            text=f"No expenses recorded for the week of {self.current_week_start.strftime('%Y-%m-%d')} to {week_end.strftime('%Y-%m-%d')}.")
-    
+        """Display expenses for the selected week based on user role."""
+        week_start = self.current_week_start
+        week_end = week_start + timedelta(days=6)
+
+        self.week_label.config(text=f"{week_start.strftime('%Y-%m-%d')} to {week_end.strftime('%Y-%m-%d')}")
+        self.expenses_history_placeholder.config(text="")  # Optional: hide the label if Treeview is visible
+
+        # Clear previous table content
+        self.expenses_history_tree.delete(*self.expenses_history_tree.get_children())
+
+        # SQL query
+        if self.user_role == "Owner":
+            query = """
+                SELECT expense_type, expense_value, expense_date, store_id
+                FROM expenses
+                WHERE expense_date BETWEEN %s AND %s
+            """
+            params = (week_start, week_end)
+        elif self.user_role == "Manager":
+            query = """
+                SELECT expense_type, expense_value, expense_date, store_id
+                FROM expenses
+                WHERE store_id = %s AND expense_date BETWEEN %s AND %s
+            """
+            params = (self.assigned_store_id, week_start, week_end)
+        else:
+            return
+
+        try:
+            results = sqlConnector.connect(query, params)
+            for row in results:
+                self.expenses_history_tree.insert("", "end", values=row)
+        except Exception as e:
+            messagebox.showerror("Database Error", str(e))
+
     def previous_week(self):
         self.current_week_start -= timedelta(weeks=1)
         self.update_expenses_history_display()
@@ -483,11 +567,41 @@ class ManageEmployees(tk.Frame):
     # Merchandise History (Weekly) Methods
     # -------------------------------
     def update_merch_history_display(self):
-        merch_week_end = self.current_merch_week_start + timedelta(days=6)
-        self.merch_week_label.config(text=f"{self.current_merch_week_start.strftime('%Y-%m-%d')} to {merch_week_end.strftime('%Y-%m-%d')}")
-        self.merch_history_placeholder.config(
-            text=f"No merchandise recorded for the week of {self.current_merch_week_start.strftime('%Y-%m-%d')} to {merch_week_end.strftime('%Y-%m-%d')}.")
-    
+        """Populate the merchandise history table for the selected week, filtered by role."""
+        week_start = self.current_merch_week_start
+        week_end = week_start + timedelta(days=6)
+
+        self.merch_week_label.config(text=f"{week_start.strftime('%Y-%m-%d')} to {week_end.strftime('%Y-%m-%d')}")
+
+        # Clear table before inserting new data
+        for row in self.merch_history_tree.get_children():
+            self.merch_history_tree.delete(row)
+
+        # SQL Query setup
+        if self.user_role == "Owner":
+            query = """
+                SELECT merch_type, merch_value, merch_date, store_id
+                FROM merchandise
+                WHERE merch_date BETWEEN %s AND %s
+            """
+            params = (week_start, week_end)
+        elif self.user_role == "Manager":
+            query = """
+                SELECT merch_type, merch_value, merch_date, store_id
+                FROM merchandise
+                WHERE merch_date BETWEEN %s AND %s AND store_id = %s
+            """
+            params = (week_start, week_end, self.assigned_store_id)
+        else:
+            return
+
+        try:
+            results = sqlConnector.connect(query, params)
+            for row in results:
+                self.merch_history_tree.insert("", "end", values=row)
+        except Exception as e:
+            messagebox.showerror("Database Error", str(e))
+
     def previous_merch_week(self):
         self.current_merch_week_start -= timedelta(weeks=1)
         self.update_merch_history_display()
@@ -508,16 +622,40 @@ class ManageEmployees(tk.Frame):
     # Gross Profit (Weekly) Methods
     # -------------------------------
     def update_gross_profit_display(self):
-        profit_week_end = self.current_profit_week_start + timedelta(days=6)
-        self.profit_week_label.config(text=f"{self.current_profit_week_start.strftime('%Y-%m-%d')} to {profit_week_end.strftime('%Y-%m-%d')}")
-        # Clear the treeview
-        for row in self.gross_profit_tree.get_children():
-            self.gross_profit_tree.delete(row)
-        # Insert a dummy row for each day of the week (placeholders)
-        for i in range(7):
-            day = self.current_profit_week_start + timedelta(days=i)
-            self.gross_profit_tree.insert("", "end", values=(day.strftime("%Y-%m-%d"), "0", "0", "0"))
-    
+        """Display weekly gross profit by day, filtered by role."""
+        week_start = self.current_profit_week_start
+        week_end = week_start + timedelta(days=6)
+
+        self.profit_week_label.config(text=f"{week_start.strftime('%Y-%m-%d')} to {week_end.strftime('%Y-%m-%d')}")
+
+        self.gross_profit_tree.delete(*self.gross_profit_tree.get_children())
+
+        if self.user_role == "Owner":
+            query = """
+                SELECT profit_date, cash_total, credit_total, total, store_id
+                FROM gross_profit
+                WHERE profit_date BETWEEN %s AND %s
+                ORDER BY profit_date ASC
+            """
+            params = (week_start, week_end)
+        elif self.user_role == "Manager":
+            query = """
+                SELECT profit_date, cash_total, credit_total, total, store_id
+                FROM gross_profit
+                WHERE profit_date BETWEEN %s AND %s AND store_id = %s
+                ORDER BY profit_date ASC
+            """
+            params = (week_start, week_end, self.assigned_store_id)
+        else:
+            return
+
+        try:
+            results = sqlConnector.connect(query, params)
+            for row in results:
+                self.gross_profit_tree.insert("", "end", values=row)
+        except Exception as e:
+            messagebox.showerror("Database Error", str(e))
+
     def previous_profit_week(self):
         self.current_profit_week_start -= timedelta(weeks=1)
         self.update_gross_profit_display()
@@ -559,18 +697,18 @@ class ManageEmployees(tk.Frame):
                 SELECT e.firstName, e.store_name, p.pay_date, p.amount
                 FROM Payroll p
                 JOIN employee e ON p.employee_id = e.employee_id
-                WHERE e.store_name = %s
+                WHERE e.store_id = %s
                 ORDER BY p.pay_date DESC
                 LIMIT 20
             """
-            params = (self.store_name,)
+            params = (self.assigned_store_id,)
         else:
             return
 
         try:
-            results = sqlConnector.connect(query, params)
-            for row in results:
-                self.payroll_tree.insert("", "end", values=(row[2], row[3]))  # pay_date, amount
+            rows = sqlConnector.connect(query, params)
+            for row in rows:
+                self.payroll_tree.insert("", "end", values=(row[2], row[3]))
         except Exception as e:
             messagebox.showerror("Database Error", str(e))
 
