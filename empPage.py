@@ -121,12 +121,12 @@ class EmployeePage(tk.Frame):
         # define columns
         self.history_treeview = ttk.Treeview(
             history_frame,
-            columns=("Date", "Store", "Clock In", "Reg In", "Clock Out", "Reg Out", "Duration"),
+            columns=( "Store", "Clock In", "Reg In", "Clock Out", "Reg Out", "Reg gain","Duration"),
             show="headings"
         )
 
         # Define headings
-        for col in ("Date", "Store", "Clock In", "Reg In", "Clock Out", "Reg Out", "Duration"):
+        for col in ( "Store", "Clock In", "Reg In", "Clock Out", "Reg Out", "Reg gain","Duration"):
             self.history_treeview.heading(col, text=col)
             self.history_treeview.column(col, width=120, anchor="center")
 
@@ -181,9 +181,8 @@ class EmployeePage(tk.Frame):
             return
         else:
             print("got a balance")
-
+        store_name = self.selected_store.get()
         date= datetime.now().strftime("%Y-%m-%d")
-        store = self.selected_store.get()
         clock_in = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         reg_in = float(balance)
@@ -201,12 +200,13 @@ class EmployeePage(tk.Frame):
 
 
         self.records.append({
-            "store": store,
+            "store": store_name,
             "clock_in": clock_in,
             "reg_in": reg_in,
             "clock_out": clock_out,
             "reg_out": reg_out,
-            "duration": "-"
+            "duration": "-",
+            "reg gain": "-",
         })
 
         print(self.records)
@@ -226,30 +226,58 @@ class EmployeePage(tk.Frame):
         # Update the history display
         self.update_history()
 
-#TODO
-    # clock out
     def clock_out(self):
         balance = self.reg_out_balance.get()
-    #     if not balance:
-    #         messagebox.showerror("Error", "Please enter a register balance.")
-    #         return
-    #     reg_out = float(balance)
-    #     employee_id = self.controller.employee_id
-    #     store_name= self.selected_store.get()
-    #     date= datetime.now().strftime("%Y-%m-%d")
-    #     clock_out = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #
-    #
-    #     last_record = self.records[-1]
-    #     last_record["clock_out"] = datetime.now().strftime("%H:%M")
-    #     last_record["reg_out"] = balance
-    #
-    #     in_time = datetime.strptime(last_record["clock_in"], "%H:%M")
-    #     out_time = datetime.strptime(last_record["clock_out"], "%H:%M")
-    #     last_record["duration"] = str(out_time - in_time)
-    #
-    #     messagebox.showinfo("Clock Out", "Clock-out recorded successfully.")
-    #     self.update_history()
+        if not balance:
+            messagebox.showerror("Error", "Please enter a register balance.")
+            return
+        else:
+            print("got a balance")
+        reg_out = float(balance)
+        employee_id = self.controller.employee_id
+        store_name = self.selected_store.get()
+        date_today = datetime.now().strftime("%Y-%m-%d")
+        clock_out_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        # Fetch the most recent clock-in entry without a clock-out
+        select_query = """SELECT clock_id, clock_in FROM clockTable
+            WHERE employee_id = %s AND clock_out IS NULL
+            ORDER BY clock_id DESC LIMIT 1
+        """
+        result = sqlConnector.connect(select_query, (employee_id,))
+        print(result)
+        if not result:
+            messagebox.showerror("Error", "No matching clock-in found.")
+            return
+        clock_id, clock_in_str = result[0]
+
+        # Update clockTable with clock-out info
+        update_query = """
+            UPDATE clockTable
+            SET clock_out = %s, reg_out = %s
+            WHERE clock_id = %s
+        """
+        sqlConnector.connect(update_query, (clock_out_time, reg_out, clock_id))
+
+        # Calculate duration
+        in_time = datetime.strptime(clock_in_str, "%Y-%m-%d %H:%M:%S")
+        out_time = datetime.strptime(clock_out_time, "%Y-%m-%d %H:%M:%S")
+        duration = str(out_time - in_time).split('.')[0]  # Remove microseconds
+
+        # Get reg_in from the last record (local memory)
+        last_record = self.records[-1]
+        reg_gain = reg_out - last_record["reg_in"]
+
+        # Update local records
+        self.records[-1].update({
+            "clock_out": out_time,
+            "reg_out": reg_out,
+            "reg gain": round(reg_gain, 2),
+            "duration": duration
+        })
+
+        self.update_history()
+        messagebox.showinfo("Clock Out", "Clock-out recorded successfully.")
 
     def update_history(self):
         self.history_treeview.delete(*self.history_treeview.get_children())
@@ -270,11 +298,3 @@ class EmployeePage(tk.Frame):
 
             #send data to sql connector
             sqlConnector.connect(query, data)
-
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.title("Employee Dashboard")
-    root.geometry("900x750")
-    employee_page = EmployeePage(root, None)
-    employee_page.pack(fill="both", expand=True)
-    root.mainloop()

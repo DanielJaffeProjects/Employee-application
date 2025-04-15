@@ -47,13 +47,11 @@ CREATE TABLE if not exists Store (
 Create table if not exists clockTable(
     clock_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
-    store_id int,
     clock_in varchar(23),
     clock_out varchar(23),
     reg_in DECIMAL(10,2),
     reg_out DECIMAL(10,2),
-    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
-    FOREIGN KEY (store_id) REFERENCES Store(store_id)
+    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
 );
 
 
