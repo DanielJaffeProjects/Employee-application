@@ -45,6 +45,8 @@ CREATE TABLE if not exists Store (
 
 # employee clock-in and clock to
 Create table if not exists clockTable(
+    firstName Varchar (15),
+    lastName varchar (15),
     clock_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
     clock_in varchar(23),
