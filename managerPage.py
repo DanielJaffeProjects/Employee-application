@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-from manageEmployees import ManageEmployees
+from OwnerAndManagerBase import ManageEmployees
 
 class ManagerPage(tk.Frame):
     def __init__(self, parent, controller):

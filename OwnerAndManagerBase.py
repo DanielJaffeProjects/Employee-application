@@ -2,6 +2,7 @@ from tkinter import ttk
 from datetime import datetime, timedelta
 from payroll import create_payroll_tab
 from Store import *
+from updateEmployees import AddEmployee
 
 class ManageEmployees(tk.Frame):
     def __init__(self, parent, controller):
@@ -102,7 +103,9 @@ class ManageEmployees(tk.Frame):
 
         if self.controller.role == 'Owner' or 'Manager':
             create_payroll_tab(content_frame, tabs,employee_id)
-
+            add_employee_tab = AddEmployee(content_frame)
+            add_employee_tab.grid(row=0, column=0, sticky="nsew")
+            tabs["Add Employee"] = add_employee_tab
         # -------------------------------
         # Enter Invoice Tab (as provided)
         # -------------------------------
@@ -236,75 +239,6 @@ class ManageEmployees(tk.Frame):
         self.update_gross_profit_display()
 
 
-        # -------------------------------
-        # Manage Employees Tab (Notebook)
-        # -------------------------------
-        manage_frame = tk.Frame(content_frame, bg="white")
-        manage_frame.grid(row=0, column=0, sticky="nsew")
-        notebook = ttk.Notebook(manage_frame)
-        notebook.pack(expand=True, fill="both")
-        # Add Employee Tab
-        add_employee_frame = tk.Frame(notebook, bg="white")
-        tk.Label(add_employee_frame, text="Add Employee", font=("Helvetica", 18), bg="white").pack(pady=10)
-
-
-        tk.Label(add_employee_frame, text="First Name", font=("Helvetica", 14), bg="white").pack()
-        emp_firstname = tk.Entry(add_employee_frame, font=("Helvetica", 14))
-        emp_firstname.pack()
-
-        tk.Label(add_employee_frame, text="Last Name:", font=("Helvetica", 14), bg="white").pack()
-        emp_lastname = tk.Entry(add_employee_frame, font=("Helvetica", 14))
-        emp_lastname.pack()
-        tk.Label(add_employee_frame, text="Username:", font=("Helvetica", 14), bg="white").pack()
-        emp_username = tk.Entry(add_employee_frame, font=("Helvetica", 14))
-        emp_username.pack()
-        tk.Label(add_employee_frame, text="Password:", font=("Helvetica", 14), bg="white").pack()
-        emp_password = tk.Entry(add_employee_frame, font=("Helvetica", 14), show="*")
-        emp_password.pack()
-
-        # Role Dropdown Menu
-        tk.Label(add_employee_frame, text="Role:", font=("Helvetica", 14), bg="white").pack()
-        roles = ["Employee", "Manager","Owner"]  # List of roles
-        selected_role = tk.StringVar()
-        selected_role.set(roles[0])  # Set default role
-        role_menu = tk.OptionMenu(add_employee_frame, selected_role, *roles)
-        role_menu.config(font=("Helvetica", 14))
-        role_menu.pack()
-
-        tk.Button(add_employee_frame, text="Add Employee", font=("Helvetica", 14),
-                  command=lambda: self.add_employee(emp_firstname.get(), emp_lastname.get(), emp_username.get(), emp_password.get(),
-                                                 selected_role.get())).pack(pady=10)
-
-        # Delete Employee Tab
-        delete_employee_frame = tk.Frame(notebook, bg="white")
-        tk.Label(delete_employee_frame, text="Delete Employee", font=("Helvetica", 18), bg="white").pack(pady=10)
-        tk.Label(delete_employee_frame, text="Username:", font=("Helvetica", 14), bg="white").pack()
-        del_username = tk.Entry(delete_employee_frame, font=("Helvetica", 14))
-        del_username.pack()
-        tk.Button(delete_employee_frame, text="Delete", font=("Helvetica", 14),
-                  command=lambda: self.delete_employee(del_username.get())).pack(pady=10)
-
-        # Edit Employee Tab
-        edit_employee_frame = tk.Frame(notebook, bg="white")
-        tk.Label(edit_employee_frame, text="Edit Employee", font=("Helvetica", 18), bg="white").pack(pady=10)
-        tk.Label(edit_employee_frame, text="Username:", font=("Helvetica", 14), bg="white").pack()
-        edit_username = tk.Entry(edit_employee_frame, font=("Helvetica", 14))
-        edit_username.pack()
-        tk.Label(edit_employee_frame, text="New Password:", font=("Helvetica", 14), bg="white").pack()
-        new_password = tk.Entry(edit_employee_frame, font=("Helvetica", 14), show="*")
-        new_password.pack()
-        tk.Label(edit_employee_frame, text="Edit Bonus Percentage:", font=("Helvetica", 14), bg="white").pack()
-        new_bonus = tk.Entry(edit_employee_frame, font=("Helvetica", 14))
-        new_bonus.pack()
-        tk.Button(edit_employee_frame, text="Update", font=("Helvetica", 14),
-                  command=lambda: self.edit_employee(edit_username.get(), new_password.get(), new_bonus.get())).pack(pady=10)
-
-        notebook.add(add_employee_frame, text="Add Employee")
-        notebook.add(delete_employee_frame, text="Delete Employee")
-        notebook.add(edit_employee_frame, text="Edit Employee")
-
-        tabs["Manage Employees"] = manage_frame
-
 
 
 
@@ -369,30 +303,6 @@ class ManageEmployees(tk.Frame):
     def submit_merchandise(self, merch_type, merch_value, merch_date):
         messagebox.showinfo("Submit Merchandise", f"Merchandise '{merch_type}' submitted!")
 
-    def add_employee(self, firstName, lastName, username, password, selectedRole):
-        if not firstName or not lastName or not password or not selectedRole:
-            messagebox.showerror("Error", "All fields must be filled out.")
-            return
-        messagebox.showinfo("Success", f"Employee {firstName} {lastName} added successfully!")
-        # sends info to database
-        query = """INSERT INTO employee(firstName,lastName, username, password,role)
-           VALUES (%s, %s, %s, %s,%s)"""
-        data = (firstName, lastName, username,password,selectedRole)
-
-        # send data to sql connector
-        sqlConnector.connect(query, data)
-
-    def delete_employee(self, username):
-        if not username:
-            messagebox.showerror("Error", "Username is required.")
-            return
-        messagebox.showinfo("Success", f"Employee {username} deleted successfully!")
-
-    def edit_employee(self, username, password, bonus):
-        if not username:
-            messagebox.showerror("Error", "Username is required.")
-            return
-        messagebox.showinfo("Success", f"Employee {username} updated successfully!")
 
 
     # -------------------------------

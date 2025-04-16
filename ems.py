@@ -6,7 +6,7 @@ import managerPage
 from login import LoginPage
 from empPage import EmployeePage
 from ownerPage import OwnerPage
-from manageEmployees import ManageEmployees
+from OwnerAndManagerBase import ManageEmployees
 
 
 class EMSApp(tk.Tk):
