@@ -10,3 +10,5 @@ class ManagerPage(tk.Frame):
 
         self.manage_employees = ManageEmployees(self, controller)
         self.manage_employees.pack(expand=True, fill="both")
+
+##
