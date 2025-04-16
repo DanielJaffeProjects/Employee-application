@@ -121,3 +121,13 @@ CREATE TABLE IF NOT EXISTS Bonus (
     Current_Bonus_Percentage DECIMAL(10,2) DEFAULT 0.00,
     FOREIGN KEY (EmpID) REFERENCES Employee(employee_id) ON DELETE CASCADE
 );
+
+Create Table if not exists withdraw(
+    withdraw_id INT PRIMARY KEY,
+    employee_id INT,
+    store_id INT,
+    withdraw_date DATE,
+    amount DECIMAL(10,2),
+    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
+    FOREIGN KEY (store_id) REFERENCES Store(store_id)
+)

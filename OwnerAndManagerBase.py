@@ -7,7 +7,9 @@ from Tabs.Merchandise import create_merchandise_tab
 from Tabs.payroll import create_payroll_tab
 from Tabs.Store import *
 from Tabs.updateEmployees import AddEmployee
-from Expenses import create_expenses_tab
+from Tabs.Expenses import create_expenses_tab
+from Withdraw import create_withdraw_tab
+
 
 class ManageEmployees(tk.Frame):
     def __init__(self, parent, controller):
@@ -113,17 +115,20 @@ class ManageEmployees(tk.Frame):
 
 
 
-        # store tabs
+        # for just the owner
         if self.controller.role == 'Owner':
             create_store_tab(content_frame, tabs, add_store, delete_store)
 
+        # for owner and manager
         if self.controller.role == 'Owner' or 'Manager':
             # make payroll
             create_payroll_tab(content_frame, tabs,employee_id)
+
             # add employee or update
             add_employee_tab = AddEmployee(content_frame)
             add_employee_tab.grid(row=0, column=0, sticky="nsew")
             tabs["Add Employee"] = add_employee_tab
+
             # submit a invoice
             createInvoice(content_frame, tabs)
 
@@ -135,6 +140,9 @@ class ManageEmployees(tk.Frame):
 
             # expenses
             create_expenses_tab(content_frame, tabs)
+
+            # withdraw
+            create_withdraw_tab(content_frame, tabs)
         # -------------------------------
         # Enter Expense Tab
         # -------------------------------
