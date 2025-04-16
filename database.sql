@@ -101,3 +101,12 @@ CREATE TABLE IF NOT EXISTS Expense (
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
     FOREIGN KEY (store_id) REFERENCES Store(store_id)
 );
+
+CREATE TABLE IF NOT EXISTS Merchandise (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Merch_Type VARCHAR(255) NOT NULL,
+    Merch_Value DECIMAL(10,2) NOT NULL,
+    Purchase_Date DATE NOT NULL,
+    StoreID INT,
+    FOREIGN KEY (StoreID) REFERENCES Store(store_id)
+);

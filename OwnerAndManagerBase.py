@@ -2,6 +2,7 @@ from tkinter import ttk
 from datetime import datetime, timedelta
 
 from Invoice import createInvoice
+from Merchandise import create_merchandise_tab
 from payroll import create_payroll_tab
 from Store import *
 from updateEmployees import AddEmployee
@@ -108,6 +109,8 @@ class ManageEmployees(tk.Frame):
         else:
             print("Not an owner, no withdraw tab added")
 
+
+
         # store tabs
         if self.controller.role == 'Owner':
             create_store_tab(content_frame, tabs, add_store, delete_store)
@@ -121,6 +124,9 @@ class ManageEmployees(tk.Frame):
             tabs["Add Employee"] = add_employee_tab
             # submit a invoice
             createInvoice(content_frame, tabs)
+
+            # merchandise
+            create_merchandise_tab(content_frame, tabs)
 
         # -------------------------------
         # Enter Expense Tab
@@ -146,29 +152,6 @@ class ManageEmployees(tk.Frame):
 
         tabs["Enter Expense"] = enter_expense_frame
 
-        # -------------------------------
-        # Enter Merchandise Tab
-        # -------------------------------
-        enter_merch_frame = tk.Frame(content_frame, bg="white")
-        enter_merch_frame.grid(row=0, column=0, sticky="nsew")
-        tk.Label(enter_merch_frame, text="Enter Merchandise", font=("Helvetica", 18), bg="white").pack(pady=10)
-
-        tk.Label(enter_merch_frame, text="Merchandise Type:", font=("Helvetica", 14), bg="white").pack()
-        merch_type = tk.Entry(enter_merch_frame, font=("Helvetica", 14))
-        merch_type.pack()
-
-        tk.Label(enter_merch_frame, text="Merchandise Value:", font=("Helvetica", 14), bg="white").pack()
-        merch_value = tk.Entry(enter_merch_frame, font=("Helvetica", 14))
-        merch_value.pack()
-
-        tk.Label(enter_merch_frame, text="Merchandise Date:", font=("Helvetica", 14), bg="white").pack()
-        merch_date = tk.Entry(enter_merch_frame, font=("Helvetica", 14))
-        merch_date.pack()
-
-        tk.Button(enter_merch_frame, text="Submit Merchandise", font=("Helvetica", 14),
-                  command=lambda: self.submit_merchandise(merch_type.get(), merch_value.get(), merch_date.get())).pack(pady=10)
-
-        tabs["Enter Merchandise"] = enter_merch_frame
 
 
 
@@ -241,8 +224,6 @@ class ManageEmployees(tk.Frame):
     def submit_expense(self, expense_type, expense_value, expense_date):
         messagebox.showinfo("Submit Expense", f"Expense '{expense_type}' submitted!")
 
-    def submit_merchandise(self, merch_type, merch_value, merch_date):
-        messagebox.showinfo("Submit Merchandise", f"Merchandise '{merch_type}' submitted!")
 
 
 
