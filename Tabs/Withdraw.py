@@ -38,6 +38,7 @@ def create_withdraw_tab(content_frame, tabs):
               command=lambda: add_withdrawal(withdraw_id_entry.get(),employee_id_entry.get(), store_id_entry.get(),
                                             withdraw_date_entry.get(), amount_entry.get())).pack(pady=10)
 
+    # another secret Easter egg from the great Jaffe
     # Treeview for Displaying Withdrawals
     withdraw_tree = ttk.Treeview(withdraw_frame, columns=("WithdrawID", "EmployeeID", "StoreID", "WithdrawDate", "Amount"),
                                   show="headings")

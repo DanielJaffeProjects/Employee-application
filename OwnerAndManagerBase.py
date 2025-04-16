@@ -8,7 +8,8 @@ from Tabs.payroll import create_payroll_tab
 from Tabs.Store import *
 from Tabs.updateEmployees import AddEmployee
 from Tabs.Expenses import create_expenses_tab
-from Withdraw import create_withdraw_tab
+from Tabs.Withdraw import create_withdraw_tab
+from gross_profit import create_gross_profit_tab
 
 
 class ManageEmployees(tk.Frame):
@@ -75,50 +76,12 @@ class ManageEmployees(tk.Frame):
         # Dictionary to hold the tabs
         tabs = {}
         print(self.controller.role)
-        if self.controller.role == 'Owner':
-            print("In with draw")
-            withdraw = tk.Frame(content_frame, bg="white")
-            withdraw.grid(row=0, column=0, sticky="nsew")
-            tabs["withdraw"] = withdraw
-
-            tk.Label(withdraw, text="Gross Profit", font=("Helvetica", 18), bg="white").pack(pady=10)
-
-            profit_nav_frame = tk.Frame(withdraw, bg="white")
-            profit_nav_frame.pack(pady=10)
-            prev_profit_btn = tk.Button(profit_nav_frame, text="<", font=("Helvetica", 14),
-                                        command=self.previous_profit_week)
-            prev_profit_btn.pack(side="left", padx=5)
-            self.profit_week_label = tk.Label(profit_nav_frame, text="", font=("Helvetica", 14), bg="white")
-            self.profit_week_label.pack(side="left", padx=5)
-            next_profit_btn = tk.Button(profit_nav_frame, text=">", font=("Helvetica", 14),
-                                        command=self.next_profit_week)
-            next_profit_btn.pack(side="left", padx=5)
-
-            tk.Label(withdraw, text="Enter Date (YYYY-MM-DD):", font=("Helvetica", 14), bg="white").pack(
-                pady=(20, 5))
-            self.profit_week_entry = tk.Entry(withdraw, font=("Helvetica", 14))
-            self.profit_week_entry.pack(pady=5)
-            tk.Button(withdraw, text="Go", font=("Helvetica", 14),
-                      command=self.set_profit_week_from_entry).pack(pady=5)
-
-            # Create a Treeview for the gross profit table
-            self.gross_profit_tree = ttk.Treeview(withdraw, columns=("Date", "Cash", "Credit", "Total"),
-                                                  show="headings")
-            self.gross_profit_tree.heading("Date", text="Date")
-            self.gross_profit_tree.heading("Cash", text="Cash")
-            self.gross_profit_tree.heading("Credit", text="Credit")
-            self.gross_profit_tree.heading("Total", text="Total")
-            self.gross_profit_tree.pack(fill="both", expand=True, padx=10, pady=10)
-            self.update_gross_profit_display()
-        else:
-            print("Not an owner, no withdraw tab added")
-
-
 
         # for just the owner
         if self.controller.role == 'Owner':
             create_store_tab(content_frame, tabs, add_store, delete_store)
 
+        # if anyone sees this Daniel is the greatest of all time Easter egg!!
         # for owner and manager
         if self.controller.role == 'Owner' or 'Manager':
             # make payroll
@@ -143,64 +106,13 @@ class ManageEmployees(tk.Frame):
 
             # withdraw
             create_withdraw_tab(content_frame, tabs)
-        # -------------------------------
-        # Enter Expense Tab
-        # -------------------------------
-        enter_expense_frame = tk.Frame(content_frame, bg="white")
-        enter_expense_frame.grid(row=0, column=0, sticky="nsew")
-        tk.Label(enter_expense_frame, text="Enter Expense", font=("Helvetica", 18), bg="white").pack(pady=10)
 
-        tk.Label(enter_expense_frame, text="Expense Type:", font=("Helvetica", 14), bg="white").pack()
-        expense_type = tk.Entry(enter_expense_frame, font=("Helvetica", 14))
-        expense_type.pack()
-
-        tk.Label(enter_expense_frame, text="Expense Value:", font=("Helvetica", 14), bg="white").pack()
-        expense_value = tk.Entry(enter_expense_frame, font=("Helvetica", 14))
-        expense_value.pack()
-
-        tk.Label(enter_expense_frame, text="Expense Date:", font=("Helvetica", 14), bg="white").pack()
-        expense_date = tk.Entry(enter_expense_frame, font=("Helvetica", 14))
-        expense_date.pack()
-
-        tk.Button(enter_expense_frame, text="Submit Expense", font=("Helvetica", 14),
-                  command=lambda: self.submit_expense(expense_type.get(), expense_value.get(), expense_date.get())).pack(pady=10)
-
-        tabs["Enter Expense"] = enter_expense_frame
+            # gross profit
+            create_gross_profit_tab(content_frame, tabs)
 
 
 
 
-        # -------------------------------
-        # Gross Profit Tab (Weekly)
-        # -------------------------------
-        gross_profit_frame = tk.Frame(content_frame, bg="white")
-        gross_profit_frame.grid(row=0, column=0, sticky="nsew")
-        tabs["Gross Profit"] = gross_profit_frame
-
-        tk.Label(gross_profit_frame, text="Gross Profit", font=("Helvetica", 18), bg="white").pack(pady=10)
-
-        profit_nav_frame = tk.Frame(gross_profit_frame, bg="white")
-        profit_nav_frame.pack(pady=10)
-        prev_profit_btn = tk.Button(profit_nav_frame, text="<", font=("Helvetica", 14), command=self.previous_profit_week)
-        prev_profit_btn.pack(side="left", padx=5)
-        self.profit_week_label = tk.Label(profit_nav_frame, text="", font=("Helvetica", 14), bg="white")
-        self.profit_week_label.pack(side="left", padx=5)
-        next_profit_btn = tk.Button(profit_nav_frame, text=">", font=("Helvetica", 14), command=self.next_profit_week)
-        next_profit_btn.pack(side="left", padx=5)
-
-        tk.Label(gross_profit_frame, text="Enter Date (YYYY-MM-DD):", font=("Helvetica", 14), bg="white").pack(pady=(20,5))
-        self.profit_week_entry = tk.Entry(gross_profit_frame, font=("Helvetica", 14))
-        self.profit_week_entry.pack(pady=5)
-        tk.Button(gross_profit_frame, text="Go", font=("Helvetica", 14), command=self.set_profit_week_from_entry).pack(pady=5)
-
-        # Create a Treeview for the gross profit table
-        self.gross_profit_tree = ttk.Treeview(gross_profit_frame, columns=("Date", "Cash", "Credit", "Total"), show="headings")
-        self.gross_profit_tree.heading("Date", text="Date")
-        self.gross_profit_tree.heading("Cash", text="Cash")
-        self.gross_profit_tree.heading("Credit", text="Credit")
-        self.gross_profit_tree.heading("Total", text="Total")
-        self.gross_profit_tree.pack(fill="both", expand=True, padx=10, pady=10)
-        self.update_gross_profit_display()
 
         # -------------------------------
         # Function to Show Selected Tab

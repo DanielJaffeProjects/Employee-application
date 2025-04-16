@@ -130,4 +130,16 @@ Create Table if not exists withdraw(
     amount DECIMAL(10,2),
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
     FOREIGN KEY (store_id) REFERENCES Store(store_id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS Gross_Profit (
+    Profit_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Employee_ID INT,
+    Store_ID INT,
+    Date DATE,
+    Cash DECIMAL(10,2),
+    Credit DECIMAL(10,2),
+    Total DECIMAL(10,2),
+    FOREIGN KEY (Employee_ID) REFERENCES Employee(employee_id),
+    FOREIGN KEY (Store_ID) REFERENCES Store(store_id)
+);
