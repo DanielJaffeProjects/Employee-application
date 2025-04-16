@@ -78,9 +78,16 @@ class LoginPage(tk.Frame):
             role_index = 5
             role = user[role_index] if len(user) > role_index else None
             print(role)
+            employee_id = user[0]
             if role:
-                role = role.title()
-                self.controller.show_frame(f"{role}Page")
+                # Store session info in the controller
+                print("Storing session info in controller")
+                self.controller.employee_id = employee_id
+                self.controller.role = role.title()
+                self.controller.username = username
+
+                # Show the appropriate page based on role
+                self.controller.show_frame(f"{role.title()}Page")
             else:
                 messagebox.showerror("Login Failed", "User role not found.")
         else:

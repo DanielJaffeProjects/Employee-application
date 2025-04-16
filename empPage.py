@@ -25,6 +25,10 @@ class EmployeePage(tk.Frame):
         self.create_bottom_frame()
         self.createMiddleFrame()
 
+        # Access session info
+        employee_id = self.controller.employee_id
+        username = self.controller.username
+        print(f"Welcome, {username} (ID: {employee_id})")
     # creates the top part
     def create_top_frame(self):
         # Top frame for store selection dropdown
@@ -117,12 +121,12 @@ class EmployeePage(tk.Frame):
         # define columns
         self.history_treeview = ttk.Treeview(
             history_frame,
-            columns=("Date", "Store", "Clock In", "Reg In", "Clock Out", "Reg Out", "Duration"),
+            columns=( "last name ", "Store", "Clock In", "Reg In", "Clock Out", "Reg Out", "Reg gain","Duration"),
             show="headings"
         )
 
         # Define headings
-        for col in ("Date", "Store", "Clock In", "Reg In", "Clock Out", "Reg Out", "Duration"):
+        for col in ( "last name ","Store", "Clock In", "Reg In", "Clock Out", "Reg Out", "Reg gain","Duration"):
             self.history_treeview.heading(col, text=col)
             self.history_treeview.column(col, width=120, anchor="center")
 
@@ -170,53 +174,119 @@ class EmployeePage(tk.Frame):
 
     # clock in
     def clock_in(self):
+        print("got in clock in")
         balance = self.reg_in_balance.get()
         if not balance:
             messagebox.showerror("Error", "Please enter a register balance.")
             return
+        else:
+            print("got a balance")
+        store_name = self.selected_store.get()
         date= datetime.now().strftime("%Y-%m-%d")
-        store = self.selected_store.get()
-        clock_in = datetime.now().strftime("%H:%M")
-        reg_in = balance
+        clock_in = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        reg_in = float(balance)
         clock_out = None
         reg_out = None
+        employee_id = self.controller.employee_id
+
+        # get first and last name
+        queryFL = "SELECT firstName, lastName FROM employee WHERE employee_id = %s"
+        result = sqlConnector.connect(queryFL, (employee_id,))
+        print(result);
+        firstName, lastName = result[0]
+        print(firstName, lastName)
+
+        # Check if the user has already clocked in today
+        for record in self.records:
+            if record["date"] == date and record["employee_id"] == employee_id and record["clock_in"] is not None:
+                messagebox.showerror("Error", "You have already clocked in today.")
+                return
+            else:
+                print("not clocked in yet")
+
 
         self.records.append({
-            "date": date,
-            "store": store,
+            "last name": lastName,
+            "store": store_name,
             "clock_in": clock_in,
             "reg_in": reg_in,
             "clock_out": clock_out,
             "reg_out": reg_out,
+            "reg gain": "-",
             "duration": "-"
         })
 
-        # sends info to database
-        query = """INSERT INTO clockTable(reg_in)
-           VALUES (%s)"""
-        data = (reg_in,)
+        print(self.records)
+        # sends info to databases
+        query = """INSERT INTO clockTable (firstName,lastName,employee_id, clock_in, reg_in)
+               VALUES (%s, %s,%s,%s,%s)"""
+        data = (firstName,lastName,employee_id,clock_in, reg_in)
 
-        # send data to sql connector
-        sqlConnector.connect(query, data)
-        messagebox.showinfo("Clock In", "Clock-in recorded successfully.")
+        try:
+            # Send the data to the SQL connector
+            sqlConnector.connect(query, data)
+            messagebox.showinfo("Clock In", "Clock-in recorded successfully.")
+
+        except Exception as e:
+            messagebox.showerror("Database Error", f"An error occurred: {str(e)}")
+
+        # Update the history display
         self.update_history()
 
-    # clock out
     def clock_out(self):
         balance = self.reg_out_balance.get()
         if not balance:
             messagebox.showerror("Error", "Please enter a register balance.")
             return
+        else:
+            print("got a balance")
+        reg_out = float(balance)
+        employee_id = self.controller.employee_id
+        store_name = self.selected_store.get()
+        date_today = datetime.now().strftime("%Y-%m-%d")
+        clock_out_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+        # Fetch the most recent clock-in entry without a clock-out
+        select_query = """SELECT clock_id, clock_in FROM clockTable
+            WHERE employee_id = %s AND clock_out IS NULL
+            ORDER BY clock_id DESC LIMIT 1
+        """
+        result = sqlConnector.connect(select_query, (employee_id,))
+        print(result)
+        if not result:
+            messagebox.showerror("Error", "No matching clock-in found.")
+            return
+        clock_id, clock_in_str = result[0]
+
+        # Update clockTable with clock-out info
+        update_query = """
+            UPDATE clockTable
+            SET clock_out = %s, reg_out = %s
+            WHERE clock_id = %s
+        """
+        sqlConnector.connect(update_query, (clock_out_time, reg_out, clock_id))
+
+        # Calculate duration
+        in_time = datetime.strptime(clock_in_str, "%Y-%m-%d %H:%M:%S")
+        out_time = datetime.strptime(clock_out_time, "%Y-%m-%d %H:%M:%S")
+        duration = str(out_time - in_time).split('.')[0]  # Remove microseconds
+
+        # Get reg_in from the last record (local memory)
         last_record = self.records[-1]
-        last_record["clock_out"] = datetime.now().strftime("%H:%M")
-        last_record["reg_out"] = balance
+        reg_gain = reg_out - last_record["reg_in"]
 
-        in_time = datetime.strptime(last_record["clock_in"], "%H:%M")
-        out_time = datetime.strptime(last_record["clock_out"], "%H:%M")
-        last_record["duration"] = str(out_time - in_time)
+        # Update local records
+        self.records[-1].update({
+            "clock_out": out_time,
+            "reg_out": reg_out,
+            "reg gain": round(reg_gain, 2),
+            "duration": duration
+        })
 
-        messagebox.showinfo("Clock Out", "Clock-out recorded successfully.")
         self.update_history()
+        messagebox.showinfo("Clock Out", "Clock-out recorded successfully.")
 
     def update_history(self):
         self.history_treeview.delete(*self.history_treeview.get_children())
@@ -225,23 +295,56 @@ class EmployeePage(tk.Frame):
 
     # Function to handle the submit button action
     def submit_info(self):
-            credit = self.credit_entry.get()
-            cash = self.cash_entry.get()
-            expense = self.expense_entry.get()
-            comments = self.comments_entry.get()
-            storeName = self.selected_store.get()
+        credit = self.credit_entry.get()
+        cash = self.cash_entry.get()
+        expense = self.expense_entry.get()
+        comments = self.comments_entry.get()
+        store_name = self.selected_store.get()
 
-            query = """INSERT INTO employee_close(firstName, lastName, store_name, credit, cash_in_envelope, expense, comments)
-                VALUES (%s, %s, %s, %s, %s, %s,%s)"""
-            data = (None, None,storeName, credit, cash, expense, comments)
+        employee_id = self.controller.employee_id
+        print(employee_id)
+        if not credit or not cash or not expense:
+            messagebox.showerror("Error", "Please fill in all required fields (credit, cash, expense).")
+            return
 
-            #send data to sql connector
-            sqlConnector.connect(query, data)
+        try:
+            # Validate that credit, cash, and expense are valid floats
+            credit_val = float(credit)
+            cash_val = float(cash)
+            expense_val = float(expense)
+        except ValueError:
+            messagebox.showerror("Input Error", "Credit, Cash, and Expense must be valid numbers.")
+            return
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.title("Employee Dashboard")
-    root.geometry("900x750")
-    employee_page = EmployeePage(root, None)
-    employee_page.pack(fill="both", expand=True)
-    root.mainloop()
+        # Fetch first and last name from database using employee_id
+        try:
+            query = "SELECT firstName, lastName FROM employee WHERE employee_id = %s"
+            result = sqlConnector.connect(query, (employee_id,))
+            print(result)
+            if not result:
+                messagebox.showerror("Error", "Employee not found in database.")
+                return
+            first_name, last_name = result[0]
+        except Exception as e:
+            messagebox.showerror("Database Error", f"Could not fetch employee info: {str(e)}")
+            return
+
+        # Submit the close-out info
+        try:
+            insert_query = """
+                INSERT INTO employee_close (
+                    firstName, lastName, store_name, credit, cash_in_envelope, expense, comments, employee_id
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """
+            data = (first_name, last_name, store_name, credit_val, cash_val, expense_val, comments, employee_id)
+            sqlConnector.connect(insert_query, data)
+            messagebox.showinfo("Success", "Closing information submitted successfully.")
+
+            # Clear input fields after successful insert
+            self.credit_entry.delete(0, tk.END)
+            self.cash_entry.delete(0, tk.END)
+            self.expense_entry.delete(0, tk.END)
+            self.comments_entry.delete(0, tk.END)
+
+        except Exception as e:
+            messagebox.showerror("Database Error", f"An error occurred while submitting data: {str(e)}")
