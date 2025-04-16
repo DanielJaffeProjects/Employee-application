@@ -69,12 +69,12 @@ Create table if not exists clockTable(
 
 # table for invoices
 CREATE TABLE if not exists Invoice (
-    invoice_id INT AUTO_INCREMENT primary key,
-    company_name VARCHAR(255),
-    amount_due DECIMAL(10,2),
-    due_date DATE,
-    paid_status ENUM('paid', 'unpaid'),
-    payment_date DATE
+    invoice_id INT AUTO_INCREMENT PRIMARY KEY,
+    invoice_company VARCHAR(255) NOT NULL,
+    invoice_amount DECIMAL(10, 2) NOT NULL,
+    date_received VARCHAR(20) NOT NULL,
+    date_due Varchar(20) NOT NULL,
+    invoice_paid ENUM('paid', 'unpaid') NOT NULL
 );
 
 # table for bonuses
