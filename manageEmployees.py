@@ -93,6 +93,9 @@ class ManageEmployees(tk.Frame):
             self.gross_profit_tree.heading("Total", text="Total")
             self.gross_profit_tree.pack(fill="both", expand=True, padx=10, pady=10)
             self.update_gross_profit_display()
+
+
+
         else:
             print("Not an owner, no withdraw tab added")
 
@@ -107,29 +110,42 @@ class ManageEmployees(tk.Frame):
         invoice_id = tk.Entry(enter_invoice_frame, font=("Helvetica", 14))
         invoice_id.pack()
 
-        tk.Label(enter_invoice_frame, text="Date:", font=("Helvetica", 14), bg="white").pack()
-        invoice_date = tk.Entry(enter_invoice_frame, font=("Helvetica", 14))
-        invoice_date.pack()
-
         tk.Label(enter_invoice_frame, text="Company:", font=("Helvetica", 14), bg="white").pack()
         invoice_company = tk.Entry(enter_invoice_frame, font=("Helvetica", 14))
         invoice_company.pack()
-
-        tk.Label(enter_invoice_frame, text="Paid (Yes/No):", font=("Helvetica", 14), bg="white").pack()
-        invoice_paid = tk.Entry(enter_invoice_frame, font=("Helvetica", 14))
-        invoice_paid.pack()
 
         tk.Label(enter_invoice_frame, text="Amount:", font=("Helvetica", 14), bg="white").pack()
         invoice_amount = tk.Entry(enter_invoice_frame, font=("Helvetica", 14))
         invoice_amount.pack()
 
-        tk.Label(enter_invoice_frame, text="Amount Paid:", font=("Helvetica", 14), bg="white").pack()
-        amount_paid = tk.Entry(enter_invoice_frame, font=("Helvetica", 14))
-        amount_paid.pack()
+
+        tk.Label(enter_invoice_frame, text="Date received: ", font=("Helvetica", 14), bg="white").pack()
+        date_received = tk.Entry(enter_invoice_frame, font=("Helvetica", 14))
+        date_received.pack()
+
+        tk.Label(enter_invoice_frame, text="Date Due:", font=("Helvetica", 14), bg="white").pack()
+        date_due = tk.Entry(enter_invoice_frame, font=("Helvetica", 14))
+        date_due.pack()
+
+        # Replace the "Paid (Yes/No):" Entry with Radiobuttons
+        tk.Label(enter_invoice_frame, text="Paid Status:", font=("Helvetica", 14), bg="white").pack()
+
+        # Variable to store the selected paid status
+        invoice_paid_status = tk.StringVar(value="unpaid")  # Default to "unpaid"
+
+        # Radiobuttons for "Paid" and "Unpaid"
+        paid_button = tk.Radiobutton(enter_invoice_frame, text="Paid", variable=invoice_paid_status, value="paid",
+                                     font=("Helvetica", 14), bg="white")
+        paid_button.pack()
+
+        unpaid_button = tk.Radiobutton(enter_invoice_frame, text="Unpaid", variable=invoice_paid_status, value="unpaid",
+                                       font=("Helvetica", 14), bg="white")
+        unpaid_button.pack()
+
 
         tk.Button(enter_invoice_frame, text="Submit Invoice", font=("Helvetica", 14),
-                  command=lambda: self.submit_invoice(invoice_id.get(), invoice_date.get(), invoice_company.get(),
-                                                      invoice_paid.get(), invoice_amount.get(), amount_paid.get())).pack(pady=10)
+                  command=lambda: self.submit_invoice(invoice_id.get(), invoice_company.get(),invoice_amount.get(), date_received.get(), date_due.get(),
+                                                      invoice_paid_status.get())).pack(pady=10)
 
         tabs["Enter Invoice"] = enter_invoice_frame
 
@@ -437,9 +453,29 @@ class ManageEmployees(tk.Frame):
         confirm = messagebox.askyesno("Logout", "Are you sure you want to logout?")
         if confirm:
             self.controller.show_frame("LoginPage")
-    def submit_invoice(self, invoice_id, invoice_date, invoice_company, invoice_paid, invoice_amount, amount_paid):
-        messagebox.showinfo("Submit Invoice", f"Invoice {invoice_id} submitted!")
 
+    def submit_invoice(self, invoice_id, invoice_company, invoice_amount, date_received, date_due, invoice_paid):
+        if not invoice_id or not invoice_company or not invoice_amount or not date_received or not date_due or not invoice_paid:
+            messagebox.showerror("Error", "All fields must be filled out.")
+            return
+
+        try:
+            # Convert paid status to match ENUM values in the database
+            paid_status = "paid" if invoice_paid.lower() == "yes" else "unpaid"
+
+            # SQL query to insert invoice data
+            query = """
+             INSERT INTO Invoice (invoice_id, invoice_company, invoice_amount, date_received, date_due, invoice_paid)
+             VALUES (%s, %s, %s, %s, %s, %s)
+             """
+            data = (invoice_id, invoice_company, invoice_amount, date_received, date_due, invoice_paid)
+
+            # Execute the query
+            sqlConnector.connect(query, data)
+
+            messagebox.showinfo("Success", f"Invoice {invoice_id} submitted successfully!")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to submit invoice: {e}")
     def submit_expense(self, expense_type, expense_value, expense_date):
         messagebox.showinfo("Submit Expense", f"Expense '{expense_type}' submitted!")
 
