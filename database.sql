@@ -99,3 +99,13 @@ CREATE TABLE IF NOT EXISTS Payroll (
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
     FOREIGN KEY (store_id) REFERENCES Store(store_id)
 );
+CREATE TABLE IF NOT EXISTS Expense (
+    expense_id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT,
+    store_id INT,
+    expense_date DATE,
+    expense_type VARCHAR(100),
+    amount DECIMAL(10,2),
+    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
+    FOREIGN KEY (store_id) REFERENCES Store(store_id)
+);
