@@ -27,19 +27,28 @@ class ManageEmployees(tk.Frame):
         top_frame.pack(side="top", fill="x", padx=10, pady=10)
 
         # Centered label (ALOHA)
-        aloha_label = tk.Label(top_frame, text="ALOHA", font=("Helvetica", 14), bg="white", fg="black")
+        aloha_label = tk.Label(top_frame, text=self.controller.role, font=("Helvetica", 14), bg="white", fg="black")
         aloha_label.place(relx=0.5, rely=0.5, anchor="center")
 
-        # Right label (name of employee)
-        tk.Label(top_frame, text="Name of employee", font=("Helvetica", 14), bg="white", fg="black").pack(side="right",
+
+
+
+        # Right label (username of employee)
+        tk.Label(top_frame, text=username, font=("Helvetica", 14), bg="white", fg="black").pack(side="right",
                                                                                                           padx=(5, 10))
 
         selected_store = tk.StringVar()
-        selected_store.set("Store 1")
-        store_options = ["Store 1", "Store 2", "Store 3", "Store 4"]
-        store_dropdown = tk.OptionMenu(top_frame, selected_store, *store_options)
-        store_dropdown.config(font=("Helvetica", 14), bg="white", fg="black", relief="solid", bd=2)
-        store_dropdown.pack(side="left", padx=10, pady=5)
+        # Fetch the first store name from the database
+        query = "SELECT all store_name FROM Store"
+        result = sqlConnector.connect(query, ())
+
+        if result and result[0][0]:
+            # Check if a store name is returned
+            store_options = [store[0] for store in result if store[0] is not None]
+            selected_store.set(result[0][0])  # Set the first store name as the default
+            store_dropdown = tk.OptionMenu(top_frame, selected_store, *store_options)
+            store_dropdown.config(font=("Helvetica", 14), bg="white", fg="black", relief="solid", bd=2)
+            store_dropdown.pack(side="left", padx=10, pady=5)
 
         # Create Main Layout
         main_frame = tk.Frame(self, bg="white")
@@ -237,10 +246,6 @@ class ManageEmployees(tk.Frame):
         self.gross_profit_tree.heading("Total", text="Total")
         self.gross_profit_tree.pack(fill="both", expand=True, padx=10, pady=10)
         self.update_gross_profit_display()
-
-
-
-
 
         # -------------------------------
         # Function to Show Selected Tab
