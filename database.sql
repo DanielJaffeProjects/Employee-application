@@ -110,3 +110,14 @@ CREATE TABLE IF NOT EXISTS Merchandise (
     StoreID INT,
     FOREIGN KEY (StoreID) REFERENCES Store(store_id)
 );
+
+CREATE TABLE IF NOT EXISTS Bonus (
+    BonusID INT AUTO_INCREMENT PRIMARY KEY,
+    EmpID INT,
+    Bonus_Amount DECIMAL(10,2) DEFAULT 0.00,
+    Sales DECIMAL(10,2) DEFAULT 0.00,
+    Gross DECIMAL(10,2) DEFAULT 0.00,
+    Bonus_Percentage DECIMAL(10,2) DEFAULT 0.00,
+    Current_Bonus_Percentage DECIMAL(10,2) DEFAULT 0.00,
+    FOREIGN KEY (EmpID) REFERENCES Employee(employee_id) ON DELETE CASCADE
+);

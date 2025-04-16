@@ -1,11 +1,12 @@
 from tkinter import ttk
 from datetime import datetime, timedelta
 
-from Invoice import createInvoice
-from Merchandise import create_merchandise_tab
-from payroll import create_payroll_tab
-from Store import *
-from updateEmployees import AddEmployee
+from Bonus import create_bonus_tab
+from Tabs.Invoice import createInvoice
+from Tabs.Merchandise import create_merchandise_tab
+from Tabs.payroll import create_payroll_tab
+from Tabs.Store import *
+from Tabs.updateEmployees import AddEmployee
 
 class ManageEmployees(tk.Frame):
     def __init__(self, parent, controller):
@@ -127,6 +128,9 @@ class ManageEmployees(tk.Frame):
 
             # merchandise
             create_merchandise_tab(content_frame, tabs)
+
+            # Bonus
+            create_bonus_tab(content_frame, tabs)
 
         # -------------------------------
         # Enter Expense Tab
