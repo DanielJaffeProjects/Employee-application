@@ -21,6 +21,16 @@ values('Daniel','is thn','m','m','owner');
 insert into employee(firstName, lastName, userName, password, role)
 values('Daniel','Yes I am the ','o','o','owner');
 
+# Test accounts with specific credentials
+insert into employee(employee_id, firstName, lastName, userName, password, role)
+values(99, 'Himmy', 'Butler', 'o', '123', 'owner');
+
+insert into employee(employee_id, firstName, lastName, userName, password, role)
+values(100, 'Himmy', 'Butler', 'e', '123', 'employee');
+
+insert into employee(employee_id, firstName, lastName, userName, password, role)
+values(101, 'Himmy', 'Butler', 'm', '123', 'manager');
+
 # employee close
 Create Table if not exists employee_close(
     firstName Varchar (15),

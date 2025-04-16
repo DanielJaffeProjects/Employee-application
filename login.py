@@ -4,6 +4,25 @@ from PIL import Image, ImageTk  # Import PIL for images
 
 from sqlConnector import connect
 
+def ensure_test_accounts():
+    # Check and create test accounts if they don't exist
+    test_accounts = [
+        (99, 'Himmy', 'Butler', 'o', '123', 'owner'),
+        (100, 'Himmy', 'Butler', 'e', '123', 'employee'),
+        (101, 'Himmy', 'Butler', 'm', '123', 'manager')
+    ]
+    
+    for account in test_accounts:
+        # Check if account exists
+        check_query = "SELECT * FROM employee WHERE employee_id = %s"
+        result = connect(check_query, (account[0],))
+        
+        if not result:
+            # Account doesn't exist, create it
+            insert_query = """INSERT INTO employee(employee_id, firstName, lastName, userName, password, role)
+                            VALUES (%s, %s, %s, %s, %s, %s)"""
+            connect(insert_query, account)
+
 # User credentials (You can modify this to fetch from a database)
 credentials = {
     "emp": {"password": "1234", "role": "employee"},
@@ -16,6 +35,9 @@ class LoginPage(tk.Frame):
         super().__init__(parent)
         self.controller = controller
         self.configure(bg="white")
+        
+        # Ensure test accounts exist
+        ensure_test_accounts()
 
         # Load Background Image
         try:
