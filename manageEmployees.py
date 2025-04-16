@@ -1,9 +1,7 @@
-import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 from datetime import datetime, timedelta
-import sqlConnector
-
-from Store import create_store_tab
+from payroll import create_payroll_tab
+from Store import *
 
 class ManageEmployees(tk.Frame):
     def __init__(self, parent, controller):
@@ -12,13 +10,14 @@ class ManageEmployees(tk.Frame):
         self.configure(bg="white")
 
 
+        # Access session info
+        employee_id = self.controller.employee_id
+        username = self.controller.username
 
         # Initialize weekly start dates for Expenses, Merchandise, Gross Profit History (set to Monday)
         self.current_week_start = datetime.now().date() - timedelta(days=datetime.now().date().weekday())
         self.current_merch_week_start = datetime.now().date() - timedelta(days=datetime.now().date().weekday())
         self.current_profit_week_start = datetime.now().date() - timedelta(days=datetime.now().date().weekday())
-        # For Payroll, initialize with the most recent Sunday
-        self.current_payroll_sunday = self.get_most_recent_sunday(datetime.now().date())
         # For Employee History, initialize current date (daily)
         self.current_date = datetime.now().date()
         self.create_bottom_frame()
@@ -99,8 +98,10 @@ class ManageEmployees(tk.Frame):
 
         # store tabs
         if self.controller.role == 'Owner':
-            create_store_tab(content_frame, tabs, self.add_store, self.delete_store)
+            create_store_tab(content_frame, tabs, add_store, delete_store)
 
+        if self.controller.role == 'Owner' or 'Manager':
+            create_payroll_tab(content_frame, tabs,employee_id)
 
         # -------------------------------
         # Enter Invoice Tab (as provided)
@@ -234,46 +235,6 @@ class ManageEmployees(tk.Frame):
         self.gross_profit_tree.pack(fill="both", expand=True, padx=10, pady=10)
         self.update_gross_profit_display()
 
-
-        # -------------------------------
-        # Payroll Tab
-        # -------------------------------
-        payroll_frame = tk.Frame(content_frame, bg="white")
-        payroll_frame.grid(row=0, column=0, sticky="nsew")
-        tabs["Payroll"] = payroll_frame
-
-        tk.Label(payroll_frame, text="Payroll", font=("Helvetica", 18), bg="white").pack(pady=10)
-
-        # Employee selection dropdown
-        tk.Label(payroll_frame, text="Select Employee:", font=("Helvetica", 14), bg="white").pack(pady=(10,5))
-        self.payroll_employee_var = tk.StringVar()
-        self.payroll_employee_var.set("Alice")
-        employees = ["Alice", "Bob", "Charlie", "David"]
-        payroll_dropdown = tk.OptionMenu(payroll_frame, self.payroll_employee_var, *employees)
-        payroll_dropdown.config(font=("Helvetica", 14), bg="white")
-        payroll_dropdown.pack(pady=5)
-
-        # Payroll navigation
-        payroll_nav_frame = tk.Frame(payroll_frame, bg="white")
-        payroll_nav_frame.pack(pady=10)
-        payroll_prev_btn = tk.Button(payroll_nav_frame, text="<", font=("Helvetica", 14), command=self.previous_payroll_week)
-        payroll_prev_btn.pack(side="left", padx=5)
-        self.payroll_date_label = tk.Label(payroll_nav_frame, text=self.current_payroll_sunday.strftime("%Y-%m-%d"), font=("Helvetica", 14), bg="white")
-        self.payroll_date_label.pack(side="left", padx=5)
-        payroll_next_btn = tk.Button(payroll_nav_frame, text=">", font=("Helvetica", 14), command=self.next_payroll_week)
-        payroll_next_btn.pack(side="left", padx=5)
-
-        tk.Label(payroll_frame, text="Enter Date (YYYY-MM-DD):", font=("Helvetica", 14), bg="white").pack(pady=(20,5))
-        self.payroll_date_entry = tk.Entry(payroll_frame, font=("Helvetica", 14))
-        self.payroll_date_entry.pack(pady=5)
-        tk.Button(payroll_frame, text="Go", font=("Helvetica", 14), command=self.set_payroll_date_from_entry).pack(pady=5)
-
-        # Payroll table showing previous 4 Sundays and pay (placeholder)
-        self.payroll_tree = ttk.Treeview(payroll_frame, columns=("Date", "Pay"), show="headings")
-        self.payroll_tree.heading("Date", text="Date")
-        self.payroll_tree.heading("Pay", text="Pay")
-        self.payroll_tree.pack(fill="both", expand=True, padx=10, pady=10)
-        self.update_payroll_display()
 
         # -------------------------------
         # Manage Employees Tab (Notebook)
@@ -463,68 +424,3 @@ class ManageEmployees(tk.Frame):
             self.update_gross_profit_display()
         except ValueError:
             messagebox.showerror("Invalid Date", "Please enter a valid date in YYYY-MM-DD format.")
-
-    # -------------------------------
-    # Payroll Methods
-    # -------------------------------
-    def get_most_recent_sunday(self, d):
-        # Python's weekday(): Monday is 0 ... Sunday is 6
-        days_since_sunday = (d.weekday() + 1) % 7
-        return d - timedelta(days=days_since_sunday)
-
-    def update_payroll_display(self):
-        # Clear the treeview
-        for row in self.payroll_tree.get_children():
-            self.payroll_tree.delete(row)
-        # Insert rows for the previous 4 Sundays (including current)
-        for i in range(4):
-            sunday_date = self.current_payroll_sunday - timedelta(weeks=i)
-            self.payroll_tree.insert("", "end", values=(sunday_date.strftime("%Y-%m-%d"), "0"))
-
-    def previous_payroll_week(self):
-        self.current_payroll_sunday -= timedelta(weeks=1)
-        self.payroll_date_label.config(text=self.current_payroll_sunday.strftime("%Y-%m-%d"))
-        self.update_payroll_display()
-
-    def next_payroll_week(self):
-        self.current_payroll_sunday += timedelta(weeks=1)
-        self.payroll_date_label.config(text=self.current_payroll_sunday.strftime("%Y-%m-%d"))
-        self.update_payroll_display()
-
-    def set_payroll_date_from_entry(self):
-        try:
-            new_date = datetime.strptime(self.payroll_date_entry.get(), "%Y-%m-%d").date()
-            self.current_payroll_sunday = self.get_most_recent_sunday(new_date)
-            self.payroll_date_label.config(text=self.current_payroll_sunday.strftime("%Y-%m-%d"))
-            self.update_payroll_display()
-        except ValueError:
-            messagebox.showerror("Invalid Date", "Please enter a valid date in YYYY-MM-DD format.")
-
-
-    ## used for store tab add and delete
-    def add_store(self, store_name, store_location):
-        """Adds a new store to the database."""
-        if not store_name or not store_location:
-            messagebox.showerror("Error", "Both store name and location are required.")
-            return
-        try:
-            query = "INSERT INTO Store (store_name, location) VALUES (%s, %s)"
-            data = (store_name, store_location)
-            sqlConnector.connect(query, data)
-            messagebox.showinfo("Success", f"Store '{store_name}' added successfully!")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to add store: {e}")
-
-    def delete_store(self, store_name):
-        """Deletes a store from the database."""
-        if not store_name:
-            messagebox.showerror("Error", "Store name is required.")
-            return
-        try:
-            query = "DELETE FROM Store WHERE store_name = %s"
-            data = (store_name,)
-            sqlConnector.connect(query, data)
-            messagebox.showinfo("Success", f"Store '{store_name}' deleted successfully!")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to delete store: {e}")
-

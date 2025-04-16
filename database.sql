@@ -91,14 +91,15 @@ CREATE TABLE if not exists Bonuses (
 );
 
 CREATE TABLE IF NOT EXISTS Payroll (
-    payroll_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
-    store_id INT,
-    pay_date DATE,
-    amount DECIMAL(10,2),
-    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
-    FOREIGN KEY (store_id) REFERENCES Store(store_id)
+    date DATE,
+    bonus DECIMAL(4,2),
+    hourly_rate DECIMAL(4,2),
+    hours INT,
+    PRIMARY KEY (employee_id, date),
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
 );
+
 CREATE TABLE IF NOT EXISTS Expense (
     expense_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
