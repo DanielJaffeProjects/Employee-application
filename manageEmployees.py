@@ -3,6 +3,7 @@ from tkinter import messagebox, ttk
 from datetime import datetime, timedelta
 import sqlConnector
 
+from Store import create_store_tab
 
 class ManageEmployees(tk.Frame):
     def __init__(self, parent, controller):
@@ -93,11 +94,13 @@ class ManageEmployees(tk.Frame):
             self.gross_profit_tree.heading("Total", text="Total")
             self.gross_profit_tree.pack(fill="both", expand=True, padx=10, pady=10)
             self.update_gross_profit_display()
-
-
-
         else:
             print("Not an owner, no withdraw tab added")
+
+        # store tabs
+        if self.controller.role == 'Owner':
+            create_store_tab(content_frame, tabs, self.add_store, self.delete_store)
+
 
         # -------------------------------
         # Enter Invoice Tab (as provided)
@@ -197,86 +200,7 @@ class ManageEmployees(tk.Frame):
 
         tabs["Enter Merchandise"] = enter_merch_frame
 
-        # -------------------------------
-        # Employee History Tab (Daily)
-        # -------------------------------
-        employee_history_frame = tk.Frame(content_frame, bg="white")
-        employee_history_frame.grid(row=0, column=0, sticky="nsew")
-        tabs["Employee History"] = employee_history_frame
 
-        tk.Label(employee_history_frame, text="Employee History", font=("Helvetica", 18), bg="white").pack(pady=10)
-
-        nav_frame = tk.Frame(employee_history_frame, bg="white")
-        nav_frame.pack(pady=10)
-        prev_button = tk.Button(nav_frame, text="<", font=("Helvetica", 14), command=self.previous_day)
-        prev_button.pack(side="left", padx=5)
-        self.date_label = tk.Label(nav_frame, text=self.current_date.strftime("%Y-%m-%d"), font=("Helvetica", 14), bg="white")
-        self.date_label.pack(side="left", padx=5)
-        next_button = tk.Button(nav_frame, text=">", font=("Helvetica", 14), command=self.next_day)
-        next_button.pack(side="left", padx=5)
-
-        tk.Label(employee_history_frame, text="Enter Date (YYYY-MM-DD):", font=("Helvetica", 14), bg="white").pack(pady=(20,5))
-        self.date_entry = tk.Entry(employee_history_frame, font=("Helvetica", 14))
-        self.date_entry.pack(pady=5)
-        tk.Button(employee_history_frame, text="Go", font=("Helvetica", 14), command=self.set_date_from_entry).pack(pady=5)
-
-        self.history_placeholder = tk.Label(employee_history_frame, text="", font=("Helvetica", 12), bg="white")
-        self.history_placeholder.pack(pady=20)
-        self.update_history_display()
-
-        # -------------------------------
-        # Expenses History Tab (Weekly)
-        # -------------------------------
-        expenses_history_frame = tk.Frame(content_frame, bg="white")
-        expenses_history_frame.grid(row=0, column=0, sticky="nsew")
-        tabs["Expenses History"] = expenses_history_frame
-
-        tk.Label(expenses_history_frame, text="Expenses History", font=("Helvetica", 18), bg="white").pack(pady=10)
-
-        exp_nav_frame = tk.Frame(expenses_history_frame, bg="white")
-        exp_nav_frame.pack(pady=10)
-        prev_week_btn = tk.Button(exp_nav_frame, text="<", font=("Helvetica", 14), command=self.previous_week)
-        prev_week_btn.pack(side="left", padx=5)
-        self.week_label = tk.Label(exp_nav_frame, text="", font=("Helvetica", 14), bg="white")
-        self.week_label.pack(side="left", padx=5)
-        next_week_btn = tk.Button(exp_nav_frame, text=">", font=("Helvetica", 14), command=self.next_week)
-        next_week_btn.pack(side="left", padx=5)
-
-        tk.Label(expenses_history_frame, text="Enter Date (YYYY-MM-DD):", font=("Helvetica", 14), bg="white").pack(pady=(20,5))
-        self.week_entry = tk.Entry(expenses_history_frame, font=("Helvetica", 14))
-        self.week_entry.pack(pady=5)
-        tk.Button(expenses_history_frame, text="Go", font=("Helvetica", 14), command=self.set_week_from_entry).pack(pady=5)
-
-        self.expenses_history_placeholder = tk.Label(expenses_history_frame, text="", font=("Helvetica", 12), bg="white")
-        self.expenses_history_placeholder.pack(pady=20)
-        self.update_expenses_history_display()
-
-        # -------------------------------
-        # Merchandise History Tab (Weekly)
-        # -------------------------------
-        merch_history_frame = tk.Frame(content_frame, bg="white")
-        merch_history_frame.grid(row=0, column=0, sticky="nsew")
-        tabs["Merchandise History"] = merch_history_frame
-
-        tk.Label(merch_history_frame, text="Merchandise History", font=("Helvetica", 18), bg="white").pack(pady=10)
-
-        merch_nav_frame = tk.Frame(merch_history_frame, bg="white")
-        merch_nav_frame.pack(pady=10)
-        prev_merch_btn = tk.Button(merch_nav_frame, text="<", font=("Helvetica", 14), command=self.previous_merch_week)
-        prev_merch_btn.pack(side="left", padx=5)
-        self.merch_week_label = tk.Label(merch_nav_frame, text="", font=("Helvetica", 14), bg="white")
-        self.merch_week_label.pack(side="left", padx=5)
-        next_merch_btn = tk.Button(merch_nav_frame, text=">", font=("Helvetica", 14), command=self.next_merch_week)
-        next_merch_btn.pack(side="left", padx=5)
-
-        tk.Label(merch_history_frame, text="Enter Date (YYYY-MM-DD):", font=("Helvetica", 14), bg="white").pack(pady=(20,5))
-        self.merch_week_entry = tk.Entry(merch_history_frame, font=("Helvetica", 14))
-        self.merch_week_entry.pack(pady=5)
-        tk.Button(merch_history_frame, text="Go", font=("Helvetica", 14), command=self.set_merch_week_from_entry).pack(pady=5)
-
-        self.merch_history_placeholder = tk.Label(merch_history_frame, text="", font=("Helvetica", 12), bg="white")
-        self.merch_history_placeholder.pack(pady=20)
-        self.update_merch_history_display()
 
         # -------------------------------
         # Gross Profit Tab (Weekly)
@@ -421,6 +345,8 @@ class ManageEmployees(tk.Frame):
         tabs["Manage Employees"] = manage_frame
 
 
+
+
         # -------------------------------
         # Function to Show Selected Tab
         # -------------------------------
@@ -507,80 +433,6 @@ class ManageEmployees(tk.Frame):
             return
         messagebox.showinfo("Success", f"Employee {username} updated successfully!")
 
-    # -------------------------------
-    # Employee History (Daily) Methods
-    # -------------------------------
-    def update_history_display(self):
-        self.history_placeholder.config(text=f"No clock-in records for {self.current_date.strftime('%Y-%m-%d')}.")
-
-    def previous_day(self):
-        self.current_date -= timedelta(days=1)
-        self.date_label.config(text=self.current_date.strftime("%Y-%m-%d"))
-        self.update_history_display()
-
-    def next_day(self):
-        self.current_date += timedelta(days=1)
-        self.date_label.config(text=self.current_date.strftime("%Y-%m-%d"))
-        self.update_history_display()
-
-    def set_date_from_entry(self):
-        try:
-            new_date = datetime.strptime(self.date_entry.get(), "%Y-%m-%d").date()
-            self.current_date = new_date
-            self.date_label.config(text=self.current_date.strftime("%Y-%m-%d"))
-            self.update_history_display()
-        except ValueError:
-            messagebox.showerror("Invalid Date", "Please enter a valid date in YYYY-MM-DD format.")
-
-    # -------------------------------
-    # Expenses History (Weekly) Methods
-    # -------------------------------
-    def update_expenses_history_display(self):
-        week_end = self.current_week_start + timedelta(days=6)
-        self.week_label.config(text=f"{self.current_week_start.strftime('%Y-%m-%d')} to {week_end.strftime('%Y-%m-%d')}")
-        self.expenses_history_placeholder.config(
-            text=f"No expenses recorded for the week of {self.current_week_start.strftime('%Y-%m-%d')} to {week_end.strftime('%Y-%m-%d')}.")
-
-    def previous_week(self):
-        self.current_week_start -= timedelta(weeks=1)
-        self.update_expenses_history_display()
-
-    def next_week(self):
-        self.current_week_start += timedelta(weeks=1)
-        self.update_expenses_history_display()
-
-    def set_week_from_entry(self):
-        try:
-            new_date = datetime.strptime(self.week_entry.get(), "%Y-%m-%d").date()
-            self.current_week_start = new_date - timedelta(days=new_date.weekday())
-            self.update_expenses_history_display()
-        except ValueError:
-            messagebox.showerror("Invalid Date", "Please enter a valid date in YYYY-MM-DD format.")
-
-    # -------------------------------
-    # Merchandise History (Weekly) Methods
-    # -------------------------------
-    def update_merch_history_display(self):
-        merch_week_end = self.current_merch_week_start + timedelta(days=6)
-        self.merch_week_label.config(text=f"{self.current_merch_week_start.strftime('%Y-%m-%d')} to {merch_week_end.strftime('%Y-%m-%d')}")
-        self.merch_history_placeholder.config(
-            text=f"No merchandise recorded for the week of {self.current_merch_week_start.strftime('%Y-%m-%d')} to {merch_week_end.strftime('%Y-%m-%d')}.")
-
-    def previous_merch_week(self):
-        self.current_merch_week_start -= timedelta(weeks=1)
-        self.update_merch_history_display()
-
-    def next_merch_week(self):
-        self.current_merch_week_start += timedelta(weeks=1)
-        self.update_merch_history_display()
-
-    def set_merch_week_from_entry(self):
-        try:
-            new_date = datetime.strptime(self.merch_week_entry.get(), "%Y-%m-%d").date()
-            self.current_merch_week_start = new_date - timedelta(days=new_date.weekday())
-            self.update_merch_history_display()
-        except ValueError:
-            messagebox.showerror("Invalid Date", "Please enter a valid date in YYYY-MM-DD format.")
 
     # -------------------------------
     # Gross Profit (Weekly) Methods
@@ -649,4 +501,30 @@ class ManageEmployees(tk.Frame):
             messagebox.showerror("Invalid Date", "Please enter a valid date in YYYY-MM-DD format.")
 
 
+    ## used for store tab add and delete
+    def add_store(self, store_name, store_location):
+        """Adds a new store to the database."""
+        if not store_name or not store_location:
+            messagebox.showerror("Error", "Both store name and location are required.")
+            return
+        try:
+            query = "INSERT INTO Store (store_name, location) VALUES (%s, %s)"
+            data = (store_name, store_location)
+            sqlConnector.connect(query, data)
+            messagebox.showinfo("Success", f"Store '{store_name}' added successfully!")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to add store: {e}")
+
+    def delete_store(self, store_name):
+        """Deletes a store from the database."""
+        if not store_name:
+            messagebox.showerror("Error", "Store name is required.")
+            return
+        try:
+            query = "DELETE FROM Store WHERE store_name = %s"
+            data = (store_name,)
+            sqlConnector.connect(query, data)
+            messagebox.showinfo("Success", f"Store '{store_name}' deleted successfully!")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to delete store: {e}")
 
