@@ -181,6 +181,8 @@ class EmployeePage(tk.Frame):
             return
         else:
             print("got a balance")
+
+
         store_name = self.selected_store.get()
         date= datetime.now().strftime("%Y-%m-%d")
         clock_in = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -193,7 +195,7 @@ class EmployeePage(tk.Frame):
         # get first and last name
         queryFL = "SELECT firstName, lastName FROM employee WHERE employee_id = %s"
         result = sqlConnector.connect(queryFL, (employee_id,))
-        print(result);
+        print(result)
         firstName, lastName = result[0]
         print(firstName, lastName)
 
@@ -241,10 +243,11 @@ class EmployeePage(tk.Frame):
             return
         else:
             print("got a balance")
+
+
+
         reg_out = float(balance)
         employee_id = self.controller.employee_id
-        store_name = self.selected_store.get()
-        date_today = datetime.now().strftime("%Y-%m-%d")
         clock_out_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
@@ -268,18 +271,29 @@ class EmployeePage(tk.Frame):
         """
         sqlConnector.connect(update_query, (clock_out_time, reg_out, clock_id))
 
-        # Calculate duration
-        in_time = datetime.strptime(clock_in_str, "%Y-%m-%d %H:%M:%S")
-        out_time = datetime.strptime(clock_out_time, "%Y-%m-%d %H:%M:%S")
-        duration = str(out_time - in_time).split('.')[0]  # Remove microseconds
 
         # Get reg_in from the last record (local memory)
         last_record = self.records[-1]
         reg_gain = reg_out - last_record["reg_in"]
 
+        print("before duration")
+
+        # Get duration from the database using the clock_id
+        query = "SELECT duration FROM clockTable WHERE clock_id = %s"
+        data = (clock_id,)  # Use clock_id to fetch the correct record
+        result = sqlConnector.connect(query, data)
+
+        # Check if the result is valid
+        if result:
+            duration = result[0][0]  # Extract the duration value
+        else:
+            duration = None
+            print("Duration not found for the given clock_id.")
+
+
         # Update local records
         self.records[-1].update({
-            "clock_out": out_time,
+            "clock_out": clock_out_time,
             "reg_out": reg_out,
             "reg gain": round(reg_gain, 2),
             "duration": duration

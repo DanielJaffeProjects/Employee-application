@@ -50,10 +50,11 @@ Create table if not exists clockTable(
     lastName varchar (15),
     clock_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
-    clock_in varchar(23),
-    clock_out varchar(23),
+    clock_in DATETIME,
+    clock_out DATETIME,
     reg_in DECIMAL(10,2),
     reg_out DECIMAL(10,2),
+    duration TIME NULL,
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
 );
 
@@ -157,3 +158,17 @@ END$$
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE TRIGGER calculate_duration_after_clockout
+BEFORE UPDATE ON clockTable
+FOR EACH ROW
+BEGIN
+    -- Only calculate duration if clock_out is being set and was previously NULL
+    IF NEW.clock_out IS NOT NULL AND OLD.clock_out IS NULL THEN
+        SET NEW.duration = TIMEDIFF(NEW.clock_out, NEW.clock_in);
+    END IF;
+END;
+//
+
+DELIMITER ;
