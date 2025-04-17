@@ -24,6 +24,7 @@ values('Daniel','Yes I am the ','o','o','owner');
 
 # employee close
 Create Table if not exists employee_close(
+    close_id INT AUTO_INCREMENT PRIMARY KEY,
     firstName Varchar (15),
     lastName varchar (15),
     store_name VARCHAR(25),
@@ -58,6 +59,10 @@ Create table if not exists clockTable(
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
 );
 
+# test the for over a 30 days
+INSERT INTO clockTable (firstName, lastName, employee_id, clock_in, clock_out, reg_in, reg_out)
+VALUES ('Test', 'User', 2, '2024-10-01 08:00:00', '2024-10-01 16:00:00', 8.00, 16.00);
+
 
 # table for invoices
 CREATE TABLE if not exists Invoice (
@@ -67,19 +72,6 @@ CREATE TABLE if not exists Invoice (
     date_received VARCHAR(20) NOT NULL,
     date_due Varchar(20) NOT NULL,
     invoice_paid ENUM('paid', 'unpaid') NOT NULL
-);
-
-# table for bonuses
-CREATE TABLE if not exists Bonuses (
-    bonus_id INT auto_increment PRIMARY KEY,
-    employee_id INT,
-    store_id INT,
-    week_start DATE,
-    week_end DATE,
-    total_sales DECIMAL(10,2),
-    bonus_percentage DECIMAL(10,2),
-    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
-    FOREIGN KEY (store_id) REFERENCES Store(store_id)
 );
 
 CREATE TABLE IF NOT EXISTS Payroll (

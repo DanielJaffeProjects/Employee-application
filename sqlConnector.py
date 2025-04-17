@@ -26,12 +26,8 @@ def connect(query,data):
             # If it's a SELECT query, fetch and print results
             if query.lower().startswith("select"):
                 results = cursor.fetchall()
-                # If no results, send admin as username and owner as role
-                if not results:
-                     return [(None, None, 'admin', None, 'owner')]
-
                 cursor.close()
-                return results
+                return results if results else []
 
             # If it's an INSERT/UPDATE/DELETE query, commit the changes
             else:

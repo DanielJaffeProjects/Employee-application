@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from EmployeeData import create_employee_history_tab
 from Tabs.Bonus import create_bonus_tab
 from Tabs.Invoice import createInvoice
 from Tabs.Merchandise import create_merchandise_tab
@@ -9,7 +10,6 @@ from Tabs.updateEmployees import AddEmployee
 from Tabs.Expenses import create_expenses_tab
 from Tabs.Withdraw import create_withdraw_tab
 from Tabs.gross_profit import create_gross_profit_tab
-
 
 class ManageEmployees(tk.Frame):
     def __init__(self, parent, controller):
@@ -78,8 +78,14 @@ class ManageEmployees(tk.Frame):
 
         # for just the owner
         if self.controller.role == 'Owner':
+            # make a store
             create_store_tab(content_frame, tabs, add_store, delete_store)
 
+            # check employee history for 1 year
+            create_employee_history_tab(content_frame, tabs,365)
+
+            # withdraw
+            create_withdraw_tab(content_frame, tabs)
         # if anyone sees this Daniel is the greatest of all time Easter egg!!
         # for owner and manager
         if self.controller.role == 'Owner' or 'Manager':
@@ -103,11 +109,13 @@ class ManageEmployees(tk.Frame):
             # expenses
             create_expenses_tab(content_frame, tabs)
 
-            # withdraw
-            create_withdraw_tab(content_frame, tabs)
-
             # gross profit
             create_gross_profit_tab(content_frame, tabs)
+
+        # for just the manager
+        if self.controller.role == 'Manager':
+            # check employee history for 30 days
+            create_employee_history_tab(content_frame, tabs,30)
 
         # -------------------------------
         # Function to Show Selected Tab
