@@ -32,15 +32,12 @@ def create_gross_profit_tab(content_frame, tabs):
     credit_entry = tk.Entry(gross_profit_frame, font=("Helvetica", 14))
     credit_entry.pack()
 
-    tk.Label(gross_profit_frame, text="Total:", font=("Helvetica", 14), bg="white").pack()
-    total_entry = tk.Entry(gross_profit_frame, font=("Helvetica", 14))
-    total_entry.pack()
 
     # Submit Button
     tk.Button(gross_profit_frame, text="Add Gross Profit", font=("Helvetica", 14),
               command=lambda: add_gross_profit(employee_id_entry.get(), store_id_entry.get(),
                                               date_entry.get(), cash_entry.get(),
-                                              credit_entry.get(), total_entry.get())).pack(pady=10)
+                                              credit_entry.get())).pack(pady=10)
 
     # Treeview for Displaying Gross Profit Records
     gross_profit_tree = ttk.Treeview(
@@ -77,15 +74,15 @@ def create_gross_profit_tab(content_frame, tabs):
     tk.Button(gross_profit_frame, text="Load Gross Profit", font=("Helvetica", 14),
               command=lambda: load_gross_profit(gross_profit_tree)).pack(pady=10)
 
-def add_gross_profit(employee_id, store_id, date, cash, credit, total):
+def add_gross_profit(employee_id, store_id, date, cash, credit):
     """Adds a new gross profit record to the database."""
-    if not employee_id or not store_id or not date or not cash or not credit or not total:
+    if not employee_id or not store_id or not date or not cash or not credit:
         messagebox.showerror("Error", "All fields are required.")
         return
     try:
-        query = """INSERT INTO Gross_Profit (Employee_ID, Store_ID, Date, Cash, Credit, Total)
-                   VALUES (%s, %s, %s, %s, %s, %s)"""
-        data = (int(employee_id), int(store_id), date, float(cash), float(credit), float(total))
+        query = """INSERT INTO Gross_Profit (Employee_ID, Store_ID, Date, Cash, Credit)
+                   VALUES (%s, %s, %s, %s, %s)"""
+        data = (int(employee_id), int(store_id), date, float(cash), float(credit))
         sqlConnector.connect(query, data)
         messagebox.showinfo("Success", "Gross profit added successfully!")
     except Exception as e:

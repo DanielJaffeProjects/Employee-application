@@ -1,4 +1,3 @@
-from tkinter import ttk
 from datetime import datetime, timedelta
 
 from Tabs.Bonus import create_bonus_tab
@@ -9,7 +8,7 @@ from Tabs.Store import *
 from Tabs.updateEmployees import AddEmployee
 from Tabs.Expenses import create_expenses_tab
 from Tabs.Withdraw import create_withdraw_tab
-from gross_profit import create_gross_profit_tab
+from Tabs.gross_profit import create_gross_profit_tab
 
 
 class ManageEmployees(tk.Frame):
@@ -109,10 +108,6 @@ class ManageEmployees(tk.Frame):
 
             # gross profit
             create_gross_profit_tab(content_frame, tabs)
-
-
-
-
 
         # -------------------------------
         # Function to Show Selected Tab

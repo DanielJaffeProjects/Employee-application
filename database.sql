@@ -143,3 +143,17 @@ CREATE TABLE IF NOT EXISTS Gross_Profit (
     FOREIGN KEY (Employee_ID) REFERENCES Employee(employee_id),
     FOREIGN KEY (Store_ID) REFERENCES Store(store_id)
 );
+
+#triggers
+
+DELIMITER $$
+
+CREATE TRIGGER calculate_total_before_insert
+BEFORE INSERT ON Gross_Profit
+FOR EACH ROW
+BEGIN
+    SET NEW.Total = NEW.Cash + NEW.Credit;
+END$$
+
+DELIMITER ;
+
