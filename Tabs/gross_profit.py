@@ -1,4 +1,5 @@
 import tkinter as tk
+from datetime import datetime
 from tkinter import ttk, messagebox
 import sqlConnector
 
@@ -40,34 +41,11 @@ def create_gross_profit_tab(content_frame, tabs):
                                               credit_entry.get())).pack(pady=10)
 
     # Treeview for Displaying Gross Profit Records
-    gross_profit_tree = ttk.Treeview(
-        gross_profit_frame,
-        columns=("ProfitID", "EmployeeID", "StoreID", "Date", "Cash", "Credit", "Total"),
-        show="headings"
-    )
-
-    # Set headings and column widths
-    column_settings = {
-        "ProfitID": 70,
-        "EmployeeID": 90,
-        "StoreID": 70,
-        "Date": 100,
-        "Cash": 80,
-        "Credit": 80,
-        "Total": 80
-    }
-
-    for col, width in column_settings.items():
+    columns = ("ProfitID", "EmployeeID", "StoreID", "Date", "Cash", "Credit", "Total")
+    gross_profit_tree = ttk.Treeview(gross_profit_frame, columns=columns, show="headings")
+    for col in columns:
         gross_profit_tree.heading(col, text=col.replace("ID", " ID"))
-        gross_profit_tree.column(col, width=width, anchor="center")
-
-    gross_profit_tree.heading("ProfitID", text="Profit ID")
-    gross_profit_tree.heading("EmployeeID", text="Employee ID")
-    gross_profit_tree.heading("StoreID", text="Store ID")
-    gross_profit_tree.heading("Date", text="Date")
-    gross_profit_tree.heading("Cash", text="Cash")
-    gross_profit_tree.heading("Credit", text="Credit")
-    gross_profit_tree.heading("Total", text="Total")
+        gross_profit_tree.column(col, width=120, anchor="center")
     gross_profit_tree.pack(fill="both", expand=True, padx=10, pady=10)
 
     # Load Gross Profit Button
@@ -79,6 +57,47 @@ def add_gross_profit(employee_id, store_id, date, cash, credit):
     if not employee_id or not store_id or not date or not cash or not credit:
         messagebox.showerror("Error", "All fields are required.")
         return
+
+
+    # Validate inputs
+    try:
+        employee_id = int(employee_id)
+        store_id = int(store_id)
+        cash = float(cash)
+        credit = float(credit)
+    except ValueError:
+        messagebox.showerror("Error", "Please enter valid numeric values for Employee ID, Store ID, Cash, and Credit.")
+        return
+
+    # Validate date format
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        messagebox.showerror("Error", "Please enter a valid date in the format YYYY-MM-DD.")
+        return
+
+    # Validate Employee ID
+    try:
+        emp_check_query = "SELECT COUNT(*) FROM Employee WHERE employee_id = %s"
+        emp_exists = sqlConnector.connect(emp_check_query, (employee_id,))
+        if emp_exists[0][0] == 0:
+            messagebox.showerror("Error", "Employee ID not found.")
+            return
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to validate Employee ID: {e}")
+        return
+
+    # Validate Store ID
+    try:
+        store_check_query = "SELECT COUNT(*) FROM Store WHERE store_id = %s"
+        store_exists = sqlConnector.connect(store_check_query, (store_id,))
+        if store_exists[0][0] == 0:
+            messagebox.showerror("Error", "Store ID not found.")
+            return
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to validate Store ID: {e}")
+        return
+
     try:
         query = """INSERT INTO Gross_Profit (Employee_ID, Store_ID, Date, Cash, Credit)
                    VALUES (%s, %s, %s, %s, %s)"""
