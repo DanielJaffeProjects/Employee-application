@@ -1,4 +1,5 @@
 import tkinter as tk
+from datetime import datetime
 from tkinter import ttk, messagebox
 import sqlConnector
 
@@ -39,14 +40,11 @@ def create_expenses_tab(content_frame, tabs):
                                           store_id_entry.get())).pack(pady=10)
 
     # Treeview for Displaying Expenses
-    expenses_tree = ttk.Treeview(expenses_frame, columns=("ExpenseID", "EmployeeID", "StoreID", "ExpenseDate",
-                                                          "ExpenseType", "Amount"), show="headings")
-    expenses_tree.heading("ExpenseID", text="Expense ID")
-    expenses_tree.heading("EmployeeID", text="Employee ID")
-    expenses_tree.heading("StoreID", text="Store ID")
-    expenses_tree.heading("ExpenseDate", text="Expense Date")
-    expenses_tree.heading("ExpenseType", text="Expense Type")
-    expenses_tree.heading("Amount", text="Amount")
+    columns = ("ExpenseID", "EmployeeID", "StoreID", "ExpenseDate", "ExpenseType", "Amount")
+    expenses_tree = ttk.Treeview(expenses_frame, columns=columns, show="headings")
+    for col in columns:
+        expenses_tree.heading(col, text=col)
+        expenses_tree.column(col, width=120, anchor="center")
     expenses_tree.pack(fill="both", expand=True, padx=10, pady=10)
 
     # Load Expenses Button
@@ -58,6 +56,45 @@ def add_expense(expense_type, expense_value, expense_date, employee_id, store_id
     if not expense_type or not expense_value or not expense_date or not employee_id or not store_id:
         messagebox.showerror("Error", "All fields are required.")
         return
+
+
+    # Validate inputs
+    try:
+        expense_value = float(expense_value)
+        employee_id = int(employee_id)
+        store_id = int(store_id)
+    except ValueError:
+        messagebox.showerror("Error", "Please enter valid numeric values for Expense Value, Employee ID, and Store ID.")
+        return
+
+    # Validate date format
+    try:
+        datetime.strptime(expense_date, "%Y-%m-%d")
+    except ValueError:
+        messagebox.showerror("Error", "Please enter a valid date in the format YYYY-MM-DD.")
+        return
+    # Validate Employee ID
+    try:
+        emp_check_query = "SELECT COUNT(*) FROM Employee WHERE employee_id = %s"
+        emp_exists = sqlConnector.connect(emp_check_query, (employee_id,))
+        if emp_exists[0][0] == 0:
+            messagebox.showerror("Error", "Employee ID not found.")
+            return
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to validate Employee ID: {e}")
+        return
+
+    # Validate Store ID
+    try:
+        store_check_query = "SELECT COUNT(*) FROM Store WHERE store_id = %s"
+        store_exists = sqlConnector.connect(store_check_query, (store_id,))
+        if store_exists[0][0] == 0:
+            messagebox.showerror("Error", "Store ID not found.")
+            return
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to validate Store ID: {e}")
+        return
+
     try:
         query = """INSERT INTO Expense (expense_type, amount, expense_date, employee_id, store_id)
                    VALUES (%s, %s, %s, %s, %s)"""
