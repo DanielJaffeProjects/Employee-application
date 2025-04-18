@@ -1,3 +1,4 @@
+drop database if exists employee_db;
 CREATE DATABASE IF NOT EXISTS employee_db;
 
 USE employee_db;
@@ -37,6 +38,7 @@ Create Table if not exists employee_close(
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 );
+
 
 # table for store
 CREATE TABLE if not exists Store (
