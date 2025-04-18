@@ -68,6 +68,16 @@ def load_employee_history(clock_tree, close_tree, employee_id, days):
     """Loads employee history data for the last `days` days for a specific employee into the tables."""
     print(f"Loading employee history for Employee ID: {employee_id}...")
     try:
+        # Check if the Employee ID exists in the database
+        validation_query = "SELECT COUNT(*) FROM employee WHERE employee_id = %s"
+        result = sqlConnector.connect(validation_query, (int(employee_id),))
+        if result[0][0] == 0:
+            messagebox.showerror("Error", "Employee ID does not exist.")
+            return
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to validate Employee ID: {e}")
+
+    try:
         # Fetch Clock-In/Clock-Out Records
         clock_query = """SELECT clock_id, clock_in, clock_out, reg_in, reg_out, duration
             FROM clockTable
