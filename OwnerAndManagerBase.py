@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from EmployeeData import create_employee_history_tab
+from Tabs.EmployeeData import create_employee_history_tab
 from Tabs.Bonus import create_bonus_tab
 from Tabs.Invoice import createInvoice
 from Tabs.Merchandise import create_merchandise_tab
@@ -36,8 +36,6 @@ class ManageEmployees(tk.Frame):
         # Centered label (ALOHA)
         aloha_label = tk.Label(top_frame, text=self.controller.role, font=("Helvetica", 14), bg="white", fg="black")
         aloha_label.place(relx=0.5, rely=0.5, anchor="center")
-
-
 
 
         # Right label (username of employee)

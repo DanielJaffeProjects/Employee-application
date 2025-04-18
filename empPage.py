@@ -36,19 +36,25 @@ class EmployeePage(tk.Frame):
         top_frame.pack(side="top", fill="x", padx=10, pady=10)
 
         # Centered label (ALOHA)
-        aloha_label = tk.Label(top_frame, text="ALOHA", font=TITLE_FONT, bg=BG_COLOR, fg=FG_COLOR)
+        aloha_label = tk.Label(top_frame, text=self.controller.role, font=TITLE_FONT, bg=BG_COLOR, fg=FG_COLOR)
         aloha_label.place(relx=0.5, rely=0.5, anchor="center")
 
         # Right label (name of employee)
-        tk.Label(top_frame, text="Name of employee", font=TITLE_FONT, bg=BG_COLOR, fg=FG_COLOR).pack(side="right",
+        tk.Label(top_frame, text=self.controller.username, font=TITLE_FONT, bg=BG_COLOR, fg=FG_COLOR).pack(side="right",
                                                                                                           padx=(5, 10))
         # select stores
         self.selected_store = tk.StringVar()
-        self.selected_store.set("Store 1")
-        store_options = ["Store 1", "Store 2", "Store 3", "Store 4"]
-        store_dropdown = tk.OptionMenu(top_frame, self.selected_store, *store_options)
-        store_dropdown.config(font=ENTRY_FONT, bg=BG_COLOR, fg=FG_COLOR, relief="solid", bd=2)
-        store_dropdown.pack(side="left", padx=10, pady=5)
+        # Fetch the first store name from the database
+        query = "SELECT all store_name FROM Store"
+        result = sqlConnector.connect(query, ())
+
+        if result and result[0][0]:
+            # Check if a store name is returned
+            store_options = [store[0] for store in result if store[0] is not None]
+            self.selected_store.set(result[0][0])  # Set the first store name as the default
+            store_dropdown = tk.OptionMenu(top_frame, self.selected_store, *store_options)
+            store_dropdown.config(font=("Helvetica", 14), bg="white", fg="black", relief="solid", bd=2)
+            store_dropdown.pack(side="left", padx=10, pady=5)
 
     def createMiddleFrame(self):
         # Left frame for tab buttons
