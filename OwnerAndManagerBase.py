@@ -91,7 +91,7 @@ class ManageEmployees(tk.Frame):
             create_payroll_tab(content_frame, tabs,employee_id)
 
             # add employee or update
-            add_employee_tab = AddEmployee(content_frame)
+            add_employee_tab = AddEmployee(content_frame,self.controller.role)
             add_employee_tab.grid(row=0, column=0, sticky="nsew")
             tabs["Add Employee"] = add_employee_tab
 

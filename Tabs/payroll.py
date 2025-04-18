@@ -105,3 +105,4 @@ def load_payroll_records(employee_id, payroll_tree):
             payroll_tree.insert("", "end", values=record)
     except Exception as e:
         messagebox.showerror("Database Error", f"An error occurred: {str(e)}")
+

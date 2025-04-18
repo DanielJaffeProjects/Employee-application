@@ -66,6 +66,18 @@ def add_withdrawal(withdraw_id, employee_id, store_id, withdraw_date, amount):
         messagebox.showerror("Error", "Withdraw ID must be a numeric value.")
         return
 
+    # Check if withdraw_id already exists
+    try:
+        query = "SELECT COUNT(*) FROM withdraw WHERE withdraw_id = %s"
+        result = sqlConnector.connect(query, (withdraw_id,))
+        if result[0][0] > 0:
+            messagebox.showerror("Error", "Withdraw ID already exists in the database.")
+            return
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to validate Withdraw ID: {e}")
+        return
+
+
     # Validate employee_id and store_id
     try:
         employee_id = int(employee_id)

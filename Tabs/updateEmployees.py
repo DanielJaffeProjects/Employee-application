@@ -4,7 +4,7 @@ from sqlConnector import connect
 
 
 class AddEmployee(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent,role):
         super().__init__(parent)
         self.configure(bg="white")
 
@@ -31,10 +31,16 @@ class AddEmployee(tk.Frame):
         self.password = tk.Entry(self, font=("Helvetica", 14), show="*")
         self.password.pack()
 
-        # Role Dropdown
-        tk.Label(self, text="Role:", font=("Helvetica", 14), bg="white").pack()
-        self.role = ttk.Combobox(self, values=["employee", "manager", "owner"], font=("Helvetica", 14))
-        self.role.pack()
+        if role.lower() == "owner":
+            # Role Dropdown
+            tk.Label(self, text="Role:", font=("Helvetica", 14), bg="white").pack()
+            self.role = ttk.Combobox(self, values=["employee", "manager", "owner"], font=("Helvetica", 14))
+            self.role.pack()
+        elif role.lower() == "manager":
+            # Role Dropdown
+            tk.Label(self, text="Role:", font=("Helvetica", 14), bg="white").pack()
+            self.role = ttk.Combobox(self, values=["employee", "manager"], font=("Helvetica", 14))
+            self.role.pack()
 
         # Add Employee Button
         tk.Button(self, text="Add Employee", font=("Helvetica", 14), bg="green", fg="white",

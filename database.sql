@@ -77,12 +77,12 @@ CREATE TABLE if not exists Invoice (
 );
 
 CREATE TABLE IF NOT EXISTS Payroll (
+    payroll_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
     date DATE,
-    bonus DECIMAL(4,2),
+    bonus int,
     hourly_rate DECIMAL(4,2),
     hours INT,
-    PRIMARY KEY (employee_id, date),
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
 );
 
