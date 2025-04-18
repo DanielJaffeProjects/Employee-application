@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+import pygame
+
 from Tabs.EmployeeData import create_employee_history_tab
 from Tabs.Bonus import create_bonus_tab
 from Tabs.Invoice import createInvoice
@@ -84,6 +86,7 @@ class ManageEmployees(tk.Frame):
 
             # withdraw
             create_withdraw_tab(content_frame, tabs)
+
         # if anyone sees this Daniel is the greatest of all time Easter egg!!
         # for owner and manager
         if self.controller.role == 'Owner' or 'Manager':
@@ -147,3 +150,4 @@ class ManageEmployees(tk.Frame):
         confirm = messagebox.askyesno("Logout", "Are you sure you want to logout?")
         if confirm:
             self.controller.show_frame("LoginPage")
+

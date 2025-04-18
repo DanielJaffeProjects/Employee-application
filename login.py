@@ -1,43 +1,19 @@
 import tkinter as tk
 from tkinter import messagebox
+
+import pygame
 from PIL import Image, ImageTk  # Import PIL for images
 
 from sqlConnector import connect
-
-def ensure_test_accounts():
-    # Check and create test accounts if they don't exist
-    test_accounts = [
-        (99, 'Himmy', 'Butler', 'o', '123', 'owner'),
-        (100, 'Himmy', 'Butler', 'e', '123', 'employee'),
-        (101, 'Himmy', 'Butler', 'm', '123', 'manager')
-    ]
-    
-    for account in test_accounts:
-        # Check if account exists
-        check_query = "SELECT * FROM employee WHERE employee_id = %s"
-        result = connect(check_query, (account[0],))
-        
-        if not result:
-            # Account doesn't exist, create it
-            insert_query = """INSERT INTO employee(employee_id, firstName, lastName, userName, password, role)
-                            VALUES (%s, %s, %s, %s, %s, %s)"""
-            connect(insert_query, account)
-
-# User credentials (You can modify this to fetch from a database)
-credentials = {
-    "emp": {"password": "1234", "role": "employee"},
-    "own": {"password": "1234", "role": "owner"},
-    "man": {"password": "1234", "role": "manager"}
-}
 
 class LoginPage(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
         self.configure(bg="white")
-        
-        # Ensure test accounts exist
-        ensure_test_accounts()
+
+        # Initialize pygame mixer for music
+        pygame.mixer.init()
 
         # Load Background Image
         try:
@@ -86,9 +62,24 @@ class LoginPage(tk.Frame):
                 self.controller.role = role.title()
                 self.controller.username = username
 
+                #TODO put this on at end
+                # # Play music for 30 seconds if the role is "Owner"
+                # if role.title() == "Owner":
+                #     self.play_music("Egyptian_national_anthem.mp3", 15000)  # 30 seconds
+
                 # Show the appropriate page based on role
                 self.controller.show_frame(f"{role.title()}Page")
             else:
                 messagebox.showerror("Login Failed", "User role not found.")
         else:
             messagebox.showerror("Login Failed", "Invalid Username or Password")
+
+# play music
+    def play_music(self, music_file,time):
+        """Play background music and stop it after 10 seconds."""
+        try:
+            pygame.mixer.music.load(music_file)
+            pygame.mixer.music.play(loops=-1)  # Play indefinitely
+            self.after(time, pygame.mixer.music.stop)  # Stop music after 10 seconds
+        except pygame.error as e:
+            print(f"Error loading music: {e}")
