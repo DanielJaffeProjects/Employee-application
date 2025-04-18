@@ -39,6 +39,7 @@ Create Table if not exists employee_close(
 
 );
 
+
 # table for store
 CREATE TABLE if not exists Store (
     store_id INT Auto_Increment primary key,
