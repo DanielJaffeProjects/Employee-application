@@ -10,7 +10,6 @@ from Tabs.Store import *
 from Tabs.updateEmployees import AddEmployee
 from Tabs.Expenses import create_expenses_tab
 from Tabs.Withdraw import create_withdraw_tab
-from Tabs.gross_profit import create_gross_profit_tab
 
 class ManageEmployees(tk.Frame):
     def __init__(self, parent, controller):
@@ -109,8 +108,6 @@ class ManageEmployees(tk.Frame):
             # expenses
             create_expenses_tab(content_frame, tabs)
 
-            # gross profit
-            create_gross_profit_tab(content_frame, tabs)
 
             # close out tab
             close_out = CloseOutTab(content_frame, self.controller,selected_store)
@@ -130,7 +127,7 @@ class ManageEmployees(tk.Frame):
 
         for title in tabs:
             btn = tk.Button(tab_frame, text=title, font=("Helvetica", 14), fg="black", bg="white",
-                            relief="solid", bd=2, command=lambda t=title: show_tab(t), width=25, height=2)
+                            relief="solid", bd=2, command=lambda t=title: show_tab(t), width=20, height=1)
             btn.pack(pady=5, padx=10, fill="x")
 
         # Show the default tab

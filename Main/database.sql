@@ -47,6 +47,9 @@ CREATE TABLE if not exists Store (
     location VARCHAR(255)
 );
 
+INSERT INTO Store (store_name, location)
+VALUES ('Aloha', 'ClearWater');
+
 # employee clock-in and clock to
 Create table if not exists clockTable(
     firstName Varchar (15),
@@ -118,17 +121,7 @@ Create Table if not exists withdraw(
     FOREIGN KEY (store_id) REFERENCES Store(store_id)
 );
 
-CREATE TABLE IF NOT EXISTS Gross_Profit (
-    Profit_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Employee_ID INT,
-    Store_ID INT,
-    Date DATE,
-    Cash DECIMAL(10,2),
-    Credit DECIMAL(10,2),
-    Total DECIMAL(10,2),
-    FOREIGN KEY (Employee_ID) REFERENCES Employee(employee_id),
-    FOREIGN KEY (Store_ID) REFERENCES Store(store_id)
-);
+
 CREATE TABLE IF NOT EXISTS Employee_Rate (
     Rate_ID INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT NOT NULL,
@@ -146,17 +139,6 @@ BEFORE INSERT ON Employee_Rate
 FOR EACH ROW
 BEGIN
     SET NEW.bonus_amount = NEW.Bonus_Rate * NEW.Rate_Per_Hour;
-END$$
-
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE TRIGGER calculate_total_before_insert
-BEFORE INSERT ON Gross_Profit
-FOR EACH ROW
-BEGIN
-    SET NEW.Total = NEW.Cash + NEW.Credit;
 END$$
 
 DELIMITER ;
