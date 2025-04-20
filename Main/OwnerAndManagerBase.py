@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from Tabs.EmployeeData import create_employee_history_tab
+from Tabs.Summary import SummaryTab
 from Tabs.employeeRate import create_bonus_tab
 from Tabs.Invoice import createInvoice
 from Tabs.Merchandise import create_merchandise_tab
@@ -113,6 +114,11 @@ class ManageEmployees(tk.Frame):
             close_out = CloseOutTab(content_frame, self.controller,selected_store)
             close_out.grid(row=0, column=0, sticky="nsew")
             tabs["Close Out"] = close_out
+
+            # Add the Summary tab
+            summary_tab = SummaryTab(content_frame, self.controller)
+            summary_tab.grid(row=0, column=0, sticky="nsew")
+            tabs["Summary"] = summary_tab
 
         # for just the manager
         if self.controller.role == 'Manager':

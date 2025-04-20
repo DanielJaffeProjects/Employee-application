@@ -7,10 +7,16 @@ def show_notification(message):
     notification.configure(bg="lightyellow", highlightbackground="black", highlightthickness=2)
     notification.attributes("-topmost", True)  # Keep the notification on top
 
+    # Calculate dynamic width and height based on message length
+    base_width = 300
+    base_height = 70
+    extra_width = min(len(message) * 7, 500)  # Limit max width to 500
+    width = base_width + extra_width
+    height = base_height + (len(message) // 50) * 20  # Adjust height for long messages
+
     # Set the size and position of the notification
     screen_width = notification.winfo_screenwidth()
     screen_height = notification.winfo_screenheight()
-    width, height = 300, 70
     x = screen_width - width - 10
     y = screen_height - height - 10
     notification.geometry(f"{width}x{height}+{x}+{y}")

@@ -22,10 +22,17 @@ values('Daniel','is thn','m','m','manager');
 insert into employee(firstName, lastName, userName, password, role)
 values('Daniel','Yes I am the ','o','o','owner');
 
+# table for store
+CREATE TABLE if not exists Store (
+    store_id INT Auto_Increment primary key,
+    store_name VARCHAR(255),
+    location VARCHAR(255)
+);
 
 # employee close
 Create Table if not exists employee_close(
     close_id INT AUTO_INCREMENT PRIMARY KEY,
+    store_id INT,
     firstName Varchar (15),
     lastName varchar (15),
     store_name VARCHAR(25),
@@ -35,17 +42,12 @@ Create Table if not exists employee_close(
     comments TEXT,
     employee_id INT,
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
+    FOREIGN KEY (store_id) REFERENCES store(store_id),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 );
 
 
-# table for store
-CREATE TABLE if not exists Store (
-    store_id INT Auto_Increment primary key,
-    store_name VARCHAR(255),
-    location VARCHAR(255)
-);
 
 INSERT INTO Store (store_name, location)
 VALUES ('Aloha', 'ClearWater');
@@ -132,6 +134,22 @@ CREATE TABLE IF NOT EXISTS Employee_Rate (
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
 );
 
+Create Table if not exists summary(
+    summary_id INT AUTO_INCREMENT PRIMARY KEY,
+    store_id INT,
+    cash_and_credit DECIMAL(10,2),
+    total_expenses DECIMAL(10,2),
+    total_merchandise DECIMAL(10,2),
+    total_withdraw DECIMAL(10,2),
+    total_payroll DECIMAL(10,2),
+    net_profit DECIMAL(10,2),
+    current_balance DECIMAL(10,2),
+    actual_cash DECIMAL(10,2),
+    actual_credit DECIMAL(10,2),
+    FOREIGN KEY (store_id) REFERENCES Store(store_id)
+);
+
+# triggers
 DELIMITER $$
 
 CREATE TRIGGER calculate_bonus_amount_before_insert

@@ -41,8 +41,9 @@ class CloseOutTab(tk.Frame):
         store_name = self.selected_store.get()
         print(store_name)
         employee_id = self.controller.employee_id
+
         if not credit or not cash or not expense:
-            show_notification( "Please fill in all required fields (credit, cash, expense).")
+            show_notification("Please fill in all required fields (credit, cash, expense).")
             return
 
         try:
@@ -57,7 +58,7 @@ class CloseOutTab(tk.Frame):
             query = "SELECT firstName, lastName FROM employee WHERE employee_id = %s"
             result = sqlConnector.connect(query, (employee_id,))
             if not result:
-                show_notification( "Employee not found in database.")
+                show_notification("Employee not found in database.")
                 return
             first_name, last_name = result[0]
         except Exception as e:
@@ -65,6 +66,14 @@ class CloseOutTab(tk.Frame):
             return
 
         try:
+            # Fetch store_id based on store_name
+            store_query = "SELECT store_id FROM store WHERE store_name = %s"
+            store_result = sqlConnector.connect(store_query, (store_name,))
+            if not store_result:
+                show_notification("Store not found in database.")
+                return
+            store_id = store_result[0][0]
+
             # Check if a close-out entry already exists for the current date and store
             check_query = """SELECT * FROM employee_close 
                 WHERE store_name = %s AND DATE(timestamp) = CURDATE()
@@ -73,18 +82,19 @@ class CloseOutTab(tk.Frame):
             print(existing_entry)
 
             if existing_entry:
-                show_notification( "A close-out entry for this store already exists for today.")
+                show_notification("A close-out entry for this store already exists for today.")
                 return
 
             # Insert the new close-out entry
             insert_query = """
                 INSERT INTO employee_close (
-                    firstName, lastName, store_name, credit, cash_in_envelope, expense, comments, employee_id
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    firstName, lastName, store_name, credit, cash_in_envelope, expense, comments, employee_id, store_id
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
-            data = (first_name, last_name, store_name, credit_val, cash_val, expense_val, comments, employee_id)
+            data = (
+            first_name, last_name, store_name, credit_val, cash_val, expense_val, comments, employee_id, store_id)
             sqlConnector.connect(insert_query, data)
-            show_notification( "Closing information submitted successfully.")
+            show_notification("Closing information submitted successfully.")
 
             self.credit_entry.delete(0, tk.END)
             self.cash_entry.delete(0, tk.END)
@@ -92,4 +102,4 @@ class CloseOutTab(tk.Frame):
             self.comments_entry.delete(0, tk.END)
 
         except Exception as e:
-            show_notification( f"An error occurred while submitting data: {str(e)}")
+            show_notification(f"An error occurred while submitting data: {str(e)}")
