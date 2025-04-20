@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from Tabs.EmployeeData import create_employee_history_tab
-from Tabs.Bonus import create_bonus_tab
+from Tabs.employeeRate import create_bonus_tab
 from Tabs.Invoice import createInvoice
 from Tabs.Merchandise import create_merchandise_tab
 from Tabs.closeOutTab import CloseOutTab
@@ -103,7 +103,7 @@ class ManageEmployees(tk.Frame):
             # merchandise
             create_merchandise_tab(content_frame, tabs)
 
-            # Bonus
+            # Bonus and employee rate
             create_bonus_tab(content_frame, tabs)
 
             # expenses

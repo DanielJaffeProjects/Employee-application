@@ -106,16 +106,7 @@ CREATE TABLE IF NOT EXISTS Merchandise (
     FOREIGN KEY (StoreID) REFERENCES Store(store_id)
 );
 
-CREATE TABLE IF NOT EXISTS Bonus (
-    BonusID INT AUTO_INCREMENT PRIMARY KEY,
-    employee_id INT,
-    Bonus_Amount DECIMAL(10,2) DEFAULT 0.00,
-    Sales DECIMAL(10,2) DEFAULT 0.00,
-    Gross DECIMAL(10,2) DEFAULT 0.00,
-    Bonus_Percentage DECIMAL(10,2) DEFAULT 0.00,
-    Current_Bonus_Percentage DECIMAL(10,2) DEFAULT 0.00,
-    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
-);
+
 
 Create Table if not exists withdraw(
     withdraw_id INT PRIMARY KEY,
@@ -138,8 +129,26 @@ CREATE TABLE IF NOT EXISTS Gross_Profit (
     FOREIGN KEY (Employee_ID) REFERENCES Employee(employee_id),
     FOREIGN KEY (Store_ID) REFERENCES Store(store_id)
 );
+CREATE TABLE IF NOT EXISTS Employee_Rate (
+    Rate_ID INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    Bonus_Rate DECIMAL(10, 2) NOT NULL,
+    Rate_Per_Hour DECIMAL(10, 2) NOT NULL,
+    day_of_year DATE NOT NULL,
+    bonus_amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
+);
 
-#triggers
+DELIMITER $$
+
+CREATE TRIGGER calculate_bonus_amount_before_insert
+BEFORE INSERT ON Employee_Rate
+FOR EACH ROW
+BEGIN
+    SET NEW.bonus_amount = NEW.Bonus_Rate * NEW.Rate_Per_Hour;
+END$$
+
+DELIMITER ;
 
 DELIMITER $$
 
