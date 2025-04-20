@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-from sqlConnector import connect
+from Main.sqlConnector import connect
 
 
 class AddEmployee(tk.Frame):

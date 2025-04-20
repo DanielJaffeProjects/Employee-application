@@ -3,7 +3,7 @@ from datetime import datetime
 from tkinter import messagebox
 from tkinter import ttk
 import re
-import sqlConnector
+from Main import sqlConnector
 
 
 # -------------------------------
@@ -144,7 +144,7 @@ def load_invoice_records(invoice_tree):
     try:
         query = "SELECT invoice_id, invoice_company, invoice_amount, date_received, date_due, invoice_paid FROM Invoice"
         data = ()
-        records = sqlConnector.connect(query,(data))
+        records = sqlConnector.connect(query, (data))
         invoice_tree.delete(*invoice_tree.get_children())  # Clear existing records
         for record in records:
             invoice_tree.insert("", "end", values=record)

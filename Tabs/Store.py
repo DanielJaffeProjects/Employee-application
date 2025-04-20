@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-import sqlConnector
+from Main import sqlConnector
 
 
 def create_store_tab(content_frame, tabs, add_store_callback, delete_store_callback):

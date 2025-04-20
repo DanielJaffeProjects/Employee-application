@@ -1,7 +1,8 @@
 import tkinter as tk
 from datetime import datetime
 from tkinter import ttk, messagebox
-import sqlConnector
+from Main import sqlConnector
+
 
 def create_gross_profit_tab(content_frame, tabs):
     """Creates the Gross Profit tab and adds it to the tabs dictionary."""

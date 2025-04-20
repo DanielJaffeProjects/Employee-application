@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import sqlConnector
+from Main import sqlConnector
+
 
 def create_employee_history_tab(content_frame, tabs, days):
     """Creates the Employee History tab with two tables."""

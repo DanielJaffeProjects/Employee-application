@@ -1,7 +1,7 @@
 import tkinter as tk
 from datetime import datetime
 from tkinter import messagebox, ttk
-import sqlConnector
+from Main import sqlConnector
 import re
 
 def create_merchandise_tab(content_frame, tabs):
@@ -115,7 +115,7 @@ def load_merchandise_records(merch_tree):
     try:
         query = "SELECT Merch_Type, Merch_Value, Purchase_Date, StoreID FROM Merchandise"
         data = ()
-        records = sqlConnector.connect(query,data)
+        records = sqlConnector.connect(query, data)
         merch_tree.delete(*merch_tree.get_children())  # Clear existing records
         for record in records:
             merch_tree.insert("", "end", values=record)

@@ -1,7 +1,8 @@
 import tkinter as tk
 from datetime import datetime
 from tkinter import ttk, messagebox
-import sqlConnector
+from Main import sqlConnector
+
 
 def create_expenses_tab(content_frame, tabs):
     """Creates the Expenses tab and adds it to the tabs dictionary."""

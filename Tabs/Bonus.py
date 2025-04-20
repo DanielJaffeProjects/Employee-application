@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import sqlConnector
+from Main import sqlConnector
+
 
 def create_bonus_tab(content_frame, tabs):
     """Creates the Bonus tab and adds it to the tabs dictionary."""

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import sqlConnector
+from Main import sqlConnector
+
 
 def create_payroll_tab(content_frame, tabs,employee_id):
     """Creates the Payroll tab and adds it to the tabs dictionary."""
