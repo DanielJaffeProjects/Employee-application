@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from tkinter import messagebox
 
@@ -17,7 +18,8 @@ class LoginPage(tk.Frame):
 
         # Load Background Image
         try:
-            image = Image.open("../videos_and_pictures/clwbeach.jpg")
+            image_path = os.path.join(os.path.dirname(__file__), "../videos_and_pictures/clwbeach.jpg")
+            image = Image.open(image_path)
             self.bg_image = ImageTk.PhotoImage(image)
             self.bg_label = tk.Label(self, image=self.bg_image)
             self.bg_label.place(relwidth=1, relheight=1)
