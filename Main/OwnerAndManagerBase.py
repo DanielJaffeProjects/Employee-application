@@ -113,7 +113,7 @@ class ManageEmployees(tk.Frame):
             create_gross_profit_tab(content_frame, tabs)
 
             # close out tab
-            close_out = CloseOutTab(content_frame, self.controller)
+            close_out = CloseOutTab(content_frame, self.controller,selected_store)
             close_out.grid(row=0, column=0, sticky="nsew")
             tabs["Close Out"] = close_out
 

@@ -6,7 +6,7 @@ BG_COLOR = "white"
 LABEL_FONT = ("Helvetica", 18)
 
 class CloseOutTab(tk.Frame):
-    def __init__(self, parent, controller, selected_store=None):
+    def __init__(self, parent, controller, selected_store):
         super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
         self.selected_store = selected_store
