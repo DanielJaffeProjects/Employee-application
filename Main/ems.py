@@ -3,6 +3,7 @@ from tkinter import messagebox
 
 # Import your custom pages
 import managerPage
+from Main.Notification import show_notification
 from login import LoginPage
 from empPage import EmployeePage
 from ownerPage import OwnerPage
@@ -52,7 +53,7 @@ class EMSApp(tk.Tk):
                 self.frames[page_name] = frame
                 frame.grid(row=0, column=0, sticky="nsew")
             else:
-                messagebox.showerror("Error", f"Page class '{page_name}' not found.")
+                show_notification(f"Page class '{page_name}' not found.")
                 return
 
         frame = self.frames[page_name]

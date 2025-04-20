@@ -2,6 +2,7 @@ import tkinter as tk
 from datetime import datetime
 from tkinter import ttk, messagebox
 from Main import sqlConnector
+from Main.Notification import show_notification
 
 
 def create_expenses_tab(content_frame, tabs):
@@ -55,7 +56,7 @@ def create_expenses_tab(content_frame, tabs):
 def add_expense(expense_type, expense_value, expense_date, employee_id, store_id):
     """Adds a new expense record to the database."""
     if not expense_type or not expense_value or not expense_date or not employee_id or not store_id:
-        messagebox.showerror("Error", "All fields are required.")
+        show_notification("All fields are required.")
         return
 
 
@@ -65,24 +66,24 @@ def add_expense(expense_type, expense_value, expense_date, employee_id, store_id
         employee_id = int(employee_id)
         store_id = int(store_id)
     except ValueError:
-        messagebox.showerror("Error", "Please enter valid numeric values for Expense Value, Employee ID, and Store ID.")
+        show_notification("Please enter valid numeric values for Expense Value, Employee ID, and Store ID.")
         return
 
     # Validate date format
     try:
         datetime.strptime(expense_date, "%Y-%m-%d")
     except ValueError:
-        messagebox.showerror("Error", "Please enter a valid date in the format YYYY-MM-DD.")
+        show_notification("Please enter a valid date in the format YYYY-MM-DD.")
         return
     # Validate Employee ID
     try:
         emp_check_query = "SELECT COUNT(*) FROM Employee WHERE employee_id = %s"
         emp_exists = sqlConnector.connect(emp_check_query, (employee_id,))
         if emp_exists[0][0] == 0:
-            messagebox.showerror("Error", "Employee ID not found.")
+            show_notification( "Employee ID not found.")
             return
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to validate Employee ID: {e}")
+        show_notification("Failed to validate Employee ID: {e}")
         return
 
     # Validate Store ID
@@ -90,10 +91,10 @@ def add_expense(expense_type, expense_value, expense_date, employee_id, store_id
         store_check_query = "SELECT COUNT(*) FROM Store WHERE store_id = %s"
         store_exists = sqlConnector.connect(store_check_query, (store_id,))
         if store_exists[0][0] == 0:
-            messagebox.showerror("Error", "Store ID not found.")
+            show_notification("Store ID not found.")
             return
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to validate Store ID: {e}")
+        show_notification("Failed to validate Store ID: {e}")
         return
 
     try:
@@ -103,7 +104,7 @@ def add_expense(expense_type, expense_value, expense_date, employee_id, store_id
         sqlConnector.connect(query, data)
         messagebox.showinfo("Success", "Expense added successfully!")
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to add expense: {e}")
+        show_notification("Failed to add expense: {e}")
 
 def load_expenses(tree):
     """Loads all expense records into the Treeview."""
@@ -117,4 +118,4 @@ def load_expenses(tree):
         for result in results:
             tree.insert("", "end", values=result)
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to load expenses: {e}")
+        show_notification( f"Failed to load expenses: {e}")

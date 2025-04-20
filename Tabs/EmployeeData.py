@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from Main import sqlConnector
+from Main.Notification import show_notification
 
 
 def create_employee_history_tab(content_frame, tabs, days):
@@ -57,7 +58,7 @@ def create_employee_history_tab(content_frame, tabs, days):
     def on_load_history():
         employee_id = employee_id_entry.get()
         if not employee_id.isdigit():
-            messagebox.showerror("Error", "Please enter a valid Employee ID.")
+            show_notification("Please enter a valid Employee ID.")
             return
         load_employee_history(clock_tree, close_tree, int(employee_id), days)
 
@@ -73,10 +74,10 @@ def load_employee_history(clock_tree, close_tree, employee_id, days):
         validation_query = "SELECT COUNT(*) FROM employee WHERE employee_id = %s"
         result = sqlConnector.connect(validation_query, (int(employee_id),))
         if result[0][0] == 0:
-            messagebox.showerror("Error", "Employee ID does not exist.")
+            show_notification("Employee ID does not exist.")
             return
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to validate Employee ID: {e}")
+        show_notification( f"Failed to validate Employee ID: {e}")
 
     try:
         # Fetch Clock-In/Clock-Out Records
@@ -109,4 +110,4 @@ def load_employee_history(clock_tree, close_tree, employee_id, days):
         messagebox.showinfo("Success", f"Employee history for Employee ID {employee_id} for the last {days} days loaded successfully.")
     except Exception as e:
         print(f"Error loading employee history: {e}")
-        messagebox.showerror("Error", f"Failed to load employee history: {e}")
+        show_notification( f"Failed to load employee history: {e}")

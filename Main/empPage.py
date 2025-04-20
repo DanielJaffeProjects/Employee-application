@@ -3,6 +3,7 @@ from tkinter import messagebox
 from datetime import datetime
 from tkinter import ttk
 import sqlConnector
+from Main.Notification import show_notification
 from Tabs.closeOutTab import CloseOutTab
 
 # Color definitions
@@ -162,7 +163,7 @@ class EmployeePage(tk.Frame):
         print("got in clock in")
         balance = self.reg_in_balance.get()
         if not balance:
-            messagebox.showerror("Error", "Please enter a register balance.")
+            show_notification("Please enter a register balance.")
             return
         else:
             print("got a balance")
@@ -187,7 +188,7 @@ class EmployeePage(tk.Frame):
         # Check if the user has already clocked in today
         for record in self.records:
             if record["date"] == date and record["employee_id"] == employee_id and record["clock_in"] is not None:
-                messagebox.showerror("Error", "You have already clocked in today.")
+                show_notification( "You have already clocked in today.")
                 return
             else:
                 print("not clocked in yet")
@@ -213,10 +214,10 @@ class EmployeePage(tk.Frame):
         try:
             # Send the data to the SQL connector
             sqlConnector.connect(query, data)
-            messagebox.showinfo("Clock In", "Clock-in recorded successfully.")
+            show_notification( "Clock-in recorded successfully.")
 
         except Exception as e:
-            messagebox.showerror("Database Error", f"An error occurred: {str(e)}")
+            show_notification(f"An error occurred: {str(e)}")
 
         # Update the history display
         self.update_history()
@@ -224,7 +225,7 @@ class EmployeePage(tk.Frame):
     def clock_out(self):
         balance = self.reg_out_balance.get()
         if not balance:
-            messagebox.showerror("Error", "Please enter a register balance.")
+            show_notification( "Please enter a register balance.")
             return
         else:
             print("got a balance")
@@ -244,7 +245,7 @@ class EmployeePage(tk.Frame):
         result = sqlConnector.connect(select_query, (employee_id,))
         print(result)
         if not result:
-            messagebox.showerror("Error", "No matching clock-in found.")
+            show_notification( "No matching clock-in found.")
             return
         clock_id, clock_in_str = result[0]
 
@@ -285,7 +286,7 @@ class EmployeePage(tk.Frame):
         })
 
         self.update_history()
-        messagebox.showinfo("Clock Out", "Clock-out recorded successfully.")
+        show_notification("Clock-out recorded successfully.")
 
     def update_history(self):
         self.history_treeview.delete(*self.history_treeview.get_children())

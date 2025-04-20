@@ -4,6 +4,9 @@ from tkinter import messagebox, ttk
 from Main import sqlConnector
 import re
 
+from Main.Notification import show_notification
+
+
 def create_merchandise_tab(content_frame, tabs):
     # Create Merchandise Tab
     enter_merch_frame = tk.Frame(content_frame, bg="white")
@@ -39,7 +42,7 @@ def create_merchandise_tab(content_frame, tabs):
         store_map = {f"{row[1]} (ID: {row[0]})": row[0] for row in result}
         store_dropdown['values'] = list(store_map.keys())
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to load stores: {e}")
+        show_notification(f"Failed to load stores: {e}")
 
     # Submit Button
     tk.Button(enter_merch_frame, text="Submit Merchandise", font=("Helvetica", 14),
@@ -75,12 +78,12 @@ def create_merchandise_tab(content_frame, tabs):
 
 def submit_merchandise(merch_type, merch_value, purchase_date, store_id):
     if not merch_type or not merch_value or not purchase_date or not store_id:
-        messagebox.showerror("Error", "All fields must be filled out.")
+        show_notification("All fields must be filled out.")
         return
 
     # Validate Merchandise Type
     if not re.match(r"^[a-zA-Z0-9\s]+$", merch_type):
-        messagebox.showerror("Error", "Merchandise Type must be alphanumeric.")
+        show_notification("Merchandise Type must be alphanumeric.")
         return
 
     # Validate Merchandise Value
@@ -89,14 +92,14 @@ def submit_merchandise(merch_type, merch_value, purchase_date, store_id):
         if merch_value <= 0:
             raise ValueError
     except ValueError:
-        messagebox.showerror("Error", "Merchandise Value must be a positive number.")
+        show_notification("Merchandise Value must be a positive number.")
         return
 
     # Validate Purchase Date
     try:
         datetime.strptime(purchase_date, "%Y-%m-%d")
     except ValueError:
-        messagebox.showerror("Error", "Purchase Date must be in the format YYYY-MM-DD.")
+        show_notification( "Purchase Date must be in the format YYYY-MM-DD.")
         return
 
     try:
@@ -112,7 +115,7 @@ def submit_merchandise(merch_type, merch_value, purchase_date, store_id):
 
         messagebox.showinfo("Success", "Merchandise added successfully!")
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to add merchandise: {e}")
+        show_notification(f"Failed to add merchandise: {e}")
 
 def load_merchandise_records(merch_tree):
     """Loads merchandise records into the Treeview."""
@@ -150,4 +153,4 @@ def load_merchandise_records(merch_tree):
             merch_tree.insert("", "end", values=(*record, store_name))
 
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to load merchandise records: {e}")
+        show_notification(f"Failed to load merchandise records: {e}")

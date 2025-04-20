@@ -1,7 +1,8 @@
 # File: Main/closeOutTab.py
 import tkinter as tk
-from tkinter import messagebox
 from Main import sqlConnector
+from Main.Notification import show_notification
+
 BG_COLOR = "white"
 LABEL_FONT = ("Helvetica", 18)
 
@@ -41,7 +42,7 @@ class CloseOutTab(tk.Frame):
         print(store_name)
         employee_id = self.controller.employee_id
         if not credit or not cash or not expense:
-            messagebox.showerror("Error", "Please fill in all required fields (credit, cash, expense).")
+            show_notification( "Please fill in all required fields (credit, cash, expense).")
             return
 
         try:
@@ -49,18 +50,18 @@ class CloseOutTab(tk.Frame):
             cash_val = float(cash)
             expense_val = float(expense)
         except ValueError:
-            messagebox.showerror("Input Error", "Credit, Cash, and Expense must be valid numbers.")
+            show_notification("Credit, Cash, and Expense must be valid numbers.")
             return
 
         try:
             query = "SELECT firstName, lastName FROM employee WHERE employee_id = %s"
             result = sqlConnector.connect(query, (employee_id,))
             if not result:
-                messagebox.showerror("Error", "Employee not found in database.")
+                show_notification( "Employee not found in database.")
                 return
             first_name, last_name = result[0]
         except Exception as e:
-            messagebox.showerror("Database Error", f"Could not fetch employee info: {str(e)}")
+            show_notification(f"Could not fetch employee info: {str(e)}")
             return
 
         try:
@@ -72,7 +73,7 @@ class CloseOutTab(tk.Frame):
             print(existing_entry)
 
             if existing_entry:
-                messagebox.showerror("Error", "A close-out entry for this store already exists for today.")
+                show_notification( "A close-out entry for this store already exists for today.")
                 return
 
             # Insert the new close-out entry
@@ -83,7 +84,7 @@ class CloseOutTab(tk.Frame):
             """
             data = (first_name, last_name, store_name, credit_val, cash_val, expense_val, comments, employee_id)
             sqlConnector.connect(insert_query, data)
-            messagebox.showinfo("Success", "Closing information submitted successfully.")
+            show_notification( "Closing information submitted successfully.")
 
             self.credit_entry.delete(0, tk.END)
             self.cash_entry.delete(0, tk.END)
@@ -91,4 +92,4 @@ class CloseOutTab(tk.Frame):
             self.comments_entry.delete(0, tk.END)
 
         except Exception as e:
-            messagebox.showerror("Database Error", f"An error occurred while submitting data: {str(e)}")
+            show_notification( f"An error occurred while submitting data: {str(e)}")

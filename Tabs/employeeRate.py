@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 from tkcalendar import DateEntry  # Import DateEntry for date selection
 from Main import sqlConnector
+from Main.Notification import show_notification
 
 
 def create_bonus_tab(content_frame, tabs):
@@ -61,13 +62,13 @@ def load_employee_ids(dropdown):
         results = sqlConnector.connect(query, ())
         dropdown["values"] = [row[0] for row in results]
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to load Employee IDs: {e}")
+        show_notification( f"Failed to load Employee IDs: {e}")
 
 
 def add_employee_rate(emp_id, bonus_rate, rate_per_hour, date):
     """Adds a new employee rate record to the Employee_Rate table."""
     if not emp_id:
-        messagebox.showerror("Error", "Employee ID is required.")
+        show_notification( "Employee ID is required.")
         return
 
     # Validate inputs
@@ -76,7 +77,7 @@ def add_employee_rate(emp_id, bonus_rate, rate_per_hour, date):
         bonus_rate = float(bonus_rate) if bonus_rate else 0.00
         rate_per_hour = float(rate_per_hour) if rate_per_hour else 0.00
     except ValueError:
-        messagebox.showerror("Error", "Please enter valid numeric values for the fields.")
+        show_notification("Please enter valid numeric values for the fields.")
         return
 
     try:
@@ -84,9 +85,9 @@ def add_employee_rate(emp_id, bonus_rate, rate_per_hour, date):
                    VALUES (%s, %s, %s, %s)"""
         data = (emp_id, bonus_rate, rate_per_hour, date)
         sqlConnector.connect(query, data)
-        messagebox.showinfo("Success", "Employee rate added successfully!")
+        show_notification("Employee rate added successfully!")
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to add employee rate: {e}")
+        show_notification( f"Failed to add employee rate: {e}")
 
 def load_employee_rates(tree):
     """Loads all employee rate records into the Treeview."""
@@ -101,4 +102,4 @@ def load_employee_rates(tree):
         for result in results:
             tree.insert("", "end", values=result)
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to load employee rates: {e}")
+        show_notification(f"Failed to load employee rates: {e}")

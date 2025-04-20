@@ -4,6 +4,7 @@ from tkinter import messagebox
 from tkinter import ttk
 import re
 from Main import sqlConnector
+from Main.Notification import show_notification
 
 
 # -------------------------------
@@ -88,12 +89,12 @@ def createInvoice(content_frame,tabs):
 
 def submit_invoice(invoice_id, invoice_company, invoice_amount, date_received, date_due, invoice_paid):
     if not invoice_id or not invoice_company or not invoice_amount or not date_received or not date_due or not invoice_paid:
-        messagebox.showerror("Error", "All fields must be filled out.")
+        show_notification("All fields must be filled out.")
         return
 
     # Validate Invoice ID
     if not re.match(r"^[a-zA-Z0-9]+$", invoice_id):
-        messagebox.showerror("Error", "Invoice ID must be alphanumeric.")
+        show_notification( "Invoice ID must be alphanumeric.")
         return
 
     # Check for duplicate Invoice ID
@@ -101,10 +102,10 @@ def submit_invoice(invoice_id, invoice_company, invoice_amount, date_received, d
         query = "SELECT COUNT(*) FROM Invoice WHERE invoice_id = %s"
         result = sqlConnector.connect(query, (invoice_id,))
         if result[0][0] > 0:
-            messagebox.showerror("Error", f"Invoice ID '{invoice_id}' already exists.")
+            show_notification(f"Invoice ID '{invoice_id}' already exists.")
             return
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to check for duplicate Invoice ID: {e}")
+        show_notification( f"Failed to check for duplicate Invoice ID: {e}")
         return
 
     # Validate Invoice Amount
@@ -113,7 +114,7 @@ def submit_invoice(invoice_id, invoice_company, invoice_amount, date_received, d
         if invoice_amount <= 0:
             raise ValueError
     except ValueError:
-        messagebox.showerror("Error", "Invoice Amount must be a positive number.")
+        show_notification( "Invoice Amount must be a positive number.")
         return
 
     # Validate Dates
@@ -121,7 +122,7 @@ def submit_invoice(invoice_id, invoice_company, invoice_amount, date_received, d
         datetime.strptime(date_received, "%Y-%m-%d")
         datetime.strptime(date_due, "%Y-%m-%d")
     except ValueError:
-        messagebox.showerror("Error", "Dates must be in the format YYYY-MM-DD and valid.")
+        show_notification( "Dates must be in the format YYYY-MM-DD and valid.")
         return
 
     try:
@@ -137,7 +138,7 @@ def submit_invoice(invoice_id, invoice_company, invoice_amount, date_received, d
 
         messagebox.showinfo("Success", f"Invoice {invoice_id} submitted successfully!")
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to submit invoice: {e}")
+        show_notification(f"Failed to submit invoice: {e}")
 
 def load_invoice_records(invoice_tree):
     """Loads invoice records into the Treeview."""
@@ -149,12 +150,12 @@ def load_invoice_records(invoice_tree):
         for record in records:
             invoice_tree.insert("", "end", values=record)
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to load invoice records: {e}")
+        show_notification(f"Failed to load invoice records: {e}")
 
 def update_invoice(invoice_id, invoice_company, invoice_amount, date_received, date_due, invoice_paid):
     """Updates the selected invoice in the database."""
     if not invoice_id or not invoice_company or not invoice_amount or not date_received or not date_due or not invoice_paid:
-        messagebox.showerror("Error", "All fields must be filled out.")
+        show_notification("All fields must be filled out.")
         return
 
     try:
@@ -164,7 +165,7 @@ def update_invoice(invoice_id, invoice_company, invoice_amount, date_received, d
         datetime.strptime(date_received, "%Y-%m-%d")
         datetime.strptime(date_due, "%Y-%m-%d")
     except ValueError:
-        messagebox.showerror("Error", "Invalid input. Check the amount and date formats.")
+        show_notification( "Invalid input. Check the amount and date formats.")
         return
 
     try:
@@ -177,4 +178,4 @@ def update_invoice(invoice_id, invoice_company, invoice_amount, date_received, d
         sqlConnector.connect(query, data)
         messagebox.showinfo("Success", f"Invoice {invoice_id} updated successfully!")
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to update invoice: {e}")
+        show_notification( f"Failed to update invoice: {e}")

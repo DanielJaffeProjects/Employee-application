@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 
 from Main import sqlConnector
+from Main.Notification import show_notification
 
 
 def create_store_tab(content_frame, tabs, add_store_callback, delete_store_callback):
@@ -50,7 +51,7 @@ def create_store_tab(content_frame, tabs, add_store_callback, delete_store_callb
 def add_store(store_name, store_location):
     """Adds a new store to the database."""
     if not store_name or not store_location:
-        messagebox.showerror("Error", "Both store name and location are required.")
+        show_notification( "Both store name and location are required.")
         return
     try:
         # Check for duplicate store name
@@ -58,21 +59,21 @@ def add_store(store_name, store_location):
         data_check = (store_name,)
         result = sqlConnector.connect(query_check, data_check)
         if result[0][0] > 0:  # If the count is greater than 0, the store already exists
-            messagebox.showerror("Error", f"Store '{store_name}' already exists.")
+            show_notification(f"Store '{store_name}' already exists.")
             return
 
         # Insert the new store
         query_insert = "INSERT INTO Store (store_name, location) VALUES (%s, %s)"
         data_insert = (store_name, store_location)
         sqlConnector.connect(query_insert, data_insert)
-        messagebox.showinfo("Success", f"Store '{store_name}' added successfully!")
+        show_notification(f"Store '{store_name}' added successfully!")
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to add store: {e}")
+        show_notification(f"Failed to add store: {e}")
 
 def delete_store(store_name):
     """Deletes a store from the database."""
     if not store_name:
-        messagebox.showerror("Error", "Store name is required.")
+        show_notification("Store name is required.")
         return
     try:
         query = "DELETE FROM Store WHERE store_name = %s"
@@ -80,7 +81,7 @@ def delete_store(store_name):
         sqlConnector.connect(query, data)
         messagebox.showinfo("Success", f"Store '{store_name}' deleted successfully!")
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to delete store: {e}")
+        show_notification(f"Failed to delete store: {e}")
 
 def load_stores(store_tree):
     """Loads all stores from the database into the Treeview."""
@@ -91,4 +92,4 @@ def load_stores(store_tree):
         for record in records:
             store_tree.insert("", "end", values=record)
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to load stores: {e}")
+        show_notification(f"Failed to load stores: {e}")

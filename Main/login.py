@@ -1,10 +1,10 @@
 import os
 import tkinter as tk
-from tkinter import messagebox
 
 import pygame
 from PIL import Image, ImageTk  # Import PIL for images
 
+from Main.Notification import show_notification
 from sqlConnector import connect
 
 class LoginPage(tk.Frame):
@@ -72,9 +72,9 @@ class LoginPage(tk.Frame):
                 # Show the appropriate page based on role
                 self.controller.show_frame(f"{role.title()}Page")
             else:
-                messagebox.showerror("Login Failed", "User role not found.")
+                show_notification("User role not found.")
         else:
-            messagebox.showerror("Login Failed", "Invalid Username or Password")
+            show_notification( "Invalid Username or Password")
 
 # play music
     def play_music(self, music_file,time):

@@ -1,8 +1,9 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 import re
 
 from Main import sqlConnector
+from Main.Notification import show_notification
 
 
 def create_withdraw_tab(content_frame, tabs):
@@ -59,12 +60,12 @@ def create_withdraw_tab(content_frame, tabs):
 def add_withdrawal(withdraw_id, employee_id, store_id, withdraw_date, amount):
     """Adds a new withdrawal record to the database."""
     if  not withdraw_id or not employee_id or not store_id or not withdraw_date or not amount:
-        messagebox.showerror("Error", "All fields are required.")
+        show_notification("All fields are required.")
         return
 
     # Validate withdraw_id
     if not withdraw_id.isdigit():
-        messagebox.showerror("Error", "Withdraw ID must be a numeric value.")
+        show_notification("Withdraw ID must be a numeric value.")
         return
 
     # Check if withdraw_id already exists
@@ -72,10 +73,10 @@ def add_withdrawal(withdraw_id, employee_id, store_id, withdraw_date, amount):
         query = "SELECT COUNT(*) FROM withdraw WHERE withdraw_id = %s"
         result = sqlConnector.connect(query, (withdraw_id,))
         if result[0][0] > 0:
-            messagebox.showerror("Error", "Withdraw ID already exists in the database.")
+            show_notification("Withdraw ID already exists in the database.")
             return
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to validate Withdraw ID: {e}")
+        show_notification(f"Failed to validate Withdraw ID: {e}")
         return
 
 
@@ -84,7 +85,7 @@ def add_withdrawal(withdraw_id, employee_id, store_id, withdraw_date, amount):
         employee_id = int(employee_id)
         store_id = int(store_id)
     except ValueError:
-        messagebox.showerror("Error", "Employee ID and Store ID must be integers.")
+        show_notification("Employee ID and Store ID must be integers.")
         return
 
     # Validate employee_id exists
@@ -93,10 +94,10 @@ def add_withdrawal(withdraw_id, employee_id, store_id, withdraw_date, amount):
         query = "SELECT COUNT(*) FROM employee WHERE employee_id = %s"
         result = sqlConnector.connect(query, (employee_id,))
         if result[0][0] == 0:
-            messagebox.showerror("Error", "Invalid Employee ID.")
+            show_notification("Invalid Employee ID.")
             return
     except ValueError:
-        messagebox.showerror("Error", "Employee ID must be an integer.")
+        show_notification("Employee ID must be an integer.")
         return
 
     # Validate store_id exists
@@ -105,15 +106,15 @@ def add_withdrawal(withdraw_id, employee_id, store_id, withdraw_date, amount):
         query = "SELECT COUNT(*) FROM store WHERE store_id = %s"
         result = sqlConnector.connect(query, (store_id,))
         if result[0][0] == 0:
-            messagebox.showerror("Error", "Invalid Store ID.")
+            show_notification("Invalid Store ID.")
             return
     except ValueError:
-        messagebox.showerror("Error", "Store ID must be an integer.")
+        show_notification("Store ID must be an integer.")
         return
 
         # Validate withdraw_date format
     if not re.match(r"^\d{4}-\d{2}-\d{2}$", withdraw_date):
-        messagebox.showerror("Error", "Withdraw Date must be in YYYY-MM-DD format.")
+        show_notification("Withdraw Date must be in YYYY-MM-DD format.")
         return
 
         # Validate amount
@@ -122,7 +123,7 @@ def add_withdrawal(withdraw_id, employee_id, store_id, withdraw_date, amount):
         if amount <= 0:
             raise ValueError
     except ValueError:
-        messagebox.showerror("Error", "Amount must be a positive number.")
+        show_notification("Amount must be a positive number.")
         return
 
     try:
@@ -130,9 +131,9 @@ def add_withdrawal(withdraw_id, employee_id, store_id, withdraw_date, amount):
                    VALUES (%s,%s, %s, %s, %s)"""
         data = (withdraw_id,int(employee_id), int(store_id), withdraw_date, float(amount))
         sqlConnector.connect(query, data)
-        messagebox.showinfo("Success", "Withdrawal added successfully!")
+        show_notification( "Withdrawal added successfully!")
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to add withdrawal: {e}")
+        show_notification(f"Failed to add withdrawal: {e}")
 
 def load_withdrawals(tree):
 
@@ -147,4 +148,4 @@ def load_withdrawals(tree):
         for result in results:
             tree.insert("", "end", values=result)
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to load withdrawals: {e}")
+        show_notification(f"Failed to load withdrawals: {e}")

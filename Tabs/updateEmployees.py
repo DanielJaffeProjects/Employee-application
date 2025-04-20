@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 from Main.sqlConnector import connect
+from Main.Notification import show_notification
 
 
 class AddEmployee(tk.Frame):
@@ -75,7 +76,7 @@ class AddEmployee(tk.Frame):
 
         # Validate input
         if not all([first_name, last_name, username, password, role]):
-            messagebox.showerror("Error", "All fields must be filled out.")
+            show_notification("All fields must be filled out.")
             return
 
         try:
@@ -90,15 +91,15 @@ class AddEmployee(tk.Frame):
                 self.clear_form()
                 self.load_usernames()
             else:
-                messagebox.showerror("Error", "Failed to add employee.")
+                show_notification("Failed to add employee.")
         except Exception as e:
-            messagebox.showerror("Database Error", f"An error occurred: {e}")
+            show_notification( f"An error occurred: {e}")
 
     def delete_employee(self):
         """Handles deleting an employee from the database."""
         username = self.delete_username.get()
         if not username:
-            messagebox.showerror("Error", "Please select an employee to delete.")
+            show_notification("Please select an employee to delete.")
             return
 
         try:
@@ -108,15 +109,15 @@ class AddEmployee(tk.Frame):
                 messagebox.showinfo("Success", f"Employee '{username}' deleted successfully!")
                 self.load_usernames()
             else:
-                messagebox.showerror("Error", "Failed to delete employee.")
+                show_notification("Failed to delete employee.")
         except Exception as e:
-            messagebox.showerror("Database Error", f"An error occurred: {e}")
+            show_notification( f"An error occurred: {e}")
 
     def load_employee(self):
         """Loads an employee's data into the form for editing."""
         username = self.edit_username.get()
         if not username:
-            messagebox.showerror("Error", "Please select an employee to edit.")
+            show_notification("Please select an employee to edit.")
             return
 
         try:
@@ -134,9 +135,9 @@ class AddEmployee(tk.Frame):
                 self.password.insert(0, password)
                 self.role.set(role)
             else:
-                messagebox.showerror("Error", "Failed to load employee data.")
+                show_notification("Failed to load employee data.")
         except Exception as e:
-            messagebox.showerror("Database Error", f"An error occurred: {e}")
+            show_notification(f"An error occurred: {e}")
 
     def update_employee(self):
         """Updates an employee's data in the database."""
@@ -148,7 +149,7 @@ class AddEmployee(tk.Frame):
 
         # Validate input
         if not all([first_name, last_name, username, password, role]):
-            messagebox.showerror("Error", "All fields must be filled out.")
+            show_notification("All fields must be filled out.")
             return
 
         try:
@@ -158,13 +159,13 @@ class AddEmployee(tk.Frame):
             data = (first_name, last_name, password, role, username)
             success = connect(query, data)
             if success:
-                messagebox.showinfo("Success", "Employee updated successfully!")
+                show_notification("Employee updated successfully!")
                 self.clear_form()
                 self.load_usernames()
             else:
-                messagebox.showerror("Error", "Failed to update employee.")
+                show_notification("Failed to update employee.")
         except Exception as e:
-            messagebox.showerror("Database Error", f"An error occurred: {e}")
+            show_notification( f"An error occurred: {e}")
 
     def load_usernames(self):
         """Loads all employee usernames into the dropdowns."""

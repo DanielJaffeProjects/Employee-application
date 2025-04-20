@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from Main import sqlConnector
+from Main.Notification import show_notification
 
 
 def create_payroll_tab(content_frame, tabs,employee_id):
@@ -59,7 +60,7 @@ def create_payroll_tab(content_frame, tabs,employee_id):
 def submit_payroll(employee_id, date, bonus, hourly_rate, hours):
     """Submits payroll data to the database."""
     if not employee_id or not date or not bonus or not hourly_rate or not hours:
-        messagebox.showerror("Error", "All fields must be filled out.")
+        show_notification( "All fields must be filled out.")
         return
 
     # Validate input values
@@ -81,7 +82,7 @@ def submit_payroll(employee_id, date, bonus, hourly_rate, hours):
         if bonus < 0 or hourly_rate < 0 or hours < 0:
             raise ValueError("Bonus, Hourly Rate, and Hours must be non-negative values.")
     except ValueError as ve:
-        messagebox.showerror("Input Error", f"Invalid input: {ve}")
+        show_notification(f"Invalid input: {ve}")
         return
 
     try:
@@ -93,7 +94,7 @@ def submit_payroll(employee_id, date, bonus, hourly_rate, hours):
         sqlConnector.connect(query, data)
         messagebox.showinfo("Success", "Payroll record added successfully!")
     except Exception as e:
-        messagebox.showerror("Database Error", f"An error occurred: {str(e)}")
+        show_notification(f"An error occurred: {str(e)}")
 
 
 def load_payroll_records(employee_id, payroll_tree):
@@ -105,5 +106,5 @@ def load_payroll_records(employee_id, payroll_tree):
         for record in records:
             payroll_tree.insert("", "end", values=record)
     except Exception as e:
-        messagebox.showerror("Database Error", f"An error occurred: {str(e)}")
+        show_notification(f"An error occurred: {str(e)}")
 
