@@ -38,7 +38,7 @@ class CloseOutTab(tk.Frame):
         expense = self.expense_entry.get()
         comments = self.comments_entry.get()
         store_name = self.selected_store.get()
-
+        print(store_name)
         employee_id = self.controller.employee_id
         if not credit or not cash or not expense:
             messagebox.showerror("Error", "Please fill in all required fields (credit, cash, expense).")
@@ -64,6 +64,18 @@ class CloseOutTab(tk.Frame):
             return
 
         try:
+            # Check if a close-out entry already exists for the current date and store
+            check_query = """SELECT * FROM employee_close 
+                WHERE store_name = %s AND DATE(timestamp) = CURDATE()
+            """
+            existing_entry = sqlConnector.connect(check_query, (store_name,))
+            print(existing_entry)
+
+            if existing_entry:
+                messagebox.showerror("Error", "A close-out entry for this store already exists for today.")
+                return
+
+            # Insert the new close-out entry
             insert_query = """
                 INSERT INTO employee_close (
                     firstName, lastName, store_name, credit, cash_in_envelope, expense, comments, employee_id
