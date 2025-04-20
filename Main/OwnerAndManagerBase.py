@@ -4,6 +4,7 @@ from Tabs.EmployeeData import create_employee_history_tab
 from Tabs.Bonus import create_bonus_tab
 from Tabs.Invoice import createInvoice
 from Tabs.Merchandise import create_merchandise_tab
+from Tabs.closeOutTab import CloseOutTab
 from Tabs.payroll import create_payroll_tab
 from Tabs.Store import *
 from Tabs.updateEmployees import AddEmployee
@@ -110,6 +111,11 @@ class ManageEmployees(tk.Frame):
 
             # gross profit
             create_gross_profit_tab(content_frame, tabs)
+
+            # close out tab
+            close_out = CloseOutTab(content_frame, self.controller)
+            close_out.grid(row=0, column=0, sticky="nsew")
+            tabs["Close Out"] = close_out
 
         # for just the manager
         if self.controller.role == 'Manager':

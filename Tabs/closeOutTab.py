@@ -1,13 +1,12 @@
 # File: Main/closeOutTab.py
 import tkinter as tk
 from tkinter import messagebox
-import sqlConnector
-
+from Main import sqlConnector
 BG_COLOR = "white"
 LABEL_FONT = ("Helvetica", 18)
 
 class CloseOutTab(tk.Frame):
-    def __init__(self, parent, controller, selected_store):
+    def __init__(self, parent, controller, selected_store=None):
         super().__init__(parent, bg=BG_COLOR)
         self.controller = controller
         self.selected_store = selected_store

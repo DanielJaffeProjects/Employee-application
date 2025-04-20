@@ -94,7 +94,8 @@ class EmployeePage(tk.Frame):
         #close out tab
         close_out = CloseOutTab(content_frame, self.controller, self.selected_store)
         close_out.grid(row=0, column=0, sticky="nsew")
-        self.tabs["Close"] = close_out
+        self.tabs["Close Out"] = close_out
+
         # History tab
         history_tab = tk.Frame(content_frame, bg=BG_COLOR)
         tk.Label(history_tab, text="Clock In/Out History", font=LABEL_FONT, bg=BG_COLOR, fg=FG_COLOR).pack(pady=10)
