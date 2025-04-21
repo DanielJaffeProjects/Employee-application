@@ -114,12 +114,10 @@ CREATE TABLE IF NOT EXISTS Merchandise (
 
 
 Create Table if not exists withdraw(
-    withdraw_id INT PRIMARY KEY,
-    employee_id INT,
+    withdraw_id INT PRIMARY KEY AUTO_INCREMENT,
     store_id INT,
     withdraw_date DATE,
     amount DECIMAL(10,2),
-    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
     FOREIGN KEY (store_id) REFERENCES Store(store_id)
 );
 
@@ -146,6 +144,8 @@ Create Table if not exists summary(
     current_balance DECIMAL(10,2),
     actual_cash DECIMAL(10,2),
     actual_credit DECIMAL(10,2),
+    month int,
+    year int,
     FOREIGN KEY (store_id) REFERENCES Store(store_id)
 );
 
