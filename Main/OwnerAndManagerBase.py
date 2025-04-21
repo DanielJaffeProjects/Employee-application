@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from Tabs.EmployeeData import create_employee_history_tab
 from Tabs.Summary import SummaryTab
-from Tabs.employeeRate import create_bonus_tab
+from Tabs.bonus import create_bonus_tab
 from Tabs.Invoice import createInvoice
 from Tabs.Merchandise import create_merchandise_tab
 from Tabs.closeOutTab import CloseOutTab

@@ -185,3 +185,5 @@ class AddEmployee(tk.Frame):
         self.username.delete(0, tk.END)
         self.password.delete(0, tk.END)
         self.role.set("")
+
+

@@ -55,8 +55,10 @@ def create_bonus_tab(content_frame, tabs):
 
 
 
+
 def load_employee_ids(dropdown):
     """Loads Employee IDs into the dropdown."""
+    print("load_employee_ids")
     try:
         query = "SELECT employee_id FROM Employee"
         results = sqlConnector.connect(query, ())
@@ -67,9 +69,11 @@ def load_employee_ids(dropdown):
 
 def add_employee_rate(emp_id, bonus_rate, rate_per_hour, date):
     """Adds a new employee rate record to the Employee_Rate table."""
+    print("add_employee_rate")
     if not emp_id:
         show_notification( "Employee ID is required.")
         return
+
 
     # Validate inputs
     try:
@@ -81,13 +85,26 @@ def add_employee_rate(emp_id, bonus_rate, rate_per_hour, date):
         return
 
     try:
-        query = """INSERT INTO Employee_Rate (employee_id, Bonus_Rate, Rate_Per_Hour, day_of_year)
-                   VALUES (%s, %s, %s, %s)"""
-        data = (emp_id, bonus_rate, rate_per_hour, date)
-        sqlConnector.connect(query, data)
-        show_notification("Employee rate added successfully!")
+        # Check if a bonus already exists for the employee on the given date
+        check_query = """SELECT COUNT(*) FROM Employee_Rate WHERE employee_id = %s"""
+        result = sqlConnector.connect(check_query, (emp_id,))
+        print(result)
+        if result[0][0] > 0:
+            # Update the existing bonus
+            update_query = """UPDATE Employee_Rate
+                              SET Bonus_Rate = %s, Rate_Per_Hour = %s
+                              WHERE employee_id = %s"""
+            sqlConnector.connect(update_query, (bonus_rate, rate_per_hour, emp_id))
+            show_notification("Employee rate updated successfully!")
+        else:
+            # Insert a new bonus
+            insert_query = """INSERT INTO Employee_Rate (employee_id, Bonus_Rate, Rate_Per_Hour, day_of_year)
+                              VALUES (%s, %s, %s, %s)"""
+            sqlConnector.connect(insert_query, (emp_id, bonus_rate, rate_per_hour, date))
+            show_notification("Employee rate added successfully!")
     except Exception as e:
-        show_notification( f"Failed to add employee rate: {e}")
+        show_notification(f"Failed to add or update employee rate: {e}")
+
 
 def load_employee_rates(tree):
     """Loads all employee rate records into the Treeview."""
