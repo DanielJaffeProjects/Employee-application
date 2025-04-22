@@ -53,4 +53,9 @@ Welcome to the **Employee Management System** — a desktop application built wi
    Ensure you have Python 3 and MySQL installed. Install the required Python packages using:
    ```bash
    pip install mysql-connector-python
+   ...
    # Note make sure to be running the Main-branch
+   # first run the database.sql file to create the database and tables
+   # then run the ems file as that is the one that will run the main program
+   # From there sit back and watch the magic happen
+   
