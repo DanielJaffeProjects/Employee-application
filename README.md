@@ -57,5 +57,10 @@ Welcome to the **Employee Management System** — a desktop application built wi
    # Note make sure to be running the Main-branch
    # first run the database.sql file to create the database and tables
    # then run the ems file as that is the one that will run the main program
-   # From there sit back and watch the magic happen
+   # also i preset the store and the employee tables with some data
+   # to log in use username = 'o' and password = 'o' for owner
+    # to log in use username = 'm' and password = 'm' for manager
+    # to log in use username = 'e' and password = 'e' for employee
+      # From there sit back and watch the magic happen
+
    
