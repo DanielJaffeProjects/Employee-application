@@ -1,5 +1,7 @@
 from Main import sqlConnector
 from Main.Notification import show_notification
+
+
 def generate_monthly_summary(store_id, month, year):
     if not store_id or not month or not year:
         show_notification("Store ID, month, and year are required.")
@@ -36,14 +38,14 @@ def generate_monthly_summary(store_id, month, year):
         total_merchandise = result_merchandise[0][0] if result_merchandise and result_merchandise[0][0] is not None else 0
         print("total_merchandise", total_merchandise)
 
-        # Query to calculate total cash and credit
-        query_cash_credit = """SELECT SUM(credit + cash_in_envelope) AS cash_and_credit
+        # Query to calculate total cash_in_envelope
+        query_cash = """SELECT SUM(cash_in_envelope) AS total_cash
             FROM employee_close
             WHERE store_id = %s AND MONTH(timestamp) = %s AND YEAR(timestamp) = %s
         """
-        result_cash_credit = sqlConnector.connect(query_cash_credit, (store_id, month, year))
-        cash_and_credit = result_cash_credit[0][0] if result_cash_credit and result_cash_credit[0][0] is not None else 0
-        print("cash_and_credit", cash_and_credit)
+        result_cash = sqlConnector.connect(query_cash, (store_id, month, year))
+        total_cash = result_cash[0][0] if result_cash and result_cash[0][0] is not None else 0
+        print("total_cash", total_cash)
 
         # Query to calculate total payroll
         query_payroll = """SELECT SUM(total_payment) AS total_payroll
@@ -53,6 +55,10 @@ def generate_monthly_summary(store_id, month, year):
         result_payroll = sqlConnector.connect(query_payroll, (store_id, month, year))
         total_payroll = result_payroll[0][0] if result_payroll and result_payroll[0][0] is not None else 0
         print("total_payroll", total_payroll)
+
+        # Calculate actual_cash
+        actual_cash = total_cash - total_payroll
+        print("actual_cash", actual_cash)
 
         # Check if a record exists in the summary table
         check_query = """SELECT COUNT(*) FROM summary
@@ -64,17 +70,17 @@ def generate_monthly_summary(store_id, month, year):
             print("record exists")
             update_query = """UPDATE summary
                               SET total_withdraw = %s, total_expenses = %s, total_merchandise = %s, 
-                                  cash_and_credit = %s, total_payroll = %s
+                                  cash_and_credit = %s, total_payroll = %s, actual_cash = %s
                               WHERE store_id = %s AND month = %s AND year = %s"""
             sqlConnector.connect(update_query, (total_withdraw, total_expenses, total_merchandise,
-                                                cash_and_credit, total_payroll, store_id, month, year))
+                                                total_cash, total_payroll, actual_cash, store_id, month, year))
         else:
             # Insert a new record
             insert_query = """INSERT INTO summary (store_id, month, year, total_withdraw, total_expenses, 
-                                                   total_merchandise, cash_and_credit, total_payroll)
-                              VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+                                                   total_merchandise, cash_and_credit, total_payroll, actual_cash)
+                              VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             sqlConnector.connect(insert_query, (store_id, month, year, total_withdraw, total_expenses,
-                                                total_merchandise, cash_and_credit, total_payroll))
+                                                total_merchandise, total_cash, total_payroll, actual_cash))
 
         # Commit transaction
         sqlConnector.connect("COMMIT", ())
