@@ -203,3 +203,24 @@ END$$
 
 DELIMITER ;
 
+# trigger to calculate the current balance before inserting or updating a summary
+DELIMITER $$
+
+CREATE TRIGGER calculate_current_balance_before_insert
+BEFORE INSERT ON summary
+FOR EACH ROW
+BEGIN
+    SET NEW.current_balance = NEW.net_profit - NEW.total_withdraw;
+END$$
+
+# trigger to calculate the current balance before updating a summary
+DELIMITER $$
+
+CREATE TRIGGER calculate_current_balance_before_update
+BEFORE UPDATE ON summary
+FOR EACH ROW
+BEGIN
+    SET NEW.current_balance = NEW.net_profit - NEW.total_withdraw;
+END$$
+
+DELIMITER ;
