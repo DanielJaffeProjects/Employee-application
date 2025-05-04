@@ -1,6 +1,6 @@
 import tkinter as tk
 from datetime import datetime
-from tkinter import messagebox, ttk
+from tkinter import ttk
 from Main import sqlConnector
 import re
 
@@ -113,7 +113,7 @@ def submit_merchandise(merch_type, merch_value, purchase_date, store_id):
         # Execute the query
         sqlConnector.connect(query, data)
 
-        messagebox.showinfo("Success", "Merchandise added successfully!")
+        show_notification( "Merchandise added successfully!")
     except Exception as e:
         show_notification(f"Failed to add merchandise: {e}")
 
