@@ -13,10 +13,19 @@ def create_employee_history_tab(content_frame, tabs, days):
     # Title
     tk.Label(history_frame, text="Employee History", font=("Helvetica", 18), bg="white").pack(pady=10)
 
-    # Employee ID Input
-    tk.Label(history_frame, text="Enter Employee ID:", font=("Helvetica", 14), bg="white").pack(pady=5)
-    employee_id_entry = tk.Entry(history_frame, font=("Helvetica", 14))
-    employee_id_entry.pack(pady=5)
+    # Employee Name Dropdown
+    tk.Label(history_frame, text="Select Employee Name:", font=("Helvetica", 14), bg="white").pack(pady=5)
+    employee_name_combobox = ttk.Combobox(history_frame, font=("Helvetica", 14), state="readonly")
+    employee_name_combobox.pack(pady=5)
+
+    # Populate the dropdown with employee names
+    try:
+        name_query = "SELECT CONCAT(firstName, ' ', lastName) AS fullName FROM employee"
+        result = sqlConnector.connect(name_query, ())
+        employee_names = [row[0] for row in result]
+        employee_name_combobox['values'] = employee_names
+    except Exception as e:
+        show_notification(f"Failed to load employee names: {e}")
 
     # Clock-In/Clock-Out Table
     tk.Label(history_frame, text="Clock-In/Clock-Out Records", font=("Helvetica", 14), bg="white").pack(pady=5)
@@ -54,17 +63,31 @@ def create_employee_history_tab(content_frame, tabs, days):
         close_tree.heading(col, text=col)
         close_tree.column(col, width=width, anchor="center")
 
-    # Load Data Button
+        # Load Data Button
+
+        # Load Data Button
+
     def on_load_history():
-        employee_id = employee_id_entry.get()
-        if not employee_id.isdigit():
-            show_notification("Please enter a valid Employee ID.")
+        employee_name = employee_name_combobox.get()
+        if not employee_name:
+            show_notification("Please select a valid Employee Name.")
             return
-        load_employee_history(clock_tree, close_tree, int(employee_id), days)
+
+        try:
+            # Fetch Employee ID based on the selected name
+            id_query = "SELECT employee_id FROM employee WHERE CONCAT(firstName, ' ', lastName) = %s"
+            result = sqlConnector.connect(id_query, (employee_name,))
+            if not result or not result[0][0]:
+                show_notification("Employee name does not exist.")
+                return
+
+            employee_id = result[0][0]
+            load_employee_history(clock_tree, close_tree, employee_id, days)
+        except Exception as e:
+            show_notification(f"Failed to fetch Employee ID: {e}")
 
     tk.Button(history_frame, text="Load History", font=("Helvetica", 14), bg="#4CAF50", fg="white",
               command=on_load_history).pack(pady=10)
-
 
 def load_employee_history(clock_tree, close_tree, employee_id, days):
     """Loads employee history data for the last `days` days for a specific employee into the tables."""

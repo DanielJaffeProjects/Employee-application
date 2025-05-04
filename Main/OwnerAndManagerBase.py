@@ -87,6 +87,12 @@ class ManageEmployees(tk.Frame):
             # withdraw
             create_withdraw_tab(content_frame, tabs)
 
+            # Add the Summary tab
+            summary_tab = SummaryTab(content_frame, self.controller)
+            summary_tab.grid(row=0, column=0, sticky="nsew")
+            tabs["Summary"] = summary_tab
+
+
         # if anyone sees this Daniel is the greatest of all time Easter egg!!
         # for owner and manager
         if self.controller.role == 'Owner' or 'Manager':
@@ -115,10 +121,6 @@ class ManageEmployees(tk.Frame):
             close_out.grid(row=0, column=0, sticky="nsew")
             tabs["Close Out"] = close_out
 
-            # Add the Summary tab
-            summary_tab = SummaryTab(content_frame, self.controller)
-            summary_tab.grid(row=0, column=0, sticky="nsew")
-            tabs["Summary"] = summary_tab
 
         # for just the manager
         if self.controller.role == 'Manager':
