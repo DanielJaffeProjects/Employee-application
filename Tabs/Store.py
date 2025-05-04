@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 
 from Main import sqlConnector
 from Main.Notification import show_notification
@@ -79,7 +79,7 @@ def delete_store(store_name):
         query = "DELETE FROM Store WHERE store_name = %s"
         data = (store_name,)
         sqlConnector.connect(query, data)
-        messagebox.showinfo("Success", f"Store '{store_name}' deleted successfully!")
+        show_notification(f"Store '{store_name}' deleted successfully!")
     except Exception as e:
         show_notification(f"Failed to delete store: {e}")
 

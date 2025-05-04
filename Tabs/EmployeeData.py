@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 from Main import sqlConnector
 from Main.Notification import show_notification
 
@@ -107,7 +107,7 @@ def load_employee_history(clock_tree, close_tree, employee_id, days):
         for row in close_data:
             close_tree.insert("", "end", values=row)
 
-        messagebox.showinfo("Success", f"Employee history for Employee ID {employee_id} for the last {days} days loaded successfully.")
+        show_notification(f"Employee history for Employee ID {employee_id} for the last {days} days loaded successfully.")
     except Exception as e:
         print(f"Error loading employee history: {e}")
         show_notification( f"Failed to load employee history: {e}")

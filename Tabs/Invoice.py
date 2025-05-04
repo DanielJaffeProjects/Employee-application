@@ -1,6 +1,5 @@
 import tkinter as tk
 from datetime import datetime
-from tkinter import messagebox
 from tkinter import ttk
 import re
 from Main import sqlConnector
@@ -136,7 +135,7 @@ def submit_invoice(invoice_id, invoice_company, invoice_amount, date_received, d
         # Execute the query
         sqlConnector.connect(query, data)
 
-        messagebox.showinfo("Success", f"Invoice {invoice_id} submitted successfully!")
+        show_notification( f"Invoice {invoice_id} submitted successfully!")
     except Exception as e:
         show_notification(f"Failed to submit invoice: {e}")
 
@@ -176,6 +175,6 @@ def update_invoice(invoice_id, invoice_company, invoice_amount, date_received, d
         """
         data = (invoice_company, invoice_amount, date_received, date_due, invoice_paid, invoice_id)
         sqlConnector.connect(query, data)
-        messagebox.showinfo("Success", f"Invoice {invoice_id} updated successfully!")
+        show_notification( f"Invoice {invoice_id} updated successfully!")
     except Exception as e:
         show_notification( f"Failed to update invoice: {e}")

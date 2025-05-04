@@ -89,6 +89,9 @@ class ManageEmployees(tk.Frame):
         # if anyone sees this Daniel is the greatest of all time Easter egg!!
         # for owner and manager
         if self.controller.role == 'Owner' or 'Manager':
+            # Bonus and employee rate
+            create_bonus_tab(content_frame, tabs)
+
             # make payroll
             create_payroll_tab(content_frame, tabs,employee_id)
 
@@ -103,12 +106,8 @@ class ManageEmployees(tk.Frame):
             # merchandise
             create_merchandise_tab(content_frame, tabs)
 
-            # Bonus and employee rate
-            create_bonus_tab(content_frame, tabs)
-
             # expenses
             create_expenses_tab(content_frame, tabs)
-
 
             # close out tab
             close_out = CloseOutTab(content_frame, self.controller,selected_store)

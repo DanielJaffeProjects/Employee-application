@@ -1,6 +1,6 @@
 import tkinter as tk
 from datetime import datetime
-from tkinter import ttk, messagebox
+from tkinter import ttk
 from Main import sqlConnector
 from Main.Notification import show_notification
 
@@ -102,7 +102,7 @@ def add_expense(expense_type, expense_value, expense_date, employee_id, store_id
                    VALUES (%s, %s, %s, %s, %s)"""
         data = (expense_type, float(expense_value), expense_date, int(employee_id), int(store_id))
         sqlConnector.connect(query, data)
-        messagebox.showinfo("Success", "Expense added successfully!")
+        show_notification( "Expense added successfully!")
     except Exception as e:
         show_notification("Failed to add expense: {e}")
 

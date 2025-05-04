@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 from Main.sqlConnector import connect
 from Main.Notification import show_notification
 
@@ -87,7 +87,7 @@ class AddEmployee(tk.Frame):
             success = connect(query, data)
 
             if success:
-                messagebox.showinfo("Success", "Employee added successfully!")
+                show_notification("Employee added successfully!")
                 self.clear_form()
                 self.load_usernames()
             else:
@@ -106,7 +106,7 @@ class AddEmployee(tk.Frame):
             query = "DELETE FROM employee WHERE userName = %s"
             success = connect(query, (username,))
             if success:
-                messagebox.showinfo("Success", f"Employee '{username}' deleted successfully!")
+                show_notification( f"Employee '{username}' deleted successfully!")
                 self.load_usernames()
             else:
                 show_notification("Failed to delete employee.")
@@ -176,7 +176,7 @@ class AddEmployee(tk.Frame):
             self.delete_username['values'] = usernames
             self.edit_username['values'] = usernames
         except Exception as e:
-            messagebox.showerror("Database Error", f"An error occurred: {e}")
+            show_notification( f"An error occurred: {e}")
 
     def clear_form(self):
         """Clears the form fields."""

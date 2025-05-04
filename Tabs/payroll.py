@@ -62,7 +62,7 @@ def create_payroll_tab(content_frame, tabs, _):
             store_id = store_data[store_name]
             submit_payroll(emp_id, store_id, date_entry.get(), hourly_rate_entry.get(), hours_entry.get())
         else:
-            messagebox.showerror("Error", "Please select a valid employee and store.")
+            show_notification("Please select a valid employee and store.")
 
     tk.Button(payroll_frame, text="Submit Payroll", font=("Helvetica", 14),
               command=handle_submit).pack(pady=10)
@@ -90,7 +90,7 @@ def create_payroll_tab(content_frame, tabs, _):
             emp_id = employee_data[name]
             load_payroll_records(emp_id, payroll_tree)
         else:
-            messagebox.showerror("Error", "Please select a valid employee.")
+            show_notification( "Please select a valid employee.")
 
     tk.Button(payroll_frame, text="Load Payroll Records", font=("Helvetica", 14),
               command=handle_load).pack(pady=10)
@@ -169,4 +169,4 @@ def load_payroll_records(employee_id, tree):
         for row in updated_records:
             tree.insert("", "end", values=row)
     except Exception as e:
-        messagebox.showerror("Error", f"Could not load payroll records: {str(e)}")
+        show_notification( f"Could not load payroll records: {str(e)}")
