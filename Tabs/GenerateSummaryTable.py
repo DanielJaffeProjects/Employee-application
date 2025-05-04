@@ -1,12 +1,14 @@
 from Main import sqlConnector
 from Main.Notification import show_notification
-
 def generate_monthly_summary(store_id, month, year):
     if not store_id or not month or not year:
         show_notification("Store ID, month, and year are required.")
         return
     print(store_id, month, year)
     try:
+        # Start transaction
+        sqlConnector.connect("START TRANSACTION", ())
+
         # Query to calculate total withdrawals
         query_withdraw = """SELECT SUM(amount) AS total_withdraw
             FROM withdraw
@@ -52,7 +54,11 @@ def generate_monthly_summary(store_id, month, year):
                               VALUES (%s, %s, %s, %s, %s, %s)"""
             sqlConnector.connect(insert_query, (store_id, month, year, total_withdraw, total_expenses, total_merchandise))
 
+        # Commit transaction
+        sqlConnector.connect("COMMIT", ())
         show_notification("Monthly summary generated successfully.")
 
     except Exception as e:
+        # Rollback transaction in case of an error
+        sqlConnector.connect("ROLLBACK", ())
         show_notification(f"An error occurred while generating the summary: {str(e)}")
