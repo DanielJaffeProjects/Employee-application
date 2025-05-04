@@ -110,11 +110,16 @@ def submit_payroll(employee_id, store_id, date_str, hourly_rate, hours):
         hours = float(hours)
         total_payment = hourly_rate * hours
         print("totalpayment", total_payment)
+
+        # Check if a bonus exists for the employee
+        bonus_check_query = """SELECT COUNT(*) FROM Employee_Rate WHERE employee_id = %s"""
+        bonus_exists = sqlConnector.connect(bonus_check_query, (employee_id,))
+        if bonus_exists[0][0] == 0:
+            show_notification("A bonus must be added for this employee before processing payroll.")
+            return
+
         # Fetch bonus rate
-        bonus_query = """SELECT Bonus_Rate
-        FROM Employee_Rate
-        WHERE employee_id = %s 
-        """
+        bonus_query = """SELECT Bonus_Rate FROM Employee_Rate WHERE employee_id = %s"""
         result = sqlConnector.connect(bonus_query, (employee_id,))
         bonus_rate = float(result[0][0]) if result else 0.0
         bonus_amount = bonus_rate * hours
@@ -122,6 +127,7 @@ def submit_payroll(employee_id, store_id, date_str, hourly_rate, hours):
         print("bonus_rate", bonus_rate)
         print("bonus_amount", bonus_amount)
         print("total_with_bonus", total_with_bonus)
+
         # Insert payroll record
         insert_query = """INSERT INTO Payroll (employee_id, store_id, timeofDate, hourly_rate, hours, total_payment, payment_with_bonus)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
