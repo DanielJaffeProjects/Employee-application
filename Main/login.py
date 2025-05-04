@@ -64,10 +64,16 @@ class LoginPage(tk.Frame):
                 self.controller.role = role.title()
                 self.controller.username = username
 
-                #TODO put this on at end
-                # # Play music for 30 seconds if the role is "Owner"
-                # if role.title() == "Owner":
-                #     self.play_music("Egyptian_national_anthem.mp3", 15000)  # 30 seconds
+
+                # Play music for 30 seconds if the role is "Owner"
+                if role.title() == "Owner":
+                    self.play_music("Endi's Crazy Demands.mp3")  # 30 seconds
+
+                if role.title() == "Manager":
+                    self.play_music("Worst of the worst.mp3")
+
+                if role.title() == "Employee":
+                    self.play_music("Literal Chaos.mp3")
 
                 # Show the appropriate page based on role
                 self.controller.show_frame(f"{role.title()}Page")
@@ -77,11 +83,14 @@ class LoginPage(tk.Frame):
             show_notification( "Invalid Username or Password")
 
 # play music
-    def play_music(self, music_file,time):
-        """Play background music and stop it after 10 seconds."""
+    def play_music(self, music_file, time=None):
+        """Play background music once or stop it after a specified time."""
         try:
-            pygame.mixer.music.load(music_file)
-            pygame.mixer.music.play(loops=-1)  # Play indefinitely
-            self.after(time, pygame.mixer.music.stop)  # Stop music after 10 seconds
+            # Construct the path to the music file in the videos_and_pictures folder
+            music_path = os.path.join(os.path.dirname(__file__), "../videos_and_pictures", music_file)
+            pygame.mixer.music.load(music_path)
+            pygame.mixer.music.play(loops=0)  # Play the file once
+            if time is not None:
+                self.after(time, pygame.mixer.music.stop)  # Stop music after the specified time
         except pygame.error as e:
             print(f"Error loading music: {e}")
