@@ -84,14 +84,15 @@ CREATE TABLE if not exists Invoice (
 CREATE TABLE IF NOT EXISTS Payroll (
     payroll_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT NOT NULL,
-    date DATE NOT NULL,
+    store_id INT NOT NULL,
+    timeofDate DATE NOT NULL,
     hourly_rate DECIMAL(10, 2) NOT NULL,
     hours DECIMAL(10, 2) NOT NULL,
     total_payment DECIMAL(10, 2) NOT NULL,
     payment_with_bonus DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
+    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
+    FOREIGN KEY (store_id) REFERENCES Store(store_id)
 );
-
 CREATE TABLE IF NOT EXISTS Expense (
     expense_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
