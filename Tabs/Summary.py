@@ -87,20 +87,20 @@ class SummaryTab(tk.Frame):
         #generate a summary for that month
         generate_monthly_summary(store_id,month,year)
 
-        # # Fetch summary data
-        # query = """SELECT cash_and_credit, total_expenses, total_merchandise, total_withdraw,
-        #            total_payroll, net_profit, current_balance, actual_cash, actual_credit
-        #            FROM summary
-        #            WHERE store_id = %s AND month = %s AND year = %s"""
-        # try:
-        #     result = sqlConnector.connect(query, (store_id, month, year))
-        #     if result and isinstance(result, list) and len(result) > 0:
-        #         values = result[0]
-        #         for i, field in enumerate(self.summary_labels.keys()):
-        #             self.summary_labels[field].config(text=str(values[i]))
-        #     else:
-        #         # Reset all values to 0 if no data is found
-        #         for field in self.summary_labels.keys():
-        #             self.summary_labels[field].config(text="0")
-        # except Exception as e:
-        #     show_notification(f"Failed to fetch summary data: {e}")
+        # Fetch summary data
+        query = """SELECT cash_and_credit, total_expenses, total_merchandise, total_withdraw,
+                   total_payroll, net_profit, current_balance, actual_cash, actual_credit
+                   FROM summary
+                   WHERE store_id = %s AND month = %s AND year = %s"""
+        try:
+            result = sqlConnector.connect(query, (store_id, month, year))
+            if result and isinstance(result, list) and len(result) > 0:
+                values = result[0]
+                for i, field in enumerate(self.summary_labels.keys()):
+                    self.summary_labels[field].config(text=str(values[i]))
+            else:
+                # Reset all values to 0 if no data is found
+                for field in self.summary_labels.keys():
+                    self.summary_labels[field].config(text="0")
+        except Exception as e:
+            show_notification(f"Failed to fetch summary data: {e}")

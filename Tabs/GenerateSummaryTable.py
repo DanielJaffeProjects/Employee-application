@@ -15,17 +15,27 @@ def generate_monthly_summary(store_id, month, year):
         """
         result = sqlConnector.connect(query, (store_id, month, year))
         total_withdraw = result[0][0] if result and result[0][0] is not None else 0
-        print(total_withdraw)
+        print("total_withdraw",total_withdraw)
 
+        # Check if a record exists in the summary table
+        check_query = """SELECT COUNT(*) FROM summary
+                              WHERE store_id = %s AND month = %s AND year = %s"""
+        record_exists = sqlConnector.connect(check_query, (store_id, month, year))[0][0] > 0
 
-        # Insert or update the total_withdraw in the summary table
-        # If a record already exists for the given store_id, month, and year, it will be updated
-        insert_query = """INSERT INTO summary (store_id, month, year, total_withdraw)
-            VALUES (%s, %s, %s, %s)
-            ON DUPLICATE KEY UPDATE total_withdraw = VALUES(total_withdraw)
-        """
-        sqlConnector.connect(insert_query, (store_id, month, year, total_withdraw))
+        if record_exists:
+            # Update the existing record
+            print("record exists")
+            update_query = """UPDATE summary
+                              SET total_withdraw = %s
+                              WHERE store_id = %s AND month = %s AND year = %s"""
+            sqlConnector.connect(update_query, (total_withdraw, store_id, month, year))
+        else:
+            # Insert a new record
+            insert_query = """INSERT INTO summary (store_id, month, year, total_withdraw)
+                              VALUES (%s, %s, %s, %s)"""
+            sqlConnector.connect(insert_query, (store_id, month, year, total_withdraw))
 
         show_notification("Monthly summary generated successfully.")
+
     except Exception as e:
         show_notification(f"An error occurred while generating the summary: {str(e)}")
