@@ -187,7 +187,7 @@ BEFORE INSERT ON summary
 FOR EACH ROW
 BEGIN
     SET NEW.net_profit = NEW.cash_and_credit -
-                         (NEW.total_expenses + NEW.total_merchandise + NEW.total_withdraw + NEW.total_payroll);
+                         (NEW.total_expenses + NEW.total_merchandise+ NEW.total_payroll);
 END$$
 
 #trigger to calculate the net profit before updating a summary
@@ -198,7 +198,7 @@ BEFORE UPDATE ON summary
 FOR EACH ROW
 BEGIN
     SET NEW.net_profit = NEW.cash_and_credit -
-                         (NEW.total_expenses + NEW.total_merchandise + NEW.total_withdraw + NEW.total_payroll);
+                         (NEW.total_expenses + NEW.total_merchandise + NEW.total_payroll);
 END$$
 
 DELIMITER ;
