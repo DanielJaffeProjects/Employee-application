@@ -14,10 +14,15 @@ def create_withdraw_tab(content_frame, tabs):
     # Title
     tk.Label(withdraw_frame, text="Manage Withdrawals", font=("Helvetica", 18), bg="white").pack(pady=10)
 
-    # Store ID Entry
-    tk.Label(withdraw_frame, text="Store ID:", font=("Helvetica", 14), bg="white").pack()
-    store_id_entry = tk.Entry(withdraw_frame, font=("Helvetica", 14))
-    store_id_entry.pack()
+    # Store Name Dropdown
+    tk.Label(withdraw_frame, text="Store Name:", font=("Helvetica", 14), bg="white").pack()
+    store_name_var = tk.StringVar(withdraw_frame)
+    store_name_dropdown = ttk.Combobox(withdraw_frame, textvariable=store_name_var, font=("Helvetica", 14), state="readonly")
+    store_name_dropdown.pack()
+
+    # Populate the dropdown with store names
+    store_mapping = load_store_names()
+    store_name_dropdown['values'] = list(store_mapping.keys())
 
     # Withdraw Date Entry
     tk.Label(withdraw_frame, text="Withdraw Date (YYYY-MM-DD):", font=("Helvetica", 14), bg="white").pack()
@@ -31,12 +36,12 @@ def create_withdraw_tab(content_frame, tabs):
 
     # Submit Button
     tk.Button(withdraw_frame, text="Add Withdrawal", font=("Helvetica", 14),
-              command=lambda: add_withdrawal(store_id_entry.get(),
+              command=lambda: add_withdrawal(store_mapping.get(store_name_var.get()),
                                              withdraw_date_entry.get(), amount_entry.get())).pack(pady=10)
 
     # Treeview for Displaying Withdrawals
-    withdraw_tree = ttk.Treeview(withdraw_frame, columns=("StoreID", "WithdrawDate", "Amount"), show="headings")
-    withdraw_tree.heading("StoreID", text="Store ID")
+    withdraw_tree = ttk.Treeview(withdraw_frame, columns=("StoreName", "WithdrawDate", "Amount"), show="headings")
+    withdraw_tree.heading("StoreName", text="Store Name")
     withdraw_tree.heading("WithdrawDate", text="Withdraw Date")
     withdraw_tree.heading("Amount", text="Amount")
     withdraw_tree.pack(fill="both", expand=True, padx=10, pady=10)
@@ -90,18 +95,32 @@ def add_withdrawal(store_id, withdraw_date, amount):
 
 
 def load_withdrawals(tree):
-    """Loads withdrawal records with only StoreID, WithdrawDate, and Amount into the Treeview."""
+    """Loads withdrawal records with Store Name, Withdraw Date, and Amount into the Treeview."""
     try:
-        # Query to select only the required columns
-        query = "SELECT store_id, withdraw_date, amount FROM withdraw"
+        # Query to join store and withdraw tables to get store_name
+        query = """SELECT s.store_name, w.withdraw_date, w.amount
+            FROM withdraw w
+            JOIN store s ON w.store_id = s.store_id
+        """
         results = sqlConnector.connect(query, ())
 
         # Clear existing rows in the Treeview
         for row in tree.get_children():
             tree.delete(row)
 
-        # Insert new rows with only the selected columns
+        # Insert new rows with store_name, withdraw_date, and amount
         for result in results:
             tree.insert("", "end", values=result)
     except Exception as e:
         show_notification(f"Failed to load withdrawals: {e}")
+
+
+def load_store_names():
+    """Loads store names and their IDs from the database."""
+    try:
+        query = "SELECT store_id, store_name FROM store"
+        results = sqlConnector.connect(query, ())
+        return {store_name: store_id for store_id, store_name in results}
+    except Exception as e:
+        show_notification(f"Failed to load store names: {e}")
+        return {}

@@ -76,22 +76,6 @@ class ManageEmployees(tk.Frame):
         tabs = {}
         print(self.controller.role)
 
-        # for just the owner
-        if self.controller.role == 'Owner':
-            # make a store
-            create_store_tab(content_frame, tabs, add_store, delete_store)
-
-            # check employee history for 1 year
-            create_employee_history_tab(content_frame, tabs,365)
-
-            # withdraw
-            create_withdraw_tab(content_frame, tabs)
-
-            # Add the Summary tab
-            summary_tab = SummaryTab(content_frame, self.controller)
-            summary_tab.grid(row=0, column=0, sticky="nsew")
-            tabs["Summary"] = summary_tab
-
 
         # if anyone sees this Daniel is the greatest of all time Easter egg!!
         # for owner and manager
@@ -126,6 +110,23 @@ class ManageEmployees(tk.Frame):
         if self.controller.role == 'Manager':
             # check employee history for 30 days
             create_employee_history_tab(content_frame, tabs,30)
+
+        # for just the owner
+        if self.controller.role == 'Owner':
+            # check employee history for 1 year
+            create_employee_history_tab(content_frame, tabs,365)
+
+            # make a store
+            create_store_tab(content_frame, tabs, add_store, delete_store)
+
+            # withdraw
+            create_withdraw_tab(content_frame, tabs)
+
+            # Add the Summary tab
+            summary_tab = SummaryTab(content_frame, self.controller)
+            summary_tab.grid(row=0, column=0, sticky="nsew")
+            tabs["Summary"] = summary_tab
+
 
         # -------------------------------
         # Function to Show Selected Tab
