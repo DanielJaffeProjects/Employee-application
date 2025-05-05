@@ -67,13 +67,13 @@ class LoginPage(tk.Frame):
 
                 # Play music for 30 seconds if the role is "Owner"
                 if role.title() == "Owner":
-                    self.play_music("Endi's Crazy Demands.mp3")  # 30 seconds
+                    self.play_music("Legend!_.mp3")  # 30 seconds
 
                 if role.title() == "Manager":
-                    self.play_music("Worst of the worst.mp3")
+                    self.play_music("Endi's Love for LeBron.mp3")
 
                 if role.title() == "Employee":
-                    self.play_music("Literal Chaos.mp3")
+                    self.play_music("The Eclipse.mp3")
 
                 # Show the appropriate page based on role
                 self.controller.show_frame(f"{role.title()}Page")
